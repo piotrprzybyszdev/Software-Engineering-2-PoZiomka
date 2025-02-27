@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomka.Server", "PoZiomkaApi\PoZiomkaApi.csproj", "{C6FCA53F-3BDB-429C-9A18-74AFFBB07757}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaApi", "PoZiomkaApi\PoZiomkaApi.csproj", "{C6FCA53F-3BDB-429C-9A18-74AFFBB07757}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "poziomka.client", "PoZiomkaApp\PoZiomkaApp.esproj", "{95CE506A-7F91-4BCE-B707-0242266EE32D}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "PoZiomkaApp", "PoZiomkaApp\PoZiomkaApp.esproj", "{95CE506A-7F91-4BCE-B707-0242266EE32D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaTest", "PoZiomkaTest\PoZiomkaTest.csproj", "{8ADCD66F-F178-488F-AB15-FD95232C9C88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{95CE506A-7F91-4BCE-B707-0242266EE32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95CE506A-7F91-4BCE-B707-0242266EE32D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95CE506A-7F91-4BCE-B707-0242266EE32D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

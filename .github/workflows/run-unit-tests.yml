@@ -1,0 +1,38 @@
+name: CI - Unit Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Unit-Tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./PoZiomka.sln
+
+      - name: Build the solution
+        run: dotnet build ./PoZiomka.sln --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test ./PoZiomkaTest/PoZiomkaTest.csproj --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: ./PoZiomkaTest/TestResults/TestResults.trx
