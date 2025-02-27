@@ -1,0 +1,39 @@
+services:
+  poziomka_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/data/db
+
+  poziomka_api:
+    build:
+      context: .
+      dockerfile: PoZiomkaApi/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - DB_CONNECTION_STRING=Server=poziomka_db;Database=PoziomkaDB;User Id=SA;Password=Pass@word;TrustServerCertificate=true;Encrypt=false
+      - APP_DOMAIN=poziomka_app
+      - APP_PORT=4200
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - poziomka_db
+
+  poziomka_app:
+    build:
+      context: PoZiomkaApp
+    environment:
+      - API_DOMAIN=poziomka_api
+      - API_PORT=8080
+    ports:
+      - "4200:4200"
+    depends_on:
+      - poziomka_api
+
+volumes:
+  db_data:
