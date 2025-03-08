@@ -9,6 +9,12 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "PoZiomkaApp", "PoZiomkaApp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaTest", "PoZiomkaTest\PoZiomkaTest.csproj", "{8ADCD66F-F178-488F-AB15-FD95232C9C88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaDomain", "PoZiomkaDomain\PoZiomkaDomain.csproj", "{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaInfrastructure", "PoZiomkaInfrastructure\PoZiomkaInfrastructure.csproj", "{1F71EDB4-8ACF-4D44-992E-1167562D9F93}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{473238F2-903D-43A8-8079-53D7EB9766EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +35,18 @@ Global
 		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ADCD66F-F178-488F-AB15-FD95232C9C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F71EDB4-8ACF-4D44-992E-1167562D9F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F71EDB4-8ACF-4D44-992E-1167562D9F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F71EDB4-8ACF-4D44-992E-1167562D9F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F71EDB4-8ACF-4D44-992E-1167562D9F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{473238F2-903D-43A8-8079-53D7EB9766EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{473238F2-903D-43A8-8079-53D7EB9766EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{473238F2-903D-43A8-8079-53D7EB9766EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{473238F2-903D-43A8-8079-53D7EB9766EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

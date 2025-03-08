@@ -1,6 +1,6 @@
 const { env } = require('process');
 
-const target = env.API_DOMAIN && env.API_PORT ? `http://${env.API_DOMAIN}:${env.API_PORT}` : 'http://localhost:8080';
+const target = env.API_DOMAIN && env.API_PORT ? `https://${env.API_DOMAIN}:${env.API_PORT}` : 'https://localhost:8081';
 
 const PROXY_CONFIG = [
   {
