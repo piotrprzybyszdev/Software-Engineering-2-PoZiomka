@@ -5,7 +5,7 @@ const target = env.API_DOMAIN && env.API_PORT ? `https://${env.API_DOMAIN}:${env
 const PROXY_CONFIG = [
   {
     context: [
-      "/weatherforecast",
+      "/api/**",
     ],
     target,
     secure: false
