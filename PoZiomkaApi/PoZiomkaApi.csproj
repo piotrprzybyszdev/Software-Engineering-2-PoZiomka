@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PoZiomkaDomain\PoZiomkaDomain.csproj" />
     <ProjectReference Include="..\PoZiomkaInfrastructure\PoZiomkaInfrastructure.csproj" />
   </ItemGroup>

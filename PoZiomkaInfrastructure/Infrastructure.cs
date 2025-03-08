@@ -1,7 +1,13 @@
 ﻿using DbUp;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
+using PoZiomkaInfrastructure.Repositories;
+using PoZiomkaInfrastructure.Services;
+using System.Data;
 using System.Reflection;
 
 namespace PoZiomkaInfrastructure;
@@ -28,6 +34,12 @@ public static class Infrastructure
 
     public static void Configure(IConfiguration configuration, IServiceCollection services)
     {
+        var connectionString = configuration["DB:Connection-String"];
 
+        services.AddScoped<IDbConnection>(_ => new SqlConnection(connectionString));
+
+        services.AddScoped<IPasswordService, PasswordService>();
+
+        services.AddScoped<IStudentRepository, StudentRepository>();
     }
 }
