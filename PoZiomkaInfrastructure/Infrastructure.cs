@@ -39,6 +39,10 @@ public static class Infrastructure
         services.AddScoped<IDbConnection>(_ => new SqlConnection(connectionString));
 
         services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<IEmailService>(_ => new EmailService(
+            configuration["Email:Host"]!, int.Parse(configuration["Email:Port"]!),
+            configuration["Email:Sender"]!, configuration["Email:Password"]!, bool.Parse(configuration["Email:Secure"]!))
+        );
 
         services.AddScoped<IStudentRepository, StudentRepository>();
     }
