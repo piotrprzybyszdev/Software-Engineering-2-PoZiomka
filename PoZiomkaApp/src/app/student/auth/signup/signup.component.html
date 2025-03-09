@@ -1,0 +1,46 @@
+<section class="vh-100 bg-danger bg-opacity-25">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xxl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none d-xl-flex">
+                            <img class="w-100" src="images/poziomka-splash.jpg" />
+                        </div>
+                        <div class="col-12 col-xl-6 px-0 px-md-5 px-xl-0">
+                            <div class="card-body py-md-5 px-5 mx-md-4 h-100">
+                                <div class="h-100 d-flex flex-column pb-5">
+                                    <div class="text-center mb-4">
+                                        <h1 class="poziomka-logo mt-1 pb-1">PoZiomka</h1>
+                                        <hr>
+                                        <h3 class="mt-5">Zarejestruj się w systemie</h3>
+                                    </div>
+
+                                    <form class="my-auto" [formGroup]="signupForm">
+                                        <div class="form-outline form-floating mb-4">
+                                            <input type="email" id="emailTextField" class="form-control" placeholder="" formControlName="email" [ngClass]="emailInvalid ? 'is-invalid' : ''" />
+                                            <label class="form-label" for="emailTextField">Email</label>
+                                        </div>
+
+                                        <div class="form-floating">
+                                            <input type="password" id="passwordTextField" class="form-control" placeholder="" formControlName="password" [ngClass]="passwordInvalid ? 'is-invalid' : ''" />
+                                            <label class="form-label" for="passwordTextField">Hasło</label>
+                                        </div>
+
+                                        <div class="text-danger mt-3" [ngClass]="error() === undefined ? 'invisible' : ''">
+                                            {{error() ?? 'error placeholder'}}
+                                        </div>
+
+                                        <div class="text-end px-3 my-4">
+                                            <button class="btn btn-danger" type="button" (click)="onRegisterButtonClick()">Zarejestruj się</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
