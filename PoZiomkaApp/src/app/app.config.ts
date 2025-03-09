@@ -8,10 +8,10 @@ import localePL from "@angular/common/locales/pl";
 registerLocaleData(localePL);
 
 export const appConfig: ApplicationConfig = {
-    providers: [
-        provideZoneChangeDetection({eventCoalescing: true}),
-        provideRouter(routes, withComponentInputBinding()),
-        provideHttpClient(),
-        {provide: LOCALE_ID, useValue: 'pl-PL'}
-    ]
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(),
+    { provide: LOCALE_ID, useValue: 'pl-PL' }
+  ]
 }
