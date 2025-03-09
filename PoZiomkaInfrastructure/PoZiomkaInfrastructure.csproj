@@ -22,6 +22,7 @@
     <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.6.1" />
   </ItemGroup>
 
   <ItemGroup>

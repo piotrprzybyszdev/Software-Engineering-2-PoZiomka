@@ -43,6 +43,7 @@ public static class Infrastructure
             configuration["Email:Host"]!, int.Parse(configuration["Email:Port"]!),
             configuration["Email:Sender"]!, configuration["Email:Password"]!, bool.Parse(configuration["Email:Secure"]!))
         );
+        services.AddScoped<IJwtService>(_ => new JwtService(configuration["Jwt:Key"]!, configuration["Jwt:Issuer"]!, configuration["Jwt:Audience"]!));
 
         services.AddScoped<IStudentRepository, StudentRepository>();
     }
