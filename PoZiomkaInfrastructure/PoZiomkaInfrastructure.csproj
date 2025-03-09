@@ -8,16 +8,24 @@
 
   <ItemGroup>
     <None Remove="Migrations\CreateTables.sql" />
+    <None Remove="Migrations\InsertSampleData.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Migrations\CreateTables.sql" />
+    <EmbeddedResource Include="Migrations\InsertSampleData.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="dbup-sqlserver" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PoZiomkaDomain\PoZiomkaDomain.csproj" />
   </ItemGroup>
 
 </Project>
