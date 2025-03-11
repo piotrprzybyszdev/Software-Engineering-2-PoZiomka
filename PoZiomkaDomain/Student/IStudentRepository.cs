@@ -7,4 +7,5 @@ public class EmailNotUniqueException : Exception;
 public interface IStudentRepository
 {
     public Task CreateStudent(StudentCreate studentCreate, CancellationToken? cancellationToken);
+    public Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken);
 }

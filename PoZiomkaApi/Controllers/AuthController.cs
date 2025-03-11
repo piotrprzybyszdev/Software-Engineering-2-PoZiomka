@@ -61,4 +61,11 @@ public class AuthController(IMediator mediator, IJwtService jwtService) : Contro
 
         return Ok("No role found");
     }
+
+    [HttpPost("confirm")]
+    public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
+    {
+        await mediator.Send(confirmRequest.ToConfirmStudentCommand());
+        return Ok();
+    }
 }
