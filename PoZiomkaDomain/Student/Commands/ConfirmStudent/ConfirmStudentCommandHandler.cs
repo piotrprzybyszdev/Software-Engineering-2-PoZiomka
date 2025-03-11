@@ -15,9 +15,9 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository) 
         {
             await studentRepository.ConfirmStudent(studentConfirm, cancellationToken);
         }
-        catch (EmailNotUniqueException)
+        catch (EmailNotFoundException)
         {
-            throw new EmailTakenException($"User with email `{request.Email}` already exists");
+            throw new EmailNotRegisteredException($"User with email `{request.Email}` not registered");
         }
     }
 }
