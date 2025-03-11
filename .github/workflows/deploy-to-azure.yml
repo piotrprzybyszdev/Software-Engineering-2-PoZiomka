@@ -60,7 +60,7 @@ jobs:
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with: 
-          app-name: PoZiomkaApi
+          app-name: poziomka-api
           package: ./package
 
       - name: Logout from Azure
