@@ -1,18 +1,23 @@
+using PoZiomkaApi;
+using PoZiomkaDomain;
+using PoZiomkaInfrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Infrastructure.Initalize(builder.Configuration);
+Infrastructure.Configure(builder.Configuration, builder.Services);
+Domain.Configure(builder.Configuration, builder.Services);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
+app.UsePathBase("/api");
 
-// Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
