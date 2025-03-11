@@ -1,15 +1,13 @@
 name: CI - Unit Test
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
 
 jobs:
   Unit-Tests:
+    name: Run Unit Tests for .Net
     runs-on: ubuntu-latest
 
     steps:

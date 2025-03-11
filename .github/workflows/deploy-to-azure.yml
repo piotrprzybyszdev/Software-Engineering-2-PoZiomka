@@ -1,0 +1,68 @@
+name: CI - Unit Test
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  Publish-Artifact:
+    name: Publish .Net artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./PoZiomka.sln
+
+      - name: Build the solution
+        run: dotnet build ./PoZiomka.sln --configuration Release --no-restore
+
+      - name: Publish the solution
+        run: dotnet publish ./PoZiomka.sln --configuration Release --no-restore --no-build --property:PublishDir=/publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PoZiomkaApi
+          path: /publish
+
+  Deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Api
+    needs: Publish-Artifact
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: PoZiomkaApi
+          path: /package
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v3
+        with: 
+          app-name: PoZiomkaApi
+          package: /package
+
+      - name: Logout from Azure
+        run: |
+          az logout
