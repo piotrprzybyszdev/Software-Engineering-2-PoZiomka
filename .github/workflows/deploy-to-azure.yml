@@ -30,13 +30,13 @@ jobs:
         run: dotnet build ./PoZiomka.sln --configuration Release --no-restore
 
       - name: Publish the solution
-        run: dotnet publish ./PoZiomka.sln --configuration Release --no-restore --no-build --property:PublishDir=/publish
+        run: dotnet publish ./PoZiomka.sln --configuration Release --no-restore --no-build --property:PublishDir=./publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: PoZiomkaApi
-          path: /publish
+          path: ./publish
 
   Deploy:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: PoZiomkaApi
-          path: /package
+          path: ./package
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -61,7 +61,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with: 
           app-name: PoZiomkaApi
-          package: /package
+          package: ./package
 
       - name: Logout from Azure
         run: |
