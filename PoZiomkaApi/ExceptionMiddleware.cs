@@ -3,6 +3,7 @@ using PoZiomkaDomain.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using FluentValidation;
 using System.Text.Json;
+using System;
 
 namespace PoZiomkaApi;
 
@@ -26,6 +27,17 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status400BadRequest,
                 Detail = exception.Message,
                 Title = "Email is taken"
+            };
+        }
+        catch (EmailNotRegisteredException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Email not registered"
             };
         }
         catch (ValidationException exception)
