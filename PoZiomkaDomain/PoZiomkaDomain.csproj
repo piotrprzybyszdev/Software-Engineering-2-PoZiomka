@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Admin\Commands\" />
+    <Folder Include="Admin\Dtos\" />
+    <Folder Include="Room\Commands\" />
+    <Folder Include="Room\Dtos\" />
     <Folder Include="Student\Queries\" />
   </ItemGroup>
 
