@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace PoZiomkaDomain.Admin
 {
-	public class Admin
+	public class Privilege
 	{
 		private int Id;
-		public string Email;
-		private List<Privilege> Privileges = new List<Privilege>();
+		public string Name;
 	}
 }

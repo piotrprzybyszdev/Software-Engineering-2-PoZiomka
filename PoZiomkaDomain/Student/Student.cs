@@ -8,9 +8,9 @@ namespace PoZiomkaDomain.Student
 {
 	public class Student(int Id, string Email, string Phone)
 	{
-		private int Id=Id; 
-		private string Email=Email; 
-		private string Phone=Phone;
-		private StudentAnswers StudentAnswers= new StudentAnswers();
+		private int Id = Id;
+		private string Email = Email;
+		private string Phone = Phone;
+		private StudentAnswers StudentAnswers = new StudentAnswers();
 	}
 }
