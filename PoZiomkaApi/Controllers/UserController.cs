@@ -1,12 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoZiomkaApi.Services;
+using PoZiomkaDomain.Form;
 
-namespace PoZiomkaApi.Controllers
+namespace PoZiomkaApi.Controllers;
+
+[Route("/user")]
+[ApiController]
+public class UserController(IFormFiller formFiller, IApplicationService applicationService) : Controller
 {
-	public class UserController : Controller
+	[HttpPost("fillForm")]
+	public async Task<IActionResult> FillForm([FromBody] Answer answers)
 	{
-		public IActionResult Index()
-		{
-			return View();
-		}
+		return Ok();
+	}
+
+	[HttpPost("makeAnApplication")]
+	public async Task<IActionResult> MakeAnApplication([FromBody] string _)
+	{
+		return Ok();
 	}
 }
+
