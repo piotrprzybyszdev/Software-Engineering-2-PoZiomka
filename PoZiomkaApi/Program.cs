@@ -1,7 +1,6 @@
 using PoZiomkaApi;
 using PoZiomkaDomain;
 using PoZiomkaInfrastructure;
-using PoZiomkaApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +13,6 @@ Authentication.Configure(builder.Configuration, builder.Services);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<ISecurityService, SecurityService>();
 
 var app = builder.Build();
 
