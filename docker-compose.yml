@@ -1,5 +1,11 @@
 name: poziomka
 services:
+  poziomka_mail:
+    image: changemakerstudiosus/papercut-smtp:latest
+    ports:
+      - 80:80
+      - 25:25
+
   poziomka_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:

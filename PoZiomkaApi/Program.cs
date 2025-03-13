@@ -8,6 +8,8 @@ Infrastructure.Initalize(builder.Configuration);
 Infrastructure.Configure(builder.Configuration, builder.Services);
 Domain.Configure(builder.Configuration, builder.Services);
 
+Authentication.Configure(builder.Configuration, builder.Services);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,6 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
