@@ -50,6 +50,16 @@ jobs:
           name: PoZiomkaApi
           path: ./package
 
+      - name: Update apsettings
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './package/appsettings.json'
+        env:
+          DB.Connection-String: ${{ secrets.APPSETTINGS_DB_CONNECTION_STRING }}
+          Email.Sender: ${{ secrets.APPSETTINGS_EMAIL_SENDER }}
+          Email.Password: ${{ secrets.APPSETTINGS_EMAIL_PASSWORD }}
+          Jwt.Key: ${{ secrets.APPSETTINGS_JWT_KEY }}
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
