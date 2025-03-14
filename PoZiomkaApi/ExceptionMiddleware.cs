@@ -28,6 +28,17 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Email is taken"
             };
         }
+        catch (EmailNotRegisteredException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Email not registered"
+            };
+        }
         catch (ValidationException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;

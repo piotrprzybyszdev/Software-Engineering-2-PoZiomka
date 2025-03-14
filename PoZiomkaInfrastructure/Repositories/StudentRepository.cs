@@ -31,4 +31,23 @@ VALUES (@email, CAST(@passwordHash AS BINARY), 0);
             throw new QueryExceutionException(exception.Message, exception.Number);
         }
     }
+
+    public async Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"
+UPDATE Students SET IsConfirmed = 1 WHERE Email = @email;
+";
+
+        int rowsAffected;
+        try
+        {
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentConfirm, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExceutionException(exception.Message, exception.Number);
+        }
+
+        if (rowsAffected == 0) throw new EmailNotFoundException();
+    }
 }
