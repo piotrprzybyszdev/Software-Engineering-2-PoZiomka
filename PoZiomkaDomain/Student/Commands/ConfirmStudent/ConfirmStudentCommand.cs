@@ -2,4 +2,4 @@
 
 namespace PoZiomkaDomain.Student.Commands.ConfirmStudent;
 
-public record ConfirmStudentCommand(string Email) : IRequest;
+public record ConfirmStudentCommand(string Token) : IRequest;

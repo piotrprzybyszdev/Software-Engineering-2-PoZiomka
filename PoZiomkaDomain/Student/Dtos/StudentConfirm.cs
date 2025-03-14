@@ -1,3 +1,3 @@
 ﻿namespace PoZiomkaDomain.Student.Dtos;
 
-public record StudentConfirm(string Email);
+public record StudentConfirm(string Token);

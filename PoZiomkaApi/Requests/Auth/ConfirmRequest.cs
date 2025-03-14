@@ -2,7 +2,7 @@
 
 namespace PoZiomkaApi.Requests.Auth;
 
-public record ConfirmRequest(string Email)
+public record ConfirmRequest(string Token)
 {
-    public ConfirmStudentCommand ToConfirmStudentCommand() => new(Email);
+    public ConfirmStudentCommand ToConfirmStudentCommand() => new(Token);
 }
