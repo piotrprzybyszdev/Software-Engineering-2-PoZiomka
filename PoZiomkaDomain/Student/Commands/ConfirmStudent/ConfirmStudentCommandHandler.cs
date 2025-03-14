@@ -2,6 +2,7 @@
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
+using System.Security.Claims;
 
 namespace PoZiomkaDomain.Student.Commands.ConfirmStudent;
 
@@ -11,7 +12,7 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
     {
         var claimsIdentity = await jwtService.ReadToken(request.Token);
 
-        var emailClaim = claimsIdentity.FindFirst("Claim") ?? throw new Exception("No email in claims");
+        var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email) ?? throw new Exception("No email in claims");
 
         var email = emailClaim.Value;
 
