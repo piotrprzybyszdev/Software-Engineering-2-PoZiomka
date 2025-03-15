@@ -13,52 +13,56 @@ namespace PoZiomkaApi.Controllers;
 [ApiController]
 public class AuthController(IMediator mediator, IJwtService jwtService) : ControllerBase
 {
-    [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
-    {
-        await mediator.Send(signupRequest.ToSignupStudentCommand());
-        return Ok();
-    }
+	[HttpPost("signup")]
+	public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
+	{
+		await mediator.Send(signupRequest.ToSignupStudentCommand());
+		return Ok();
+	}
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login()
-    {
-        var principal = new ClaimsPrincipal(
-            new ClaimsIdentity([
-                new Claim(ClaimTypes.Role, Authentication.Roles.Student)
-            ], CookieAuthenticationDefaults.AuthenticationScheme)
-        );
+	[HttpPost("login")]
+	public async Task<IActionResult> Login()
+	{
+		var userId = 1;
 
-        await HttpContext.SignInAsync(principal);
+		var claims = new List<Claim>
+		{
+			new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+			new Claim(ClaimTypes.Role, Authentication.Roles.Student)
+		};
 
-        return Ok();
-    }
+		var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
 
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
-    {
-        await HttpContext.SignOutAsync();
-        return Ok();
-    }
+		await HttpContext.SignInAsync(principal);
 
-    [Authorize(Roles = Authentication.Roles.Student)]
-    [HttpGet("get-jwt-test")]
-    public async Task<IActionResult> GetJwtTest()
-    {
-        return Ok(await jwtService.GenerateToken(HttpContext.User.Identities.First(), TimeSpan.FromMinutes(20)));
-    }
+		return Ok();
+	}
 
-    [Authorize(Roles = Authentication.Roles.Student)]
-    [HttpGet("decode-jwt-test/{token}")]
-    public async Task<IActionResult> DecodeJwtTest(string token)
-    {
-        var identity = await jwtService.ReadToken(token);
+	[HttpPost("logout")]
+	public async Task<IActionResult> Logout()
+	{
+		await HttpContext.SignOutAsync();
+		return Ok();
+	}
 
-        if (identity.HasClaim(ClaimTypes.Role, Authentication.Roles.Student))
-            return Ok("Student");
-        if (identity.HasClaim(ClaimTypes.Role, Authentication.Roles.Administrator))
-            return Ok("Admin");
+	[Authorize(Roles = Authentication.Roles.Student)]
+	[HttpGet("get-jwt-test")]
+	public async Task<IActionResult> GetJwtTest()
+	{
+		return Ok(await jwtService.GenerateToken(HttpContext.User.Identities.First(), TimeSpan.FromMinutes(20)));
+	}
 
-        return Ok("No role found");
-    }
+	[Authorize(Roles = Authentication.Roles.Student)]
+	[HttpGet("decode-jwt-test/{token}")]
+	public async Task<IActionResult> DecodeJwtTest(string token)
+	{
+		var identity = await jwtService.ReadToken(token);
+
+		if (identity.HasClaim(ClaimTypes.Role, Authentication.Roles.Student))
+			return Ok("Student");
+		if (identity.HasClaim(ClaimTypes.Role, Authentication.Roles.Administrator))
+			return Ok("Admin");
+
+		return Ok("No role found");
+	}
 }

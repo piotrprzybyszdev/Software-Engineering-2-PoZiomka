@@ -4,12 +4,15 @@ using Microsoft.Identity.Client;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using static PoZiomkaApi.Authentication;
+using System.Security.Claims;
+using PoZiomkaDomain.Match;
+
 
 namespace PoZiomkaApi.Controllers;
 
 [Route("/")]
 [ApiController]
-public class StudentController(IStudentRepository studentRepository): Controller
+public class StudentController(IStudentRepository studentRepository, IJudgeService judgeService): Controller
 {
 	[HttpPut("confirm")]
 	public async Task<IActionResult> Confirm()
@@ -39,12 +42,21 @@ public class StudentController(IStudentRepository studentRepository): Controller
 	}
 
 	[HttpGet("get/{id}")]
-	//[Authorize] 
-	public async Task<StudentModel> GetStudentById(int id)
+	[Authorize] 
+	public async Task<StudentDisplay> GetStudentById(int id)
 	{
+		int loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+		bool ok = User.IsInRole(Roles.Administrator) ||
+		  (User.IsInRole(Roles.Student) &&
+		  (loggedInUserId == id || await judgeService.IsMatch(loggedInUserId, id)));
+
+		if (!ok)
+			throw new UnauthorizedAccessException();
+
 		var student = await studentRepository.GetStudentById(id, null);
 
-		return student;
+		return student.ToStudentDisplay(true);
 	}
 
 	[HttpPost("create")]
