@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+
+.poziomka-logo {
+    background: linear-gradient(to right, #c43d3e 30%, 40%, #cfac69);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
