@@ -12,3 +12,9 @@
 	IsPhoneNumberHidden bit NOT NULL,
 	IsIndexNumberHidden bit NOT NULL,
 );
+
+CREATE TABLE Admin(
+	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+	Email varchar(100) UNIQUE NOT NULL,
+	PasswordHash binary(60) NOT NULL
+);
