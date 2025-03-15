@@ -11,7 +11,7 @@ public static class Cors
             options.AddPolicy(Policy, policy =>
             {
                 policy
-                    .WithOrigins(configuration["App:Domain"]!)
+                    .WithOrigins(configuration["App:Url"]!)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();

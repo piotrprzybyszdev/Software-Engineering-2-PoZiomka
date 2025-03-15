@@ -50,7 +50,7 @@ jobs:
           name: PoZiomkaApi
           path: ./package
 
-      - name: Update apsettings
+      - name: Update appsettings
         uses: microsoft/variable-substitution@v1
         with:
           files: './package/appsettings.json'
@@ -59,6 +59,7 @@ jobs:
           Email.Sender: ${{ secrets.APPSETTINGS_EMAIL_SENDER }}
           Email.Password: ${{ secrets.APPSETTINGS_EMAIL_PASSWORD }}
           Jwt.Key: ${{ secrets.APPSETTINGS_JWT_KEY }}
+          App.Url: ${{ vars.APP_URL }}
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -76,3 +77,26 @@ jobs:
       - name: Logout from Azure
         run: |
           az logout
+
+  Build-And-Deploy:
+    name: Build and Deploy Angular App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Update appsettings
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './PoZiomkaApp/appsettings.json'
+        env:
+          apiUrl: ${{ vars.API_URL }}
+
+      - name: Build And Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_PURPLE_POND_02473A803 }}
+          action: "upload"
+          app_location: "./PoZiomkaApp"
+          output_location: "dist/poziomka.client/browser"
