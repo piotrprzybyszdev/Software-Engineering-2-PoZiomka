@@ -46,4 +46,18 @@ VALUES (@email, CAST(@passwordHash AS BINARY), 0);
 			throw new QueryExceutionException(exception.Message, exception.Number);
 		}
 	}
+
+	public async Task<IEnumerable<StudentModel>> GetAllStudents()
+	{
+		var sqlQuery = @"SELECT * FROM Students";
+
+		try
+		{
+			return await connection.QueryAsync<StudentModel>(sqlQuery);
+		}
+		catch (SqlException exception)
+		{
+			throw new QueryExceutionException(exception.Message, exception.Number);
+		}
+	}
 }

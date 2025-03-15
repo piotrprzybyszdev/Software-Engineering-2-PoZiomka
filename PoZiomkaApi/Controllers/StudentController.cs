@@ -28,17 +28,22 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 
 	[HttpGet("get-logged-in")]
 	[Authorize(Roles = Roles.Student)]
-	public async Task<IActionResult> GetLoggedIn()
+	public async Task<StudentDisplay> GetLoggedIn()
 	{
+		int loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-		return NoContent();
+		var student = await studentRepository.GetStudentById(loggedInUserId, null);
+
+		return student.ToStudentDisplay(false);
 	}
 
 	[HttpGet("get")]
 	[Authorize(Roles = Roles.Administrator)]
-	public async Task<IActionResult> Get()
+	public async Task<IEnumerable<StudentDisplay>> Get()
 	{
-		return NoContent();
+		var studentsModel = await studentRepository.GetAllStudents();
+		var studentsDisplay= studentsModel.Select(s => s.ToStudentDisplay(true));
+		return studentsDisplay;
 	}
 
 	[HttpGet("get/{id}")]
