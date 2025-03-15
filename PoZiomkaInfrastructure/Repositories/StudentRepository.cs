@@ -31,4 +31,19 @@ VALUES (@email, CAST(@passwordHash AS BINARY), 0);
             throw new QueryExceutionException(exception.Message, exception.Number);
         }
     }
+
+    public async Task<StudentModel> GetStudentById(int id, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"SELECT * FROM Students WHERE id = @id";
+
+        try
+        {
+            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
+            return student ?? throw new QueryExceutionException("Student not found", id);
+		}
+		catch (SqlException exception)
+		{
+			throw new QueryExceutionException(exception.Message, exception.Number);
+		}
+	}
 }
