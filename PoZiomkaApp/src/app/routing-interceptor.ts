@@ -5,7 +5,6 @@ import { environment } from "../environments/environment";
 
 export class RoutingInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log(req.url);
         return next.handle(req.clone({
             url: environment.apiUrl.concat(req.url),
             withCredentials: true
