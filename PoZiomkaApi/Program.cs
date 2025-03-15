@@ -9,6 +9,7 @@ Infrastructure.Configure(builder.Configuration, builder.Services);
 Domain.Configure(builder.Configuration, builder.Services);
 
 Authentication.Configure(builder.Configuration, builder.Services);
+Cors.Configure(builder.Configuration, builder.Services);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +25,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseCors(Cors.Policy);
 }
 
 app.UseHttpsRedirection();
