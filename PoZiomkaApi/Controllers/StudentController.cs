@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using PoZiomkaApi.Requests.Auth;
+using PoZiomkaApi.Requests.Student;
 
 namespace PoZiomkaApi.Controllers;
 

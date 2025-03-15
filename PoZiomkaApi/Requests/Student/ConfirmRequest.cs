@@ -1,6 +1,6 @@
 ﻿using PoZiomkaDomain.Student.Commands.ConfirmStudent;
 
-namespace PoZiomkaApi.Requests.Auth;
+namespace PoZiomkaApi.Requests.Student;
 
 public record ConfirmRequest(string Token)
 {
