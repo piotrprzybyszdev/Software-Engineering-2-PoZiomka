@@ -1,6 +1,6 @@
 ﻿using PoZiomkaDomain.Application.Dtos;
 
-namespace PoZiomkaDomain.Form;
+namespace PoZiomkaDomain.Application;
 
 public interface IFileStorage
 {

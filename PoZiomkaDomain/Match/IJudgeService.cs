@@ -8,5 +8,5 @@ namespace PoZiomkaDomain.Match;
 public interface IJudgeService
 {
     public Task<IEnumerable<MatchModel>> FindMatching(IEnumerable<StudentModel> students, IEnumerable<StudentAnswerDisplay> studentAnswers);
-    public Task<IEnumerable<ReservationModel>> GenerateReservations(List<MatchModel> matches);
+    public Task<IEnumerable<ReservationModel>> GenerateReservations(IEnumerable<MatchModel> matches);
 }
