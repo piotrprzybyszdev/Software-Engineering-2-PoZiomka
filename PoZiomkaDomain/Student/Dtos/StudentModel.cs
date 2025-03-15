@@ -1,5 +1,6 @@
 ﻿namespace PoZiomkaDomain.Student.Dtos;
 
+
 public record StudentModel(int Id, string Email, string FirstName, string LastName, string PasswordHash, 
     bool IsConfirmed, string? PhoneNumber, string? IndexNumber,
     int? ReservationId, bool? HasAcceptedReservation, bool IsPhoneNumberHidden, bool IsIndexNumberHidden)

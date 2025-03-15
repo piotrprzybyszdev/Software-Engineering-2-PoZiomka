@@ -1,38 +1,25 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
-}
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
+import { StudentAuthService } from './student/auth/auth.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  standalone: false,
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+  private router = inject(Router);
+  private studentAuthService = inject(StudentAuthService);
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit() {
-    this.getForecasts();
-  }
-
-  getForecasts() {
-    this.http.get<WeatherForecast[]>('/weatherforecast').subscribe(
-      (result) => {
-        this.forecasts = result;
-      },
-      (error) => {
-        console.error(error);
+  ngOnInit(): void {
+    this.studentAuthService.fetchLoggedInStudent().subscribe({
+      next: response => {
+        if (response.palyload) {
+          this.router.navigate(['/student/profile']);
+        }
       }
-    );
+    });
   }
-
-  title = 'poziomka.client';
 }
