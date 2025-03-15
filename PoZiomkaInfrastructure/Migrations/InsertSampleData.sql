@@ -1,2 +1,2 @@
-﻿INSERT INTO Students (Email, PasswordHash, IsConfirmed)
-VALUES ('test@gmail.com', CAST(CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S' AS BINARY), 1);
+﻿INSERT INTO Students (Email, FirstName, LastName, PasswordHash, IsConfirmed, PhoneNumber, IndexNumber, ReservationId, HasAcceptedReservation, IsPhoneNumberHidden, IsIndexNumberHidden)  
+VALUES ('student@example.com', 'John', 'Doe', 0x1234567890ABCDEF, 1, '123-456-789', 'S12345', NULL, NULL, 0, 1);
