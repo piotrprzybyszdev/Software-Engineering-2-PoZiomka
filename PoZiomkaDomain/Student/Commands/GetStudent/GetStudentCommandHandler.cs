@@ -16,16 +16,8 @@ public class GetStudentCommandHandler(IStudentRepository studentRepository) : IR
 		}
 		catch
 		{
-			throw new NotFound($"Student with id `{request.Id}` not found");
+			throw new ObjectNotFound($"Student with id `{request.Id}` not found");
 		}
 	}
 }
 
-public class GetAllStudentsCommandHandler(IStudentRepository studentRepository) : IRequestHandler<GetAllStudentsCommand, IEnumerable<StudentDisplay>>
-{
-	public async Task<IEnumerable<StudentDisplay>> Handle(GetAllStudentsCommand request, CancellationToken cancellationToken)
-	{
-		var students = await studentRepository.GetAllStudents();
-		return students.Select(s => s.ToStudentDisplay(false));
-	}
-}

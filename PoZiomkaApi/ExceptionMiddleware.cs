@@ -3,6 +3,8 @@ using PoZiomkaDomain.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using FluentValidation;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
+using PoZiomkaDomain.StudentAnswers.Dtos;
 
 namespace PoZiomkaApi;
 
@@ -62,6 +64,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Internal Server Infrastructure Layer Error - something went wrong"
             };
         }
+        catch(ObjectNotFound exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+			problemDetails = new ProblemDetails()
+			{
+				Status = StatusCodes.Status404NotFound,
+				Detail = exception.Message,
+				Title = "Object not found"
+			};
+		}
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -72,6 +84,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Internal Server Error - something went wrong"
             };
         }
+        
 
         context.Response.ContentType = "application/problem+json";
         await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));

@@ -59,7 +59,7 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 
 		if (!ok)
 			throw new UnauthorizedAccessException();
-		bool hide=true;
+		bool hide = true;
 		if (User.IsInRole(Roles.Administrator))
 			hide = false;
 
