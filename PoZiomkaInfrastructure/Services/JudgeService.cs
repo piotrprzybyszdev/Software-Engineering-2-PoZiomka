@@ -21,9 +21,15 @@ public class JudgeService() : IJudgeService
 		throw new NotImplementedException();
 	}
 
+	public Task<IEnumerable<ReservationModel>> GenerateReservations(IEnumerable<MatchModel> matches)
+	{
+		throw new NotImplementedException();
+	}
+
 	public Task<bool> IsMatch(int studentId, int otherStudentId)
 	{
 		// TODO: Implement this method
 		return Task.FromResult(true); 
 	}
+	
 }
