@@ -39,7 +39,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Email not registered"
             };
         }
-        catch (TokenValidationException exception)
+        catch (InvalidTokenException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
 
@@ -47,7 +47,18 @@ public class ExceptionMiddleware(RequestDelegate next)
             {
                 Status = StatusCodes.Status400BadRequest,
                 Detail = exception.Message,
-                Title = "Token validation failed"
+                Title = "Given token is invalid"
+            };
+        }
+        catch (ClaimNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "Request is unauthorized because a claim could not be found"
             };
         }
         catch (ValidationException exception)

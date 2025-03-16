@@ -15,12 +15,21 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
         {
             claimsIdentity = await jwtService.ReadToken(request.Token);
         }
-        catch (Exception e)
+        catch (NotATokenException e)
         {
-            throw new TokenValidationException("Error validating token", e);
+            throw new InvalidTokenException("Given string is not a token", e);
+        }
+        catch (TokenExpiredException e)
+        {
+            throw new InvalidTokenException("Token has expired", e);
+        }
+        catch (TokenValidationException e)
+        {
+            throw new InvalidTokenException("Token wasn't issued by this authority", e);
         }
 
-        var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email) ?? throw new TokenValidationException("No email claim in token");
+        var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email)
+            ?? throw new ClaimNotFoundException("Email claim not found");
 
         var email = emailClaim.Value;
 
