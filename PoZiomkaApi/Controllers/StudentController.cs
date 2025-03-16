@@ -6,13 +6,16 @@ using PoZiomkaDomain.Student.Dtos;
 using static PoZiomkaApi.Authentication;
 using System.Security.Claims;
 using PoZiomkaDomain.Match;
+using MediatR;
+using PoZiomkaDomain.Student.Commands.GetStudent;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace PoZiomkaApi.Controllers;
 
 [Route("/")]
 [ApiController]
-public class StudentController(IStudentRepository studentRepository, IJudgeService judgeService): Controller
+public class StudentController(IStudentRepository studentRepository, IJudgeService judgeService, IMediator mediator): Controller
 {
 	[HttpPut("confirm")]
 	public async Task<IActionResult> Confirm()
@@ -32,18 +35,16 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 	{
 		int loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-		var student = await studentRepository.GetStudentById(loggedInUserId, null);
-
-		return student.ToStudentDisplay(false);
+		GetStudentCommand getStudent = new(loggedInUserId, false);
+		return await mediator.Send(getStudent);
 	}
 
 	[HttpGet("get")]
 	[Authorize(Roles = Roles.Administrator)]
 	public async Task<IEnumerable<StudentDisplay>> Get()
 	{
-		var studentsModel = await studentRepository.GetAllStudents();
-		var studentsDisplay= studentsModel.Select(s => s.ToStudentDisplay(true));
-		return studentsDisplay;
+		GetAllStudentsCommand getAllStudents = new();
+		return await mediator.Send(getAllStudents);
 	}
 
 	[HttpGet("get/{id}")]
@@ -58,10 +59,14 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 
 		if (!ok)
 			throw new UnauthorizedAccessException();
+		bool hide=true;
+		if (User.IsInRole(Roles.Administrator))
+			hide = false;
 
-		var student = await studentRepository.GetStudentById(id, null);
+		GetStudentCommand getStudent = new(id, hide);
+		var student = await mediator.Send(getStudent);
 
-		return student.ToStudentDisplay(true);
+		return student;
 	}
 
 	[HttpPost("create")]
