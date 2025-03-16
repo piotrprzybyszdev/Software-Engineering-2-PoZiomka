@@ -11,7 +11,7 @@ namespace PoZiomkaApi.Controllers;
 
 [Route("/")]
 [ApiController]
-public class AuthController(IMediator mediator, IJwtService jwtService) : ControllerBase
+public class AuthController(IMediator mediator, IJwtService jwtService, IEmailService emailService) : ControllerBase
 {
     [HttpPost("signup")]
     public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
@@ -67,5 +67,12 @@ public class AuthController(IMediator mediator, IJwtService jwtService) : Contro
     {
         var token = await jwtService.GenerateToken(new ClaimsIdentity([new Claim(ClaimTypes.Email, email)]), TimeSpan.FromMinutes(20));
         return Ok(token);
+    }
+
+    [HttpGet("email-test")]
+    public async Task<IActionResult> SendEmail(string email)
+    {
+        await emailService.SendEmailConfirmationEmail(email);
+        return Ok();
     }
 }
