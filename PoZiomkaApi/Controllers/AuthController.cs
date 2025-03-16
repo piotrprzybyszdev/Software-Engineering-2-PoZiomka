@@ -11,7 +11,7 @@ namespace PoZiomkaApi.Controllers;
 
 [Route("/")]
 [ApiController]
-public class AuthController(IMediator mediator, IJwtService jwtService) : ControllerBase
+public class AuthController(IMediator mediator, IJwtService jwtService, IEmailService emailService) : ControllerBase
 {
     [HttpPost("signup")]
     public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
@@ -60,5 +60,12 @@ public class AuthController(IMediator mediator, IJwtService jwtService) : Contro
             return Ok("Admin");
 
         return Ok("No role found");
+    }
+
+    [HttpGet("email-test")]
+    public async Task<IActionResult> SendEmail(string email)
+    {
+        await emailService.SendEmailConfirmationEmail(email);
+        return Ok();
     }
 }
