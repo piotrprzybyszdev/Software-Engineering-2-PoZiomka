@@ -11,7 +11,7 @@ namespace PoZiomkaApi.Controllers;
 
 [Route("/")]
 [ApiController]
-public class AuthController(IMediator mediator, IJwtService jwtService) : ControllerBase
+public class AuthController(IMediator mediator, IJwtService jwtService, IPasswordService passwordService) : ControllerBase
 {
 	[HttpPost("signup")]
 	public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
@@ -65,4 +65,11 @@ public class AuthController(IMediator mediator, IJwtService jwtService) : Contro
 
 		return Ok("No role found");
 	}
+
+	[HttpPost("get-hash")]
+	public async Task<IActionResult> GetHash([FromBody] string password)
+	{
+		return Ok(passwordService.ComputeHash(password));
+	}
+
 }
