@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using PoZiomkaDomain.Student;
@@ -17,11 +17,12 @@ namespace PoZiomkaApi.Controllers;
 [ApiController]
 public class StudentController(IStudentRepository studentRepository, IJudgeService judgeService, IMediator mediator): Controller
 {
-	[HttpPut("confirm")]
-	public async Task<IActionResult> Confirm()
-	{
-		return NoContent();
-	}
+	[HttpPost("confirm")]
+    public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
+    {
+        await mediator.Send(confirmRequest.ToConfirmStudentCommand());
+        return Ok();
+    }
 
 	[HttpPost("request-password-reset")]
 	public async Task<IActionResult> RequestPasswordReset()
@@ -90,4 +91,5 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 		return NoContent();
 	}
 }
+
 
