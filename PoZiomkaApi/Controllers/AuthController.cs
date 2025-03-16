@@ -62,6 +62,13 @@ public class AuthController(IMediator mediator, IJwtService jwtService, IEmailSe
         return Ok("No role found");
     }
 
+    [HttpPost("get-email-verification-jwt-test/{email}")]
+    public async Task<IActionResult> GetEmailVerificationJwtTest(string email)
+    {
+        var token = await jwtService.GenerateToken(new ClaimsIdentity([new Claim(ClaimTypes.Email, email)]), TimeSpan.FromMinutes(20));
+        return Ok(token);
+    }
+
     [HttpGet("email-test")]
     public async Task<IActionResult> SendEmail(string email)
     {

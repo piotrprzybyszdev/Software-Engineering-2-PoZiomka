@@ -28,6 +28,39 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Email is taken"
             };
         }
+        catch (EmailNotRegisteredException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Email not registered"
+            };
+        }
+        catch (InvalidTokenException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Given token is invalid"
+            };
+        }
+        catch (ClaimNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "Request is unauthorized because a claim could not be found"
+            };
+        }
         catch (ValidationException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
