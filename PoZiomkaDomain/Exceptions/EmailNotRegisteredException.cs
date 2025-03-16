@@ -1,5 +1,12 @@
 ﻿namespace PoZiomkaDomain.Exceptions;
 
-public class EmailNotRegisteredException(string message) : DomainException(message)
+public class EmailNotRegisteredException : DomainException
 {
+    public EmailNotRegisteredException(string message) : base(message)
+    {
+    }
+
+    public EmailNotRegisteredException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

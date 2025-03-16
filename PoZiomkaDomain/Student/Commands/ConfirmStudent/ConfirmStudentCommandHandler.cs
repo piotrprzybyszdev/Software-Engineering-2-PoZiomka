@@ -10,9 +10,17 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
 {
     public async Task Handle(ConfirmStudentCommand request, CancellationToken cancellationToken)
     {
-        var claimsIdentity = await jwtService.ReadToken(request.Token);
+        ClaimsIdentity claimsIdentity;
+        try
+        {
+            claimsIdentity = await jwtService.ReadToken(request.Token);
+        }
+        catch (Exception e)
+        {
+            throw new TokenValidationException("Error validating token", e);
+        }
 
-        var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email) ?? throw new Exception("No email in claims");
+        var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email) ?? throw new TokenValidationException("No email claim in token");
 
         var email = emailClaim.Value;
 
@@ -22,9 +30,9 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
         {
             await studentRepository.ConfirmStudent(studentConfirm, cancellationToken);
         }
-        catch (EmailNotFoundException)
+        catch (EmailNotFoundException e)
         {
-            throw new EmailNotRegisteredException($"User with email `{email}` not registered");
+            throw new EmailNotRegisteredException($"User with email `{email}` not registered", e);
         }
     }
 }

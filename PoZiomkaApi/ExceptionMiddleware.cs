@@ -39,6 +39,17 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Email not registered"
             };
         }
+        catch (TokenValidationException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Token validation failed"
+            };
+        }
         catch (ValidationException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
