@@ -11,7 +11,7 @@ public interface IStudentRepository
     public Task CreateStudent(StudentCreate studentCreate, CancellationToken? cancellationToken);
     public Task<StudentModel> GetStudentById(int id, CancellationToken? cancellationToken);
     public Task<IEnumerable<StudentModel>> GetAllStudents();
-
-    public Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken);
+	public Task EditStudent(StudentEdit studentEdit);
+	public Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken);
 
 }

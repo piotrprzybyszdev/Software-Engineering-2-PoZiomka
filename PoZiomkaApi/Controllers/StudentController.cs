@@ -6,6 +6,9 @@ using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Student.Commands.GetAllStudent;
 using PoZiomkaDomain.Student.Commands.GetStudent;
+using PoZiomkaDomain.Student.Commands.EditStudent; 
+using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaApi.Requests.Auth;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -60,16 +63,28 @@ public class StudentController(IMediator mediator) : Controller
 
     [HttpPost("create")]
     [Authorize(Roles = Roles.Administrator)]
-    public IActionResult CreateStudent()
+    public async Task<IActionResult> CreateStudent([FromBody] SignupRequest signupRequest)
     {
-        return NoContent();
+        await mediator.Send(signupRequest.ToSignupStudentCommand());
+
+        ConfirmRequest confirmRequest = new(signupRequest.Email);
+		await mediator.Send(confirmRequest.ToConfirmStudentCommand());
+
+		return Ok();
     }
 
     [HttpPut("update")]
-    [Authorize]
-    public IActionResult UpdateStudent()
+    //[Authorize]
+    public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
     {
-        return NoContent();
+  //      if(studentEdit.Id != User.GetUserId() && User.IsInRole(Roles.Administrator))
+  //      {
+		//	return Unauthorized();
+		//}
+		EditStudentCommand editStudentCommand = new(studentEdit);
+        await mediator.Send(editStudentCommand);
+        
+        return Ok();
     }
 
     [HttpDelete("delete/{id}")]
