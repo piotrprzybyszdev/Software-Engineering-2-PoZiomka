@@ -33,7 +33,7 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
 
         var email = emailClaim.Value;
 
-        var studentConfirm = new StudentConfirm(email);        
+        var studentConfirm = new StudentConfirm(email);
 
         try
         {

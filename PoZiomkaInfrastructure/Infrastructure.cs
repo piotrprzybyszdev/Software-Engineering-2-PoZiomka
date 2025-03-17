@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
 using PoZiomkaInfrastructure.Repositories;
@@ -52,5 +53,6 @@ public static class Infrastructure
         );
 
         services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IJudgeService, JudgeService>();
     }
 }

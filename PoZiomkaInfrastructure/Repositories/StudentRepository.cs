@@ -14,7 +14,7 @@ public class StudentRepository(IDbConnection connection) : IStudentRepository
     {
         var sqlQuery = @"
 INSERT INTO Students (Email, PasswordHash, IsConfirmed)
-VALUES (@email, CAST(@passwordHash AS BINARY), 0);
+VALUES (@email, @passwordHash, 0);
 ";
 
         try
@@ -25,6 +25,36 @@ VALUES (@email, CAST(@passwordHash AS BINARY), 0);
         when (exception.Number == ErrorNumbers.UniqueConstraintViolation)
         {
             throw new EmailNotUniqueException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExceutionException(exception.Message, exception.Number);
+        }
+    }
+
+
+    public async Task<StudentModel> GetStudentById(int id, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"SELECT * FROM Students WHERE id = @id";
+
+        try
+        {
+            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
+            return student ?? throw new QueryExceutionException("Student not found", id);
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExceutionException(exception.Message, exception.Number);
+        }
+    }
+
+    public async Task<IEnumerable<StudentModel>> GetAllStudents()
+    {
+        var sqlQuery = @"SELECT * FROM Students";
+
+        try
+        {
+            return await connection.QueryAsync<StudentModel>(sqlQuery);
         }
         catch (SqlException exception)
         {
@@ -50,4 +80,5 @@ UPDATE Students SET IsConfirmed = 1 WHERE Email = @email;
 
         if (rowsAffected == 0) throw new EmailNotFoundException();
     }
+
 }
