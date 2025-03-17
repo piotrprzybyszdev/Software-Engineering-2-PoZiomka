@@ -98,4 +98,18 @@ IsIndexNumberHidden=@IsIndexNumberHidden WHERE id=@id";
 		}
 		if (rowsAffedted == 0) throw new NoRowEditedException("User not found");
 	}
+
+	public async Task DeleteStudent(int id)
+	{
+		var sqlQuery = @"DELETE FROM Students WHERE id = @id";
+
+		try
+		{
+			await connection.ExecuteAsync(sqlQuery, new { id });
+		}
+		catch (SqlException exception)
+		{
+			throw new QueryExceutionException(exception.Message, exception.Number);
+		}
+	}
 }

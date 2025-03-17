@@ -84,9 +84,11 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpDelete("delete/{id}")]
-    [Authorize]
+    [Authorize(Roles =Roles.Administrator)]
     public IActionResult DeleteStudent(int id)
     {
-        return NoContent();
+		DeleteStudentCommand deleteStudentCommand = new(id);
+		mediator.Send(deleteStudentCommand);
+		return Ok();
     }
 }
