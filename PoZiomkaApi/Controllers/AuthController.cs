@@ -17,7 +17,7 @@ public class AuthController(IMediator mediator, IJwtService jwtService, IEmailSe
     [HttpPost("signup")]
     public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
     {
-        await mediator.Send(signupRequest.ToSignupStudentCommand());
+        await mediator.Send(signupRequest.ToSignupStudentByUserCommand());
         return Ok();
     }
 

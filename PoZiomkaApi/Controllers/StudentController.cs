@@ -62,14 +62,10 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPost("create")]
-    [Authorize(Roles = Roles.Administrator)]
+    //[Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> CreateStudent([FromBody] SignupRequest signupRequest)
     {
-        await mediator.Send(signupRequest.ToSignupStudentCommand());
-
-        ConfirmRequest confirmRequest = new(signupRequest.Email);
-		await mediator.Send(confirmRequest.ToConfirmStudentCommand());
-
+        await mediator.Send(signupRequest.ToSignupStudentByAdminCommand());
 		return Ok();
     }
 

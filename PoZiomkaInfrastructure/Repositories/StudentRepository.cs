@@ -15,7 +15,7 @@ public class StudentRepository(IDbConnection connection) : IStudentRepository
 	{
 		var sqlQuery = @"
 INSERT INTO Students (Email, PasswordHash, IsConfirmed)
-VALUES (@email, @passwordHash, 0);
+VALUES (@email, @passwordHash, @isConfirmed);
 ";
 
 		try
