@@ -10,6 +10,7 @@ using MediatR;
 using PoZiomkaDomain.Student.Commands.GetStudent;
 using System.Diagnostics.CodeAnalysis;
 using PoZiomkaApi.Requests.Student;
+using PoZiomkaApi.Utils;
 
 
 namespace PoZiomkaApi.Controllers;
@@ -35,7 +36,7 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 	[Authorize(Roles = Roles.Student)]
 	public async Task<StudentDisplay> GetLoggedIn()
 	{
-		int loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+		int loggedInUserId = User.GetUserId();
 
 		GetStudentCommand getStudent = new(loggedInUserId, false);
 		return await mediator.Send(getStudent);
@@ -53,7 +54,8 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 	[Authorize] 
 	public async Task<StudentDisplay> GetStudentById(int id)
 	{
-		int loggedInUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+		// for administrator, for student if is match or is the same student
+		int loggedInUserId = User.GetUserId();
 
 		bool ok = User.IsInRole(Roles.Administrator) ||
 		  (User.IsInRole(Roles.Student) &&
