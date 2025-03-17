@@ -41,26 +41,26 @@ VALUES (@email, CAST(@passwordHash AS BINARY), 0);
         {
             var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
             return student ?? throw new QueryExceutionException("Student not found", id);
-		}
-		catch (SqlException exception)
-		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
-		}
-	}
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExceutionException(exception.Message, exception.Number);
+        }
+    }
 
-	public async Task<IEnumerable<StudentModel>> GetAllStudents()
-	{
-		var sqlQuery = @"SELECT * FROM Students";
+    public async Task<IEnumerable<StudentModel>> GetAllStudents()
+    {
+        var sqlQuery = @"SELECT * FROM Students";
 
-		try
-		{
-			return await connection.QueryAsync<StudentModel>(sqlQuery);
-		}
-		catch (SqlException exception)
-		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
-		}
-	}
+        try
+        {
+            return await connection.QueryAsync<StudentModel>(sqlQuery);
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExceutionException(exception.Message, exception.Number);
+        }
+    }
 
     public async Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken)
     {

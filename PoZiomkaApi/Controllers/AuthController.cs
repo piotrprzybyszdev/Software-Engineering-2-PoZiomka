@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using PoZiomkaApi.Requests.Auth;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PoZiomkaApi.Requests.Auth;
 using PoZiomkaDomain.Common;
+using System.Security.Claims;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -14,64 +14,63 @@ namespace PoZiomkaApi.Controllers;
 
 public class AuthController(IMediator mediator, IJwtService jwtService, IEmailService emailService, IPasswordService passwordService) : ControllerBase
 {
-	[HttpPost("signup")]
-	public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
-	{
-		await mediator.Send(signupRequest.ToSignupStudentCommand());
-		return Ok();
-	}
+    [HttpPost("signup")]
+    public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
+    {
+        await mediator.Send(signupRequest.ToSignupStudentCommand());
+        return Ok();
+    }
 
-	[HttpPost("login")]
-	public async Task<IActionResult> Login()
-	{
-		var userId = 1;
+    [HttpPost("login")]
+    public async Task<IActionResult> Login()
+    {
+        var userId = 1;
 
-		var claims = new List<Claim>
-		{
-			new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-			new Claim(ClaimTypes.Role, Authentication.Roles.Student)
-		};
+        IEnumerable<Claim> claims = [
+            new(ClaimTypes.NameIdentifier, userId.ToString()),
+            new(ClaimTypes.Role, Roles.Student)
+        ];
 
-		var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
 
-		await HttpContext.SignInAsync(principal);
+        await HttpContext.SignInAsync(principal);
 
-		return Ok();
-	}
+        return Ok();
+    }
 
-	[HttpPost("logout")]
-	public async Task<IActionResult> Logout()
-	{
-		await HttpContext.SignOutAsync();
-		return Ok();
-	}
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync();
+        return Ok();
+    }
 
-	[Authorize(Roles = Authentication.Roles.Student)]
-	[HttpGet("get-jwt-test")]
-	public async Task<IActionResult> GetJwtTest()
-	{
-		return Ok(await jwtService.GenerateToken(HttpContext.User.Identities.First(), TimeSpan.FromMinutes(20)));
-	}
+    [Authorize(Roles = Roles.Student)]
+    [HttpGet("get-jwt-test")]
+    public async Task<IActionResult> GetJwtTest()
+    {
+        return Ok(await jwtService.GenerateToken(HttpContext.User.Identities.First(), TimeSpan.FromMinutes(20)));
+    }
 
-	[Authorize(Roles = Authentication.Roles.Student)]
-	[HttpGet("decode-jwt-test/{token}")]
-	public async Task<IActionResult> DecodeJwtTest(string token)
-	{
-		var identity = await jwtService.ReadToken(token);
+    [Authorize(Roles = Roles.Student)]
+    [HttpGet("decode-jwt-test/{token}")]
+    public async Task<IActionResult> DecodeJwtTest(string token)
+    {
+        var identity = await jwtService.ReadToken(token);
 
-		if (identity.HasClaim(ClaimTypes.Role, Authentication.Roles.Student))
-			return Ok("Student");
-		if (identity.HasClaim(ClaimTypes.Role, Authentication.Roles.Administrator))
-			return Ok("Admin");
+        if (identity.HasClaim(ClaimTypes.Role, Roles.Student))
+            return Ok("Student");
+        if (identity.HasClaim(ClaimTypes.Role, Roles.Administrator))
+            return Ok("Admin");
 
-		return Ok("No role found");
-	}
+        return Ok("No role found");
+    }
 
-	[HttpPost("get-hash")]
-	public async Task<IActionResult> GetHash([FromBody] string password)
-	{
-		return Ok(passwordService.ComputeHash(password));
-	}
+    [HttpPost("get-hash")]
+    public async Task<IActionResult> GetHash([FromBody] string password)
+    {
+        return Ok(passwordService.ComputeHash(password));
+    }
 
 
     [HttpPost("get-email-verification-jwt-test/{email}")]

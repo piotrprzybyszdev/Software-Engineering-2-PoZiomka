@@ -53,6 +53,6 @@ public static class Infrastructure
         );
 
         services.AddScoped<IStudentRepository, StudentRepository>();
-		services.AddScoped<IJudgeService, JudgeService>();
-	}
+        services.AddScoped<IJudgeService, JudgeService>();
+    }
 }

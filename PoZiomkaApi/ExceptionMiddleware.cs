@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
-using FluentValidation;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http.HttpResults;
-using PoZiomkaDomain.StudentAnswers.Dtos;
 
 namespace PoZiomkaApi;
 
@@ -39,6 +37,17 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status400BadRequest,
                 Detail = exception.Message,
                 Title = "Email not registered"
+            };
+        }
+        catch (UnauthorizedException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "User cannot make this request"
             };
         }
         catch (InvalidTokenException exception)
@@ -97,16 +106,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Internal Server Infrastructure Layer Error - something went wrong"
             };
         }
-        catch(ObjectNotFound exception)
+        catch (ObjectNotFound exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
-			problemDetails = new ProblemDetails()
-			{
-				Status = StatusCodes.Status404NotFound,
-				Detail = exception.Message,
-				Title = "Object not found"
-			};
-		}
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Object not found"
+            };
+        }
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -117,7 +126,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Internal Server Error - something went wrong"
             };
         }
-        
+
 
         context.Response.ContentType = "application/problem+json";
         await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
