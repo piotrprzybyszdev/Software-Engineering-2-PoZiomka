@@ -9,7 +9,7 @@ public class SignupStudentCommandHandler(IPasswordService passwordService, IStud
 {
     public async Task Handle(SignupStudentCommand request, CancellationToken cancellationToken)
     {
-        StudentCreate studentCreate = new(request.Email, passwordService.ComputeHash(request.Password));
+        StudentCreate studentCreate = new(request.Email, passwordService.ComputeHash(request.Password), request.IsConfirmed);
 
         try
         {

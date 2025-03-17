@@ -116,6 +116,26 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Object not found"
             };
         }
+        catch(NoRowEditedException exception)
+        {
+			context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+			problemDetails = new ProblemDetails()
+            {
+				Status = StatusCodes.Status404NotFound,
+				Detail = exception.Message,
+				Title = "No row changed"
+			};
+		}
+        catch(DeleteException exception)
+        { 
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+			problemDetails = new ProblemDetails()
+			{
+				Status = StatusCodes.Status500InternalServerError,
+				Detail = exception.Message,
+				Title = "Error while deleting"
+			};
+		}
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
