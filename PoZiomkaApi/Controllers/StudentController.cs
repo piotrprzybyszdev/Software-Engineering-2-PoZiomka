@@ -17,14 +17,14 @@ namespace PoZiomkaApi.Controllers;
 
 [Route("/")]
 [ApiController]
-public class StudentController(IStudentRepository studentRepository, IJudgeService judgeService, IMediator mediator): Controller
+public class StudentController(IStudentRepository studentRepository, IJudgeService judgeService, IMediator mediator) : Controller
 {
 	[HttpPost("confirm")]
-    public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
-    {
-        await mediator.Send(confirmRequest.ToConfirmStudentCommand());
-        return Ok();
-    }
+	public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
+	{
+		await mediator.Send(confirmRequest.ToConfirmStudentCommand());
+		return Ok();
+	}
 
 	[HttpPost("request-password-reset")]
 	public async Task<IActionResult> RequestPasswordReset()
@@ -51,7 +51,7 @@ public class StudentController(IStudentRepository studentRepository, IJudgeServi
 	}
 
 	[HttpGet("get/{id}")]
-	[Authorize] 
+	[Authorize]
 	public async Task<StudentDisplay> GetStudentById(int id)
 	{
 		// for administrator, for student if is match or is the same student
