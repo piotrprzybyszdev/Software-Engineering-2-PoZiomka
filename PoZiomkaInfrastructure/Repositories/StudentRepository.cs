@@ -103,13 +103,15 @@ IsIndexNumberHidden=@IsIndexNumberHidden WHERE id=@id";
 	{
 		var sqlQuery = @"DELETE FROM Students WHERE id = @id";
 
+		int rowAffected;
 		try
 		{
-			await connection.ExecuteAsync(sqlQuery, new { id });
+			rowAffected=await connection.ExecuteAsync(sqlQuery, new { id });
 		}
 		catch (SqlException exception)
 		{
 			throw new QueryExceutionException(exception.Message, exception.Number);
 		}
+		if (rowAffected == 0) throw new NoRowEditedException("Now row was deleted");
 	}
 }
