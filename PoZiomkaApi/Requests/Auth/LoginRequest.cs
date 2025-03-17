@@ -1,3 +1,8 @@
-﻿namespace PoZiomkaApi.Requests.Auth;
+﻿using PoZiomkaDomain.Student.Commands.LoginStudent;
 
-public record LoginReqest(string Email, string Password);
+namespace PoZiomkaApi.Requests.Auth;
+
+public record LoginRequest(string Email, string Password)
+{
+    public LoginStudentCommand ToLoginStudentCommand() => new(Email, Password);
+}
