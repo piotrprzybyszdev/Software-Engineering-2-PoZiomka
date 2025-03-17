@@ -22,14 +22,9 @@ public class AuthController(IMediator mediator, IJwtService jwtService, IEmailSe
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
-        var userId = 1;
-
-        IEnumerable<Claim> claims = [
-            new(ClaimTypes.NameIdentifier, userId.ToString()),
-            new(ClaimTypes.Role, Roles.Student)
-        ];
+        IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginStudentCommand());
 
         var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
 

@@ -48,6 +48,21 @@ VALUES (@email, @passwordHash, 0);
         }
     }
 
+    public async Task<StudentModel> GetStudentByEmail(string email, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"SELECT * FROM Students WHERE Email = @email";
+
+        try
+        {
+            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { email }, cancellationToken: cancellationToken ?? default));
+            return student ?? throw new EmailNotFoundException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExceutionException(exception.Message, exception.Number);
+        }
+    }
+
     public async Task<IEnumerable<StudentModel>> GetAllStudents()
     {
         var sqlQuery = @"SELECT * FROM Students";
