@@ -9,6 +9,7 @@ using PoZiomkaDomain.Match;
 using MediatR;
 using PoZiomkaDomain.Student.Commands.GetStudent;
 using System.Diagnostics.CodeAnalysis;
+using PoZiomkaApi.Requests.Student;
 
 
 namespace PoZiomkaApi.Controllers;
