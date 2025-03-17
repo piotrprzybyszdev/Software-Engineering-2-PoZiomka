@@ -49,7 +49,7 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize]
     public async Task<IActionResult> GetStudentById(int id)
     {
-        
+
         int loggedInUserId = User.GetUserId();
 
         GetStudentCommand getStudent = new(id, User);

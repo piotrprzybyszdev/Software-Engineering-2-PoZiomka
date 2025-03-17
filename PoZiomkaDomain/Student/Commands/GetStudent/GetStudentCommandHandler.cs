@@ -18,7 +18,7 @@ public class GetStudentCommandHandler(IStudentRepository studentRepository, IJud
 
         if (!ok)
             throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");
-       
+
         bool hide = true;
         if (request.User.IsInRole(Roles.Administrator))
             hide = false;
