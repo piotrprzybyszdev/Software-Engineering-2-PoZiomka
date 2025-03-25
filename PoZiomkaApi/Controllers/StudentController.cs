@@ -12,11 +12,11 @@ using PoZiomkaApi.Requests.Auth;
 
 namespace PoZiomkaApi.Controllers;
 
-[Route("/")]
+[Route("/student")]
 [ApiController]
 public class StudentController(IMediator mediator) : Controller
 {
-    [HttpPost("confirm")]
+    [HttpPut("confirm")]
     public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
     {
         await mediator.Send(confirmRequest.ToConfirmStudentCommand());
