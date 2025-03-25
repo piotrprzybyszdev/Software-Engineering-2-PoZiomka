@@ -18,9 +18,9 @@ export class ProfileComponent implements OnInit {
   private router = inject(Router);
 
   student: StudentModel | null = null;
-  isEditingEmail = signal<boolean>(false);
+  isEditingData = signal<boolean>(false);
   isEditingPassword = signal<boolean>(false);
-  emailForm!: FormGroup;
+  dataForm!: FormGroup;
   passwordForm!: FormGroup;
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
@@ -34,6 +34,9 @@ export class ProfileComponent implements OnInit {
     this.studentService.fetchLoggedInStudent().subscribe({
       next: (response) => {
         this.student = response.palyload ?? null;
+        if (this.student) {
+          this.dataForm.patchValue(this.student);
+        }
       },
       error: () => {
         this.errorMessage.set('Błąd pobierania profilu użytkownika');
@@ -42,8 +45,12 @@ export class ProfileComponent implements OnInit {
   }
 
   initForms(): void {
-    this.emailForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]]
+    this.dataForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      indexNumber: [''],
+      phoneNumber: ['']
     });
 
     this.passwordForm = this.formBuilder.group({
@@ -52,25 +59,33 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  toggleEmailEdit(): void {
-    this.isEditingEmail.set(!this.isEditingEmail());
+  toggleDataEdit(): void {
+    this.isEditingData.set(!this.isEditingData());
     if (this.student) {
-      this.emailForm.patchValue({ email: this.student.email });
+      this.dataForm.patchValue(this.student);
     }
   }
 
-  updateEmail(): void {
-    if (this.emailForm.invalid || !this.student) return;
+  updateData(): void {
+    console.log("Próba aktualizacji danych...");
+
+    if (this.dataForm.invalid || !this.student) {
+        console.log("❌ Formularz niepoprawny lub brak studenta!");
+        return;
+    }
     
-    const updatedStudent = { ...this.student, email: this.emailForm.value.email };
+    const updatedStudent = { ...this.student, ...this.dataForm.value };
+    console.log('Próba aktualizacji:', updatedStudent);
     this.studentService.updateStudent(updatedStudent).subscribe({
       next: () => {
-        this.successMessage.set('Email został zaktualizowany.');
-        this.isEditingEmail.set(false);
+        console.log('Aktualizacja zakończona sukcesem');
+        this.successMessage.set('Dane zostały zaktualizowane.');
+        this.isEditingData.set(false);
         this.fetchProfile();
       },
-      error: () => {
-        this.errorMessage.set('Błąd podczas aktualizacji emaila.');
+      error: (err) => {
+        console.error('Błąd aktualizacji:', err);
+        this.errorMessage.set('Błąd podczas aktualizacji danych.');
       }
     });
   }
@@ -98,4 +113,5 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 }
+
 
