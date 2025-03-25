@@ -1,33 +1,67 @@
 <section class="vh-100 bg-danger bg-opacity-25">
     <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xxl-10">
-                <div class="card rounded-3 text-black">
-                    <div class="card-body py-md-5 px-5 mx-md-4">
-                        
-                        <div class="text-center mb-4">
-                            <h1 class="poziomka-logo mt-1 pb-1">Twój Profil</h1>
-                            <hr>
-                        </div>
-
-                        <div class="mb-4">
-                            <h4>Imię i nazwisko:</h4>
-                            <p>{{ student?.firstName }} {{ student?.lastName }}</p>
-                        </div>
-
-                        <div class="mb-4">
-                            <h4>Email:</h4>
-                            <p>{{ student?.email }}</p>
-                        </div>
-
-                        <div class="text-center mt-5">
-                            <button class="btn btn-danger" (click)="logout()">Wyloguj się</button>
-                        </div>
-
-                    </div>
-                </div>
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-xxl-10">
+          <div class="card rounded-3 text-black">
+            <div class="card-body py-md-5 px-5 mx-md-4">
+              
+              <div class="text-center mb-4">
+                <h1 class="poziomka-logo mt-1 pb-1">Twój Profil</h1>
+                <hr>
+              </div>
+  
+              <div class="mb-4">
+                <h4>Imię i nazwisko:</h4>
+                <p>{{ student?.firstName }} {{ student?.lastName }}</p>
+              </div>
+  
+              <div class="mb-4">
+                <h4>Numer Indeksu:</h4>
+                <p>{{ student?.indexNumber }}</p>
+              </div>
+  
+              <div class="mb-4">
+                <h4>Telefon:</h4>
+                <p>{{ student?.phoneNumber }}</p>
+              </div>
+  
+              <!-- Edycja Emaila -->
+              <div class="mb-4">
+                <h4>Email:</h4>
+                <p *ngIf="!isEditingEmail()">{{ student?.email }} <button class="btn btn-sm btn-secondary" (click)="toggleEmailEdit()">Edytuj</button></p>
+                <form *ngIf="isEditingEmail()" [formGroup]="emailForm" (ngSubmit)="updateEmail()">
+                  <input type="email" formControlName="email" class="form-control mb-2">
+                  <button type="submit" class="btn btn-success btn-sm">Zapisz</button>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="toggleEmailEdit()">Anuluj</button>
+                </form>
+              </div>
+  
+              <!-- Zmiana Hasła -->
+              <div class="mb-4">
+                <h4>Zmiana Hasła:</h4>
+                <button *ngIf="!isEditingPassword()" class="btn btn-warning btn-sm" (click)="togglePasswordEdit()">Zmień Hasło</button>
+                <form *ngIf="isEditingPassword()" [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
+                  <input type="password" formControlName="oldPassword" placeholder="Stare hasło" class="form-control mb-2">
+                  <input type="password" formControlName="newPassword" placeholder="Nowe hasło" class="form-control mb-2">
+                  <button type="submit" class="btn btn-success btn-sm">Zapisz</button>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="togglePasswordEdit()">Anuluj</button>
+                </form>
+              </div>
+  
+              <!-- Wylogowanie -->
+              <div class="text-center mt-5">
+                <button class="btn btn-danger" (click)="logout()">Wyloguj się</button>
+              </div>
+  
+              <!-- Komunikaty -->
+              <div *ngIf="errorMessage()" class="alert alert-danger mt-3">{{ errorMessage() }}</div>
+              <div *ngIf="successMessage()" class="alert alert-success mt-3">{{ successMessage() }}</div>
+  
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</section>
+  </section>
+  
 

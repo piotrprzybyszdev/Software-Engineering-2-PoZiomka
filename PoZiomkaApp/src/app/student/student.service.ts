@@ -56,4 +56,10 @@ export class StudentService {
   deleteStudent(id: number) {
     return pipeApiResponse(this.httpClient.delete<void>(`/api/student/delete/${id}`, {}));
   }
+
+  logout(): void {
+    this._loggedInStudent.set(null);
+    localStorage.removeItem('authToken'); 
+  }
+  
 }
