@@ -1,1 +1,39 @@
-<p>dashboard works!</p>
+<section class="vh-100 bg-danger bg-opacity-25">
+    <div class="container-fluid py-5 h-100">
+        <div class="row d-flex justify-content-start align-items-center h-100">
+            <!-- Boczne menu -->
+            <div class="col-3 col-md-2 p-0 bg-dark text-white">
+                <div class="d-flex flex-column align-items-center pt-5">
+                    <!-- Logo -->
+                    <img src="images/poziomka_blue.png" alt="Logo" class="img-fluid mb-4" style="width: 80px;">
+                    
+                    <!-- Menu -->
+                    <div class="d-flex flex-column w-100">
+                        <button class="btn btn-danger mb-3" (click)="goToProfile()">Przejdź do profilu</button>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Główna zawartość -->
+            <div class="col-9 col-md-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-12 col-xl-12 px-0 px-md-5 px-xl-0">
+                            <div class="card-body py-md-5 px-5 mx-md-4">
+                                <div class="text-center mb-4">
+                                    <h1 class="poziomka-logo mt-1 pb-1">PoZiomka Admin</h1>
+                                    <hr>
+                                    <h3 class="mt-5">Panel Administratora</h3>
+                                </div>
+
+                                <!-- Główna treść dashboardu -->
+                                <p class="text-center">Tutaj znajduje się główny panel administracyjny, gdzie administrator może zarządzać użytkownikami, danymi, etc.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

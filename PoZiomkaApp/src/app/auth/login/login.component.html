@@ -13,20 +13,29 @@
                                     <h3 class="mt-5">Zaloguj się jako student</h3>
                                 </div>
 
-                                <form>
+                                <form [formGroup]="loginForm">
                                     <div class="form-outline form-floating mb-4">
-                                        <input type="email" id="emailTextField" class="form-control" placeholder="" />
+                                        <input type="email" id="emailTextField" class="form-control" placeholder=""
+                                               formControlName="email" [ngClass]="emailInvalid ? 'is-invalid' : ''"/>
                                         <label class="form-label" for="emailTextField">Email</label>
                                     </div>
 
                                     <div class="form-floating mb-4">
-                                        <input type="password" id="passwordTextField" class="form-control" placeholder=""/>
+                                        <input type="password" id="passwordTextField" class="form-control" placeholder=""
+                                               formControlName="password" [ngClass]="passwordInvalid ? 'is-invalid' : ''"/>
                                         <label class="form-label" for="passwordTextField">Hasło</label>
                                     </div>
 
+                                    <!-- Obsługa błędów -->
+                                    <div class="text-danger mt-3" [ngClass]="error() === undefined ? 'invisible' : ''">
+                                        {{ error() ?? 'error placeholder' }}
+                                    </div>
+
                                     <div class="d-flex justify-content-between pe-3 mb-4">
-                                        <a class="text-muted" href="#!">Zapomniałeś hasła?</a>
-                                        <button class="btn btn-danger px-4" type="button">Zaloguj się</button>
+                                        <a class="text-muted" href="/password-reset">Zapomniałeś hasła?</a>
+                                        <button class="btn btn-danger px-4" type="button" (click)="onLoginButtonClick()">
+                                            Zaloguj się
+                                        </button>
                                     </div>
 
                                     <div class="row mb-4 gx-3 pt-3">
@@ -41,7 +50,7 @@
                                                 Nie masz jeszcze konta? <a class="text-muted" href="/signup">Zarejestruj się</a>
                                             </div>
                                             <div class="text-center">
-                                                <button type="button" class="btn btn-outline-danger">Zaloguj się jako administrator</button>
+                                                <button type="button" class="btn btn-outline-danger" (click)="navigateToAdminLogin()">Zaloguj się jako administrator</button>
                                             </div>
                                         </div>
                                     </div>
