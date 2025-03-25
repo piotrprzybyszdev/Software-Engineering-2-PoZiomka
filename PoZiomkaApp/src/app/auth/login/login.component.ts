@@ -51,6 +51,7 @@ export class LoginComponent {
       .subscribe({
         next: response => {
           if (response.success) {
+            console.log("udane logowanie!");
             // Po udanym logowaniu, pobieramy dane zalogowanego studenta
             this.studentService.fetchLoggedInStudent().subscribe({
               next: studentResponse => {
