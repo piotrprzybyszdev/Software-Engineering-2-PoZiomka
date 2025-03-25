@@ -1,13 +1,16 @@
 <div class="container mt-5">
-    <h2>Lista Studentów</h2>
-  
-    <!-- Wyświetlanie błędów -->
-    <div *ngIf="errorMessage" class="alert alert-danger">
+  <h2>Lista Studentów</h2>
+
+  <!-- Wyświetlanie błędów -->
+   @if (errorMessage) {
+    <div class="alert alert-danger">
       {{ errorMessage }}
     </div>
-  
-    <!-- Wyświetlanie listy studentów -->
-    <div *ngIf="students.length > 0">
+   }
+
+  <!-- Wyświetlanie listy studentów -->
+   @if (students.length > 0) {
+    <div>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -18,19 +21,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let student of students; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ student.firstName }}</td>
-            <td>{{ student.lastName }}</td>
-            <td>{{ student.email }}</td>
+          <tr>
+            @for (student of students; track $index) {
+              <td>{{ $index + 1 }}</td>
+              <td>{{ student.firstName }}</td>
+              <td>{{ student.lastName }}</td>
+              <td>{{ student.email }}</td>
+            }
           </tr>
         </tbody>
       </table>
     </div>
-  
-    <!-- Komunikat, gdy nie ma studentów -->
-    <div *ngIf="students.length === 0">
+  }
+
+  <!-- Komunikat, gdy nie ma studentów -->
+  @if (students.length === 0) {
+    <div>
       <p>Brak studentów do wyświetlenia.</p>
     </div>
-  </div>
-  
+  }
+</div>

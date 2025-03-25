@@ -1,10 +1,10 @@
 import { Routes } from "@angular/router";
 import { LoginComponent } from "./login/login.component";
-import { AdminLoginComponent } from "./login/admin-login.component";
+import { AdminLoginComponent } from "../admin/admin-login/admin-login.component";
 import { SignupComponent } from "./signup/signup.component";
 import { UnauthorizedComponent } from "./unauthorized/unauthorized.component";
 import { ResetPasswordComponent } from "./password-reset/password-reset.component";
-import { ResetPasswordConfirmComponent } from "./password-reset/password-reset-confirm.component";
+import { ResetPasswordConfirmComponent } from "./password-reset-confirm/password-reset-confirm.component";
 
 
 export const routes: Routes = [
@@ -18,11 +18,6 @@ export const routes: Routes = [
     path: 'login',
     title: 'Poziomka - Zaloguj się',
     component: LoginComponent
-  },
-  {
-    path: 'admin/login',
-    title: 'Poziomka - Zaloguj się',
-    component: AdminLoginComponent
   },
   {
     path: 'signup',

@@ -9,7 +9,10 @@ export const routes: Routes = [
     title: 'PoZiomka - Student',
     pathMatch: 'full'
   },
-  { path: 'students', component: StudentsListComponent },
+  {
+    path: 'students',
+    component: StudentsListComponent
+  },
   {
     path: 'profile',
     title: 'PoZiomka - Profil Studenta',
