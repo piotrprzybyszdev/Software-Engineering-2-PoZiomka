@@ -31,11 +31,6 @@ const canAccessAdmin: CanMatchFn = (route, segments) => {
 export const routes: Routes = [
   ...authRoutes,
   {
-    path: 'password-reset',
-    loadComponent: () => import('./auth/password-reset/password-reset.component').then(mod => mod.ResetPasswordComponent),
-    title: 'Resetowanie hasła'
-  },
-  {
     path: 'student',
     loadComponent: () => import('./student/student.component').then(mod => mod.StudentComponent),
     title: 'Student',

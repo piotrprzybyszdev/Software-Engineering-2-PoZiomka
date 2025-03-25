@@ -31,7 +31,7 @@ export class StudentService {
     }));
   }
 
-  resetPassword(token: string): Observable<ApiResponse<void>> {
+  resetPassword(token: string, p0: string): Observable<ApiResponse<void>> {
     return pipeApiResponse(this.httpClient.put<void>('/api/student/password-reset/', {
       token: token
     }));

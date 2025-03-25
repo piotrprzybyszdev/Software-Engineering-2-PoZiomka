@@ -1,1 +1,33 @@
-<p>profile works!</p>
+<section class="vh-100 bg-danger bg-opacity-25">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xxl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="card-body py-md-5 px-5 mx-md-4">
+                        
+                        <div class="text-center mb-4">
+                            <h1 class="poziomka-logo mt-1 pb-1">Twój Profil</h1>
+                            <hr>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4>Imię i nazwisko:</h4>
+                            <p>{{ student?.firstName }} {{ student?.lastName }}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4>Email:</h4>
+                            <p>{{ student?.email }}</p>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <button class="btn btn-danger" (click)="logout()">Wyloguj się</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
