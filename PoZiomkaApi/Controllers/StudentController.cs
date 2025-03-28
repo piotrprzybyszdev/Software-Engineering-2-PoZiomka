@@ -30,7 +30,7 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpGet("get-logged-in")]
-    //[Authorize(Roles = Roles.Student)]
+    [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetLoggedIn()
     {
         int loggedInUserId = User.GetUserId();
