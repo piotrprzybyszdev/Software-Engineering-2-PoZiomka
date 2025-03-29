@@ -1,0 +1,18 @@
+<section class="min-vh-100 bg-opacity-25 d-flex" [ngClass]="backgroundColor()">
+    <div class="container py-5 h-100 my-auto">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div [ngClass]="configuration() === CardConfiguration.NoSecondary ? 'col-xxl-6' : 'col-xxl-10'">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none" [ngClass]="secondaryClass()">
+                            <ng-content select="#secondary-card">Empty secondary card</ng-content>
+                        </div>
+                        <div class="col-12 px-0 px-md-5 px-xl-0" [ngClass]="primaryClass()">
+                            <ng-content select="#primary-card">Empty primary card</ng-content>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

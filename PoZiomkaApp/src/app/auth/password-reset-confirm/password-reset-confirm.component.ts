@@ -3,11 +3,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from '../../student/student.service';
+import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
 
 @Component({
   selector: 'app-reset-password-confirm',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent],
   templateUrl: './password-reset-confirm.component.html',
   styleUrl: './password-reset-confirm.component.css'
 })
@@ -16,6 +17,8 @@ export class ResetPasswordConfirmComponent {
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  CardConfiguration = CardConfiguration;
 
   token = this.route.snapshot.paramMap.get('token');
   isSubmitted = signal<boolean>(false);

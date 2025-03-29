@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { StudentService } from '../../student/student.service'; // Importujemy StudentService
-import { HttpErrorResponse } from '@angular/common/http';
+import { CardConfiguration, CenteredCardComponent } from '../../common/centered-card/centered-card.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -18,6 +18,8 @@ export class LoginComponent {
   private studentService = inject(StudentService); // Inicjalizujemy StudentService
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
+
+  CardConfiguration = CardConfiguration;
   
   isSubmitted = signal<boolean>(false);
   error = signal<string | undefined>(undefined);
