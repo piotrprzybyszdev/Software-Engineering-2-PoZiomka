@@ -5,3 +5,9 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.poziomka-logo-blue {
+    background: linear-gradient(to right, #3a1289 30%, 40%, #53ccdf);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

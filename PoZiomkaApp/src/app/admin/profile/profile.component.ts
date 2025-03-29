@@ -38,6 +38,6 @@ export class AdminProfileComponent implements OnInit {
 
   logout(): void {
     //this.adminService.logout(); 
-    this.router.navigate(['/admin-login']);
+    this.router.navigate(['/admin/login']);
   }
 }

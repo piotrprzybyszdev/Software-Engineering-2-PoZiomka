@@ -31,7 +31,8 @@
                                             {{error() ?? 'error placeholder'}}
                                         </div>
 
-                                        <div class="text-end px-3 my-4">
+                                        <div class="d-flex justify-content-between align-items-center px-3 my-4">
+                                            <a class="text-muted" href="#" (click)="navigateToLogin()">Powrót do logowania</a>
                                             <button class="btn btn-danger" type="button" (click)="onRegisterButtonClick()">Zarejestruj się</button>
                                         </div>
                                     </form>
