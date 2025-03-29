@@ -11,7 +11,7 @@ export class DashboardComponent {
   constructor(private router: Router) {}
 
   goToProfile(): void {
-    this.router.navigate(['/admin-profile']);
+    this.router.navigate(['/admin/profile']);
   }
 
 }

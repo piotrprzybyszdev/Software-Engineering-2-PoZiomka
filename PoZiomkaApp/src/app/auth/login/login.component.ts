@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { StudentService } from '../../student/student.service'; // Importujemy StudentService
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -52,6 +53,7 @@ export class LoginComponent {
         next: response => {
           if (response.success) {
             console.log("udane logowanie!");
+            //this.router.navigate(['/student/profile']);
             // Po udanym logowaniu, pobieramy dane zalogowanego studenta
             this.studentService.fetchLoggedInStudent().subscribe({
               next: studentResponse => {
@@ -67,7 +69,11 @@ export class LoginComponent {
               }
             });
           } else {
-            this.error.set(response.error?.detail);
+            if (response.error?.detail === "Exception of type 'PoZiomkaDomain.Student.EmailNotFoundException' was thrown.") {
+              this.error.set('Student o tym emailu nie istnieje');
+            } else {
+              this.error.set(response.error?.detail);
+            }
           }
         },
         error: () => {
@@ -75,5 +81,9 @@ export class LoginComponent {
         }
       });
   }
+
+  
+  
+  
 }
 

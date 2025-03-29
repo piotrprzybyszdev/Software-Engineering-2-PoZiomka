@@ -13,7 +13,7 @@ const canAccessStudent: CanMatchFn = (route, segments) => {
   if (studentService.loggedInStudent()) {
     return true;
   }
-  return true; // to do: fix auth
+  //return true; // to do: fix auth
   return new RedirectCommand(router.parseUrl('/unauthorized/student'));
 }
 
