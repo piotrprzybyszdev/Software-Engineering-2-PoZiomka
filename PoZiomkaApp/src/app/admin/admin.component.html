@@ -1,1 +1,25 @@
-<router-outlet />
+<section class="min-vh-100 bg-opacity-25 bg-primary d-flex">
+    <div class="container-fluid min-vh-100">
+        <div class="col-10 mx-auto h-100">
+            <div class="d-flex flex-column h-100">
+                <div class="bg-white border border-secondary rounded-bottom-4 px-4 py-2">
+                    <app-menu logoLink="/admin/dashboard" logoStyle="poziomka-logo-blue">
+                        <li class="nav-item mx-lg-1 my-1 my-lg-0">
+                            <a class="nav-link active btn d-inline" href="/admin/profile">Profil</a>
+                        </li>
+                        <li class="nav-item mx-lg-1 my-1 my-lg-0">
+                            <a class="nav-link active btn d-inline" href="/admin/students">Lista Studentów</a>
+                        </li>
+                        
+                        <li class="nav-item ms-lg-4 my-1 my-lg-0">
+                            <a class="nav-link active btn d-inline" (click)="logout()">Wyloguj się</a>
+                        </li>
+                    </app-menu>
+                </div>
+                <div class="bg-white border border-secondary rounded-4 h-100 my-5">
+                    <router-outlet />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,7 +1,7 @@
 import { Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { AdminLoginComponent } from "./admin-login/admin-login.component";
 import { AdminProfileComponent } from "./profile/profile.component";
+import { StudentsListComponent } from "./student-list/student-list.component";
 
 export const routes: Routes = [
   {
@@ -9,11 +9,6 @@ export const routes: Routes = [
     redirectTo: 'dashboard',
     title: 'PoZiomka - Administrator',
     pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    title: 'Poziomka - Zaloguj się',
-    component: AdminLoginComponent
   },
   {
     path: 'dashboard',
@@ -24,5 +19,10 @@ export const routes: Routes = [
     path: 'profile',
     title: 'PoZiomka - Profil Administratora',
     component: AdminProfileComponent 
+  },
+  {
+    path: 'students',
+    title: 'PoZiomka - Lista Studentów',
+    component: StudentsListComponent
   }
 ]

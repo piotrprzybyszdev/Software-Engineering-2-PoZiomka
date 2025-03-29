@@ -60,16 +60,4 @@ export class StudentService {
   deleteStudent(id: number) {
     return pipeApiResponse(this.httpClient.delete<void>(`/api/student/delete/${id}`, {}));
   }
-
-  logout(): void {
-    this.authService.logOut().subscribe({
-      next: () => {
-        this.router.navigate(['/login']); 
-      },
-      error: (error) => {
-        console.error("Błąd podczas wylogowywania:", error);
-      }
-    });
-  }
-  
 }

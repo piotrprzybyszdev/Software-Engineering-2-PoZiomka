@@ -2,11 +2,11 @@
     <div id="secondary-card">
         <img class="w-100" src="images/poziomka-splash.jpg" />
     </div>
-    <div id="primary-card" class="py-md-5 px-5 mx-md-4">
+    <div id="primary-card" class="py-3 py-md-5 px-5 mx-md-4">
         <div class="text-center mb-4">
             <h1 class="poziomka-logo mt-1 pb-1">PoZiomka</h1>
             <hr>
-            <h3 class="mt-5">Zarejestruj się w systemie</h3>
+            <h3 class="mt-5">Zaloguj się jako student</h3>
         </div>
 
         <form [formGroup]="loginForm">
@@ -46,7 +46,7 @@
                         Nie masz jeszcze konta? <a class="text-muted" href="/signup">Zarejestruj się</a>
                     </div>
                     <div class="text-center">
-                        <button type="button" class="btn btn-outline-danger" (click)="navigateToAdminLogin()">Zaloguj się jako administrator</button>
+                        <a class="btn btn-outline-danger" href="/admin-login">Zaloguj się jako administrator</a>
                     </div>
                 </div>
             </div>

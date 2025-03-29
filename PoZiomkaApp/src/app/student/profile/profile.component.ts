@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StudentService } from '../../student/student.service';
 import { StudentModel } from '../../student/student.model';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +14,6 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   private studentService = inject(StudentService);
   private formBuilder = inject(FormBuilder);
-  private router = inject(Router);
 
   student: StudentModel | null = null;
   isEditingData = signal<boolean>(false);
@@ -106,11 +104,6 @@ export class ProfileComponent implements OnInit {
         this.errorMessage.set('Błąd podczas zmiany hasła.');
       }
     });
-  }
-
-  logout(): void {
-    this.studentService.logout(); 
-    this.router.navigate(['/login']);
   }
 }
 

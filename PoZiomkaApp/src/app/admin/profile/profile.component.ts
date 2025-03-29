@@ -2,12 +2,12 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../../admin/admin.service';
 import { Router } from '@angular/router';
-import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
+import { CardConfiguration } from "../../common/centered-card/centered-card.component";
 
 @Component({
   selector: 'app-admin-profile',
   standalone: true,
-  imports: [CommonModule, CenteredCardComponent],
+  imports: [CommonModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -33,14 +33,5 @@ export class AdminProfileComponent implements OnInit {
         this.errorMessage.set('Błąd pobierania profilu administratora');
       }
     });
-  }
-
-  goToDashboard(): void {
-    this.router.navigate(['/admin/dashboard']);
-  }
-
-  logout(): void {
-    //this.adminService.logout(); 
-    this.router.navigate(['/admin/login']);
   }
 }

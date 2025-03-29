@@ -39,11 +39,6 @@ export class LoginComponent {
     return password.invalid && (password.dirty || password.touched || this.isSubmitted());
   }
 
-  navigateToAdminLogin(): void {
-    this.router.navigate(['/admin/login']);
-  }
-  
-
   onLoginButtonClick(): void {
     if (this.loginForm.invalid) {
       this.isSubmitted.set(true);

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
