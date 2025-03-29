@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Student;
 using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Student.Commands.GetAllStudent;
+using PoZiomkaDomain.Student.Commands.GetAllStudents;
 using PoZiomkaDomain.Student.Commands.GetStudent;
 using PoZiomkaDomain.Student.Commands.EditStudent; 
 using PoZiomkaDomain.Student.Dtos;
@@ -52,7 +52,6 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize]
     public async Task<IActionResult> GetStudentById(int id)
     {
-
         int loggedInUserId = User.GetUserId();
 
         GetStudentCommand getStudent = new(id, User);
@@ -70,21 +69,17 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPut("update")]
-    //[Authorize]
+    [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
     {
-  //      if(studentEdit.Id != User.GetUserId() && User.IsInRole(Roles.Administrator))
-  //      {
-		//	return Unauthorized();
-		//}
-		EditStudentCommand editStudentCommand = new(studentEdit);
+		EditStudentCommand editStudentCommand = new(studentEdit, User);
         await mediator.Send(editStudentCommand);
         
         return Ok();
     }
 
     [HttpDelete("delete/{id}")]
-    [Authorize(Roles =Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> DeleteStudent(int id)
     {
 		DeleteStudentCommand deleteStudentCommand = new(id);

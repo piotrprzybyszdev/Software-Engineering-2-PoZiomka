@@ -29,7 +29,7 @@ VALUES (@email, @passwordHash, @isConfirmed);
 		}
 		catch (SqlException exception)
 		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
+			throw new QueryExecutionException(exception.Message, exception.Number);
 		}
 	}
 
@@ -41,11 +41,11 @@ VALUES (@email, @passwordHash, @isConfirmed);
 		try
 		{
 			var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
-			return student ?? throw new QueryExceutionException("Student not found", id);
+			return student ?? throw new QueryExecutionException("Student not found", id);
 		}
 		catch (SqlException exception)
 		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
+			throw new QueryExecutionException(exception.Message, exception.Number);
 		}
 	}
 
@@ -61,7 +61,7 @@ VALUES (@email, @passwordHash, @isConfirmed);
         }
         catch (SqlException exception)
         {
-            throw new QueryExceutionException(exception.Message, exception.Number);
+            throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
 
@@ -75,7 +75,7 @@ VALUES (@email, @passwordHash, @isConfirmed);
 		}
 		catch (SqlException exception)
 		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
+			throw new QueryExecutionException(exception.Message, exception.Number);
 		}
 	}
 
@@ -92,42 +92,49 @@ UPDATE Students SET IsConfirmed = 1 WHERE Email = @email;
 		}
 		catch (SqlException exception)
 		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
+			throw new QueryExecutionException(exception.Message, exception.Number);
 		}
 
 		if (rowsAffected == 0) throw new EmailNotFoundException();
 	}
 	public async Task EditStudent(StudentEdit studentEdit)
 	{
-		var sqlQuery = @"UPDATE Students SET
-FirstName=@FirstName, LastName=@LastName, PhoneNumber=@PhoneNumber,
-IndexNumber=@IndexNumber, IsPhoneNumberHidden=@IsPhoneNumberHidden,
-IsIndexNumberHidden=@IsIndexNumberHidden WHERE id=@id";
-		int rowsAffedted;
+		var sqlQuery = @"
+UPDATE Students
+SET
+	FirstName = @FirstName,
+	LastName = @LastName,
+	PhoneNumber = @PhoneNumber,
+	IndexNumber = @IndexNumber,
+	IsPhoneNumberHidden = @IsPhoneNumberHidden,
+	IsIndexNumberHidden = @IsIndexNumberHidden
+WHERE id = @id
+";
+		int rowsAffected;
 		try
 		{
-			rowsAffedted = await connection.ExecuteAsync(sqlQuery, studentEdit);
+			rowsAffected = await connection.ExecuteAsync(sqlQuery, studentEdit);
 		}
 		catch (SqlException exception)
 		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
+			throw new QueryExecutionException(exception.Message, exception.Number);
 		}
-		if (rowsAffedted == 0) throw new NoRowEditedException("User not found");
+		if (rowsAffected == 0) throw new NoRowsEditedException("User not found");
 	}
 
 	public async Task DeleteStudent(int id)
 	{
 		var sqlQuery = @"DELETE FROM Students WHERE id = @id";
 
-		int rowAffected;
+		int rowsAffected;
 		try
 		{
-			rowAffected=await connection.ExecuteAsync(sqlQuery, new { id });
+			rowsAffected = await connection.ExecuteAsync(sqlQuery, new { id });
 		}
 		catch (SqlException exception)
 		{
-			throw new QueryExceutionException(exception.Message, exception.Number);
+			throw new QueryExecutionException(exception.Message, exception.Number);
 		}
-		if (rowAffected == 0) throw new NoRowEditedException("Now row was deleted");
+		if (rowsAffected == 0) throw new NoRowsEditedException("No rows was deleted");
 	}
 }

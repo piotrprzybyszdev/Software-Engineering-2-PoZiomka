@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Student.Dtos;
 
-namespace PoZiomkaDomain.Student.Commands.GetAllStudent;
+namespace PoZiomkaDomain.Student.Commands.GetAllStudents;
 
 public class GetAllStudentsCommandHandler(IStudentRepository studentRepository) : IRequestHandler<GetAllStudentsCommand, IEnumerable<StudentDisplay>>
 {

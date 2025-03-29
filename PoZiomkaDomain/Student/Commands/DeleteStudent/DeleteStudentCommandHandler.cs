@@ -14,9 +14,9 @@ public class DeleteStudentCommandHandler(IStudentRepository studentRepository) :
 		{
 			await studentRepository.DeleteStudent(request.Id);
 		}
-		catch (Exception e)
+		catch (NoRowsEditedException e)
 		{
-			throw new DeleteException("Error while deleting student", e);
+			throw new StudentNotFoundException("Student not found", e);
 		}
 	}
 }

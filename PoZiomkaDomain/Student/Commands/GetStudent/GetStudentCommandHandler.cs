@@ -12,25 +12,23 @@ public class GetStudentCommandHandler(IStudentRepository studentRepository, IJud
     public async Task<StudentDisplay> Handle(GetStudentCommand request, CancellationToken cancellationToken)
     {
         int loggedInUser = request.User.GetUserId();
-        bool ok = request.User.IsInRole(Roles.Administrator) ||
+        bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
           (request.User.IsInRole(Roles.Student) &&
           (loggedInUser == request.Id || await judgeService.IsMatch(loggedInUser, request.Id)));
 
-        if (!ok)
+        if (!isUserAuthorized)
             throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");
 
-        bool hide = true;
-        if (request.User.IsInRole(Roles.Administrator))
-            hide = false;
+        var hidePersonalInfo = !request.User.IsInRole(Roles.Administrator);
 
         try
         {
             var student = await studentRepository.GetStudentById(request.Id, cancellationToken);
-            return student.ToStudentDisplay(hide);
+            return student.ToStudentDisplay(hidePersonalInfo);
         }
         catch
         {
-            throw new ObjectNotFound($"Student with id `{request.Id}` not found");
+            throw new StudentNotFoundException($"Student with id `{request.Id}` not found");
         }
     }
 }

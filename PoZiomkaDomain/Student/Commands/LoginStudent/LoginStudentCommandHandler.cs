@@ -16,9 +16,14 @@ public class LoginStudentCommandHandler(IPasswordService passwordService, IStude
         {
             student = await studentRepository.GetStudentByEmail(request.Email, cancellationToken);
         }
-        catch (EmailNotRegisteredException)
+        catch (EmailNotRegisteredException e)
         {
-            throw new EmailNotRegisteredException($"User with email `{request.Email}` not found");
+            throw new InvalidCredentialsException($"User with email {request.Email} not registered", e);
+        }
+
+        if (!passwordService.VerifyHash(request.Password, student.PasswordHash))
+        {
+            throw new InvalidCredentialsException("Invalid password");
         }
 
         IEnumerable<Claim> claims = [
