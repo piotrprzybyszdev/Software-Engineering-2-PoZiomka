@@ -1,6 +1,6 @@
-﻿using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
+﻿using PoZiomkaDomain.Common;
 using PoZiomkaInfrastructure.Services;
+using System.Security.Claims;
 
 namespace PoZiomkaTest.Infrastructure;
 
@@ -26,7 +26,7 @@ public class JwtServiceTest
 
         var token = await jwtService1.GenerateToken(new ClaimsIdentity([new Claim("key", "value")]), TimeSpan.FromMinutes(20));
 
-        await Assert.ThrowsAsync<SecurityTokenInvalidIssuerException>(() => jwtService2.ReadToken(token));
+        await Assert.ThrowsAsync<TokenValidationException>(() => jwtService2.ReadToken(token));
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class JwtServiceTest
 
         var token = await jwtService1.GenerateToken(new ClaimsIdentity([new Claim("key", "value")]), TimeSpan.FromMinutes(20));
 
-        await Assert.ThrowsAsync<SecurityTokenInvalidAudienceException>(() => jwtService2.ReadToken(token));
+        await Assert.ThrowsAsync<TokenValidationException>(() => jwtService2.ReadToken(token));
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class JwtServiceTest
 
         var token = await jwtService1.GenerateToken(new ClaimsIdentity([new Claim("key", "value")]), TimeSpan.FromMinutes(20));
 
-        await Assert.ThrowsAsync<SecurityTokenSignatureKeyNotFoundException>(() => jwtService2.ReadToken(token));
+        await Assert.ThrowsAsync<TokenValidationException>(() => jwtService2.ReadToken(token));
     }
 
     [Fact]
@@ -58,6 +58,6 @@ public class JwtServiceTest
 
         var token = await jwtService.GenerateToken(new ClaimsIdentity([new Claim("key", "value")]), TimeSpan.Zero);
 
-        await Assert.ThrowsAsync<SecurityTokenExpiredException>(() => jwtService.ReadToken(token));
+        await Assert.ThrowsAsync<TokenExpiredException>(() => jwtService.ReadToken(token));
     }
 }

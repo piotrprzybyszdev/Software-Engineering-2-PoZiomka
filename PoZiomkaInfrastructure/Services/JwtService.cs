@@ -29,7 +29,15 @@ public class JwtService(string key, string issuer, string audience) : IJwtServic
 
     public async Task<ClaimsIdentity> ReadToken(string token)
     {
-        var jwt = handler.ReadJsonWebToken(token);
+        JsonWebToken jwt;
+        try
+        {
+            jwt = handler.ReadJsonWebToken(token);
+        }
+        catch (SecurityTokenMalformedException)
+        {
+            throw new NotATokenException();
+        }
 
         var result = await handler.ValidateTokenAsync(jwt, new TokenValidationParameters()
         {
@@ -42,6 +50,11 @@ public class JwtService(string key, string issuer, string audience) : IJwtServic
         if (result.IsValid)
             return new ClaimsIdentity(jwt.Claims);
 
-        throw result.Exception;
+        throw result.Exception switch
+        {
+            SecurityTokenExpiredException => new TokenExpiredException(),
+            SecurityTokenValidationException => new TokenValidationException(),
+            _ => result.Exception,
+        };
     }
 }
