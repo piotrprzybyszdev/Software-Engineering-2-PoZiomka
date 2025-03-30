@@ -20,6 +20,7 @@ public class SignupStudentCommandHandler(IPasswordService passwordService, IStud
             throw new EmailTakenException($"User with email `{request.Email}` already exists");
         }
 
-        await emailService.SendEmailConfirmationEmail(request.Email);
+        if (!request.IsConfirmed)
+            await emailService.SendEmailConfirmationEmail(request.Email);
     }
 }

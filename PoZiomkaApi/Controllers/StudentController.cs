@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Student;
 using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Student.Commands.GetAllStudent;
-using PoZiomkaDomain.Student.Commands.GetStudent;
-using PoZiomkaDomain.Student.Commands.EditStudent; 
+using PoZiomkaDomain.Student.Commands.EditStudent;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaApi.Requests.Auth;
+using PoZiomkaDomain.Student.Commands.DeleteStudent;
+using PoZiomkaDomain.Student.Queries.GetStudent;
+using PoZiomkaDomain.Student.Queries.GetAllStudents;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -23,19 +24,13 @@ public class StudentController(IMediator mediator) : Controller
         return Ok();
     }
 
-    [HttpPost("request-password-reset")]
-    public async Task<IActionResult> RequestPasswordReset()
-    {
-        return NoContent();
-    }
-
     [HttpGet("get-logged-in")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetLoggedIn()
     {
         int loggedInUserId = User.GetUserId();
 
-        GetStudentCommand getStudent = new(loggedInUserId, User);
+        GetStudentQuery getStudent = new(loggedInUserId, User);
         return Ok(await mediator.Send(getStudent));
     }
 
@@ -43,7 +38,7 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Get()
     {
-        GetAllStudentsCommand command = new();
+        GetAllStudentsQuery command = new();
         return Ok(await mediator.Send(command));
     }
 
@@ -52,17 +47,16 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize]
     public async Task<IActionResult> GetStudentById(int id)
     {
-
         int loggedInUserId = User.GetUserId();
 
-        GetStudentCommand getStudent = new(id, User);
+        GetStudentQuery getStudent = new(id, User);
         var student = await mediator.Send(getStudent);
 
         return Ok(student);
     }
 
     [HttpPost("create")]
-    //[Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> CreateStudent([FromBody] SignupRequest signupRequest)
     {
         await mediator.Send(signupRequest.ToSignupStudentByAdminCommand());
@@ -70,25 +64,37 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPut("update")]
-    //[Authorize]
+    [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
     {
-  //      if(studentEdit.Id != User.GetUserId() && User.IsInRole(Roles.Administrator))
-  //      {
-		//	return Unauthorized();
-		//}
-		EditStudentCommand editStudentCommand = new(studentEdit);
+		EditStudentCommand editStudentCommand = new(studentEdit, User);
         await mediator.Send(editStudentCommand);
         
         return Ok();
     }
 
     [HttpDelete("delete/{id}")]
-    [Authorize(Roles =Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> DeleteStudent(int id)
     {
 		DeleteStudentCommand deleteStudentCommand = new(id);
 		await mediator.Send(deleteStudentCommand);
 		return Ok();
+    }
+
+    [HttpPost("request-password-reset")]
+    public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetRequest requestPasswordResetRequest)
+    {
+        await mediator.Send(requestPasswordResetRequest.ToRequestPasswordResetCommand());
+
+        return Ok();
+    }
+
+    [HttpPut("password-reset")]
+    public async Task<IActionResult> PasswordReset([FromBody] PasswordResetRequest passwordResetRequest)
+    {
+        await mediator.Send(passwordResetRequest.ToResetPasswordCommand());
+
+        return Ok();
     }
 }
