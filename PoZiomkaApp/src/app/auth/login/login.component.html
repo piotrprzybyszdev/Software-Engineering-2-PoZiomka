@@ -9,7 +9,7 @@
             <h3 class="mt-5">Zaloguj się jako student</h3>
         </div>
 
-        <form [formGroup]="loginForm">
+        <form [formGroup]="loginForm" (keydown.enter)="onLoginButtonClick()">
             <div class="form-outline form-floating mb-4">
                 <input type="email" id="emailTextField" class="form-control" placeholder=""
                        formControlName="email" [ngClass]="emailInvalid ? 'is-invalid' : ''"/>

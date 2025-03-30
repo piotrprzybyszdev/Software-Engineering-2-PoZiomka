@@ -9,7 +9,7 @@
             <h3 class="mt-5">Zaloguj się jako administrator</h3>
         </div>
 
-        <form [formGroup]="loginForm">
+        <form [formGroup]="loginForm" (keydown.enter)="onLoginButtonClick()">
             <div class="form-outline form-floating mb-4">
                 <input type="email" id="emailTextField" class="form-control" placeholder="" formControlName="email" [ngClass]="emailInvalid ? 'is-invalid' : ''" />
                 <label class="form-label" for="emailTextField">Email</label>
@@ -31,7 +31,7 @@
             </div>
 
             <div class="text-center">
-                <a class="btn btn-outline-primary" href="/admin-login">Zaloguj się jako student</a>
+                <a class="btn btn-outline-primary" href="/login">Zaloguj się jako student</a>
             </div>
         </form>
     </div>
