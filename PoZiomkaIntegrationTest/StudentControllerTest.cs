@@ -191,7 +191,7 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 	}
 
 	[Fact]
-	public async Task DeleteStudentByAdmin()
+	public async Task DeleteLastAddedStudentByAdmin()
 	{
 		string cookie = await _client.LoginAsAdmin(_adminEmail, _adminPassword);
 
@@ -225,6 +225,42 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 
 		// choose created student id
 		var student = data.FirstOrDefault(student => student.Email== created_email);
+		Assert.NotNull(student);
+
+		// delete student
+		var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, "api/student/delete/" + student.Id);
+		var response2 = await _client.SendAsyncWithCookie(deleteRequest, cookie);
+		Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+
+		// get all students
+		var getRequest3 = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response3 = await _client.SendAsyncWithCookie(getRequest3, cookie);
+		Assert.Equal(HttpStatusCode.OK, response3.StatusCode);
+		var data3 = await response3.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data3);
+		int countAfter = data3.Count;
+
+		// check if count is lower by 1
+		Assert.Equal(countBefore - 1, countAfter);
+	}
+
+	[Fact]
+	public async Task DeleteRandomStudentByAdmin()
+	{
+		string cookie = await _client.LoginAsAdmin(_adminEmail, _adminPassword);
+
+		// get all students
+		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response = await _client.SendAsyncWithCookie(getRequest, cookie);
+		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		var data = await response.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data);
+		int countBefore = data.Count;
+
+		// choose student id
+		Random r = new Random();
+		int n=r.Next(0, data.Count);
+		var student = data[n];
 		Assert.NotNull(student);
 
 		// delete student
