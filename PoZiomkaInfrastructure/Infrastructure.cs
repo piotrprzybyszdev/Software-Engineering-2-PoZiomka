@@ -2,7 +2,9 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
 using PoZiomkaInfrastructure.Repositories;
@@ -39,12 +41,20 @@ public static class Infrastructure
         services.AddScoped<IDbConnection>(_ => new SqlConnection(connectionString));
 
         services.AddScoped<IPasswordService, PasswordService>();
-        services.AddScoped<IEmailService>(_ => new EmailService(
-            configuration["Email:Host"]!, int.Parse(configuration["Email:Port"]!),
-            configuration["Email:Sender"]!, configuration["Email:Password"]!, bool.Parse(configuration["Email:Secure"]!))
-        );
         services.AddScoped<IJwtService>(_ => new JwtService(configuration["Jwt:Key"]!, configuration["Jwt:Issuer"]!, configuration["Jwt:Audience"]!));
 
+        services.AddScoped<IEmailContentGenerator>(provider => new EmailContentGenerator(
+            configuration["App:Url"]!, configuration["App:ConfirmEmailPath"]!,
+            configuration["App:PasswordResetPath"]!, provider.GetService<IJwtService>()!
+        ));
+        services.AddScoped<IEmailService>(provider => new EmailService(
+            configuration["Email:Host"]!, int.Parse(configuration["Email:Port"]!),
+            configuration["Email:Sender"]!, configuration["Email:Password"]!,
+            bool.Parse(configuration["Email:Secure"]!), provider.GetService<IEmailContentGenerator>()!)
+        );
+
         services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IAdminRepository, AdminRepository>();
+        services.AddScoped<IJudgeService, JudgeService>();
     }
 }

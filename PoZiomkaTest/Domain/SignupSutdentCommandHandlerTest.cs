@@ -12,15 +12,16 @@ public class SignupSutdentCommandHandlerTest
     [Fact]
     public async Task StoresHash()
     {
-        SignupStudentCommand command = new("test@gmail.com", "passwd");
+        SignupStudentCommand command = new("test@gmail.com", "passwd", false);
         var hash = "hash";
 
+        var emailService = new Mock<IEmailService>();
         var passwordService = new Mock<IPasswordService>();
         passwordService.Setup(m => m.ComputeHash(It.IsAny<string>())).Returns(hash);
 
         var studentRepository = new Mock<IStudentRepository>();
 
-        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object);
+        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);
 
         await handler.Handle(command, default);
 
@@ -36,9 +37,10 @@ public class SignupSutdentCommandHandlerTest
     [Fact]
     public async Task ThrowsEmailTaken()
     {
-        SignupStudentCommand command = new("test@gmail.com", "passwd");
+        SignupStudentCommand command = new("test@gmail.com", "passwd", false);
         var hash = "hash";
 
+        var emailService = new Mock<IEmailService>();
         var passwordService = new Mock<IPasswordService>();
         passwordService.Setup(m => m.ComputeHash(It.IsAny<string>())).Returns(hash);
 
@@ -48,8 +50,50 @@ public class SignupSutdentCommandHandlerTest
                 It.IsAny<StudentCreate>(), It.IsAny<CancellationToken?>())
             ).Throws<EmailNotUniqueException>();
 
-        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object);
+        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);
 
         await Assert.ThrowsAsync<EmailTakenException>(() => handler.Handle(command, default));
+    }
+
+    [Fact]
+    public async Task SendsEmailIfConfirmedFalse()
+    {
+        SignupStudentCommand command = new("test@gmail.com", "passwd", false);
+        var hash = "hash";
+
+        var emailService = new Mock<IEmailService>();
+        var passwordService = new Mock<IPasswordService>();
+        passwordService.Setup(m => m.ComputeHash(It.IsAny<string>())).Returns(hash);
+
+        var studentRepository = new Mock<IStudentRepository>();
+
+        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);
+
+        await handler.Handle(command, default);
+
+        emailService.Verify(
+            m => m.SendEmailConfirmationEmail("test@gmail.com"), Times.Once
+        );
+    }
+
+    [Fact]
+    public async Task DoesntSendEmailIfConfirmedTrue()
+    {
+        SignupStudentCommand command = new("test@gmail.com", "passwd", true);
+        var hash = "hash";
+
+        var emailService = new Mock<IEmailService>();
+        var passwordService = new Mock<IPasswordService>();
+        passwordService.Setup(m => m.ComputeHash(It.IsAny<string>())).Returns(hash);
+
+        var studentRepository = new Mock<IStudentRepository>();
+
+        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);
+
+        await handler.Handle(command, default);
+
+        emailService.Verify(
+            m => m.SendEmailConfirmationEmail("test@gmail.com"), Times.Never
+        );
     }
 }

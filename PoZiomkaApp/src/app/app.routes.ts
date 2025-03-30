@@ -1,24 +1,53 @@
-import { Routes } from "@angular/router";
-import { LoginComponent } from "./student/auth/login/login.component";
-import { SignupComponent } from "./student/auth/signup/signup.component";
+import { CanMatchFn, RedirectCommand, Router, Routes } from "@angular/router";
+import { routes as authRoutes } from "./auth/auth.routes";
 import { NotFoundComponent } from "./not-found/not-found.component";
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { inject } from "@angular/core";
+import { StudentService } from "./student/student.service";
+import { AdminService } from "./admin/admin.service";
+
+const canAccessStudent: CanMatchFn = (route, segments) => {
+  const router = inject(Router);
+  const studentService = inject(StudentService);
+
+  if (studentService.loggedInStudent()) {
+    return true;
+  }
+  
+  return new RedirectCommand(router.parseUrl('/unauthorized/student'));
+}
+
+const canAccessAdmin: CanMatchFn = (route, segments) => {
+  const router = inject(Router);
+  const adminService = inject(AdminService);
+
+  if (adminService.loggedInAdmin()) {
+    return true;
+  }
+
+  return new RedirectCommand(router.parseUrl('/unauthorized/admin'));
+}
 
 export const routes: Routes = [
+  ...authRoutes,
   {
-    path: '',
-    redirectTo: 'login',
-    title: 'Poziomka',
-    pathMatch: 'full'
+    path: 'student',
+    loadComponent: () => import('./student/student.component').then(mod => mod.StudentComponent),
+    title: 'Student',
+    loadChildren: () => import('./student/student.routes').then(mod => mod.routes),
+    canMatch: [canAccessStudent]
   },
   {
-    path: 'login',
-    title: 'Poziomka - Zaloguj się',
-    component: LoginComponent
+    path: 'admin',
+    loadComponent: () => import('./admin/admin.component').then(mod => mod.AdminComponent),
+    title: 'Admin',
+    loadChildren: () => import('./admin/admin.routes').then(mod => mod.routes),
+    canMatch: [canAccessAdmin]
   },
   {
-    path: 'signup',
-    title: 'Poziomka - Zarejestruj się',
-    component: SignupComponent
+    path: 'confirm-email/:token', 
+    component: ConfirmEmailComponent, 
+    title: 'Potwierdzenie E-maila'
   },
   {
     path: '**',
