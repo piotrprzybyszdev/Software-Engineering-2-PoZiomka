@@ -18,6 +18,11 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 {
 	private readonly HttpClient _client;
 
+	private readonly string _userEmail = "student@example.com";
+	private readonly string _userPassword = "password";
+	private readonly string _adminEmail = "admin";
+	private readonly string _adminPassword = "pass";
+
 	public StudentControllerTest(WebApplicationFactory<Program> factory)
 	{
 
@@ -96,7 +101,7 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 	[Fact]
 	public async Task UpdatingUserDataByAnotherUser()
 	{
-		string cookie = await _client.LoginAsUser("student@example.com", "password");
+		string cookie = await _client.LoginAsUser(_userEmail, _userPassword);
 
 		// getting Id
 		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get-logged-in");
@@ -108,7 +113,7 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 		// setting request for updating
 		string newLastName = userData.LastName == "Big" ? "Small" : "Big";
 		var editInfo = new StudentEdit(
-			Id: myId+1,
+			Id: myId + 1,
 			Email: "student@example.com",
 			FirstName: "John",
 			LastName: newLastName,
@@ -129,5 +134,57 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 
 		// checking if user was authorized
 		Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+	}
+
+	[Fact]
+	public async Task GetAllStudentsByAdmin()
+	{
+		string cookie = await _client.LoginAsAdmin(_adminEmail, _adminPassword);
+
+		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response = await _client.SendAsyncWithCookie(getRequest, cookie);
+
+		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		var data = await response.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data);
+		Assert.True(data.Count > 0);
+	}
+
+	[Fact]
+	public async Task CreateStudentByAdmin()
+	{
+		string cookie = await _client.LoginAsAdmin(_adminEmail, _adminPassword);
+
+		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response = await _client.SendAsyncWithCookie(getRequest, cookie);
+		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		var data = await response.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data);
+		int countBefore = data.Count;
+
+		var signUp = new SignupRequest(
+			Email: "newEmail@test.pl",
+			Password: "password"
+			);
+
+		var json = JsonSerializer.Serialize(signUp);
+		var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+		var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/student/create")
+		{
+			Content = content
+		};
+		var response2 = await _client.SendAsyncWithCookie(postRequest, cookie);
+
+		Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+
+		var getRequest3 = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response3 = await _client.SendAsyncWithCookie(getRequest3, cookie);
+		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		var data3 = await response.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data3);
+		int countAfter = data3.Count;
+
+		Assert.Equal(countBefore + 1, countAfter);
 	}
 }

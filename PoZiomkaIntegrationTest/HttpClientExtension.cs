@@ -39,7 +39,25 @@ public static class HttpClientExtension
 
 	public static async Task<string> LoginAsAdmin(this HttpClient client, string email, string password)
 	{
-		throw new NotImplementedException();
+		var loginRequest = new
+		{
+			Email = email,
+			Password = password
+		};
+
+		var loginResponse = await client.PostAsJsonAsync("api/login-admin", loginRequest);
+		loginResponse.EnsureSuccessStatusCode();
+
+		string? cookieHeader = loginResponse.Headers.Contains("Set-Cookie")
+			? loginResponse.Headers.GetValues("Set-Cookie").FirstOrDefault()
+			: null;
+
+		if (cookieHeader == null)
+		{
+			throw new Exception("Cookie header not found");
+		}
+
+		return cookieHeader;
 	}
 }
 
