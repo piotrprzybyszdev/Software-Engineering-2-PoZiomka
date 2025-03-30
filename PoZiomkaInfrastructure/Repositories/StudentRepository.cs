@@ -137,4 +137,23 @@ WHERE id = @id
 		}
 		if (rowsAffected == 0) throw new NoRowsEditedException("No rows was deleted");
 	}
+
+    public async Task ResetPassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"
+UPDATE Students
+SET PasswordHash = @PasswordHash
+WHERE Email = @Email
+";
+        int rowsAffected;
+        try
+        {
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, passwordUpdate, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+        if (rowsAffected == 0) throw new NoRowsEditedException("User not found");
+    }
 }

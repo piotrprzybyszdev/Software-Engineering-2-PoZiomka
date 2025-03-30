@@ -24,12 +24,6 @@ public class StudentController(IMediator mediator) : Controller
         return Ok();
     }
 
-    [HttpPost("request-password-reset")]
-    public async Task<IActionResult> RequestPasswordReset()
-    {
-        return NoContent();
-    }
-
     [HttpGet("get-logged-in")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetLoggedIn()
@@ -62,7 +56,7 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPost("create")]
-    //[Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> CreateStudent([FromBody] SignupRequest signupRequest)
     {
         await mediator.Send(signupRequest.ToSignupStudentByAdminCommand());
@@ -86,5 +80,21 @@ public class StudentController(IMediator mediator) : Controller
 		DeleteStudentCommand deleteStudentCommand = new(id);
 		await mediator.Send(deleteStudentCommand);
 		return Ok();
+    }
+
+    [HttpPost("request-password-reset")]
+    public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetRequest requestPasswordResetRequest)
+    {
+        await mediator.Send(requestPasswordResetRequest.ToRequestPasswordResetCommand());
+
+        return Ok();
+    }
+
+    [HttpPut("password-reset")]
+    public async Task<IActionResult> PasswordReset([FromBody] PasswordResetRequest passwordResetRequest)
+    {
+        await mediator.Send(passwordResetRequest.ToResetPasswordCommand());
+
+        return Ok();
     }
 }

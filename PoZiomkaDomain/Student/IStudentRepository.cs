@@ -15,4 +15,5 @@ public interface IStudentRepository
 	public Task EditStudent(StudentEdit studentEdit, CancellationToken? cancellationToken);
 	public Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken);
     public Task DeleteStudent(int id, CancellationToken? cancellationToken);
+    public Task ResetPassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken);
 }
