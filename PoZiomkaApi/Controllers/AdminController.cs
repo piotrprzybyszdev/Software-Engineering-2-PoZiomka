@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Utils;
-using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Admin.Queries.GetAdmin;
+using PoZiomkaDomain.Common;
 
 namespace PoZiomkaApi.Controllers;
 

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
-using System.Security.Authentication;
 using System.Text.Json;
 
 namespace PoZiomkaApi;

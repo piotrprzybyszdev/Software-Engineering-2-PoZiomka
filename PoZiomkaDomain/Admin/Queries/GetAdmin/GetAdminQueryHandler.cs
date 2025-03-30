@@ -1,9 +1,7 @@
 ﻿using MediatR;
-using PoZiomkaApi.Utils;
+using PoZiomkaDomain.Admin.Dtos;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
-using PoZiomkaDomain.Match;
-using PoZiomkaDomain.Admin.Dtos;
 
 namespace PoZiomkaDomain.Admin.Queries.GetAdmin;
 
