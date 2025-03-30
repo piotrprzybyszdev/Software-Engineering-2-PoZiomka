@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ApiResponse, pipeApiResponse } from "../common/api";
 import { StudentCreate, StudentModel, StudentUpdate } from "./student.model";
-import { Observable, tap } from "rxjs";
+import { Observable, of, tap } from "rxjs";
 import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "../auth/auth.service";
@@ -35,9 +35,9 @@ export class StudentService {
     }));
   }
 
-  resetPassword(token: string, p0: string): Observable<ApiResponse<void>> {
+  resetPassword(token: string, password: string): Observable<ApiResponse<void>> {
     return pipeApiResponse(this.httpClient.put<void>('/api/student/password-reset/', {
-      token: token
+      token: token, password: password
     }));
   }
 

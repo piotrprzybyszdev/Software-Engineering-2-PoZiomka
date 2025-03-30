@@ -88,9 +88,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  togglePasswordEdit(): void {
-    this.isEditingPassword.set(!this.isEditingPassword());
-  }
 
   updatePassword(): void {
     if (this.passwordForm.invalid) return;

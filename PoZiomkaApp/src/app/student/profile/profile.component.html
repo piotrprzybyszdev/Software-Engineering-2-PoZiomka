@@ -27,7 +27,6 @@
 
             <div class="text-center mt-4">
                 <button class="btn btn-primary me-3" (click)="toggleDataEdit()">Edytuj dane</button>
-                <button class="btn btn-warning me-3" (click)="togglePasswordEdit()">Zmień hasło</button>
             </div>
         </div>
 
@@ -61,24 +60,6 @@
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-success me-2" [disabled]="dataForm.invalid">Zapisz</button>
                 <button type="button" class="btn btn-secondary" (click)="toggleDataEdit()">Anuluj</button>
-            </div>
-        </form>
-
-        <!-- Tryb Zmiany Hasła -->
-        <form *ngIf="isEditingPassword()" [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
-            <div class="mb-3">
-                <label class="form-label">Stare hasło</label>
-                <input type="password" class="form-control" formControlName="oldPassword">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nowe hasło</label>
-                <input type="password" class="form-control" formControlName="newPassword">
-            </div>
-
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success me-2" [disabled]="passwordForm.invalid">Zapisz</button>
-                <button type="button" class="btn btn-secondary" (click)="togglePasswordEdit()">Anuluj</button>
             </div>
         </form>
 
