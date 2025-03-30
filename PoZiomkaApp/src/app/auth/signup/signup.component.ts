@@ -3,11 +3,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -15,6 +16,8 @@ export class SignupComponent {
   private authService = inject(AuthService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
+
+  CardConfiguration = CardConfiguration;
   
   isSubmitted = signal<boolean>(false);
   error = signal<string | undefined>(undefined);
@@ -51,4 +54,9 @@ export class SignupComponent {
         }
     });
   }
+
+  navigateToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
 }

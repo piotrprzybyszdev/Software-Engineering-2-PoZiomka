@@ -2,5 +2,6 @@
 
 public interface IEmailService
 {
-    public Task SendEmail(string receiver, string subject, string body);
+    public Task SendEmailConfirmationEmail(string receiver);
+    public Task SendPasswordResetEmail(string receiver);
 }

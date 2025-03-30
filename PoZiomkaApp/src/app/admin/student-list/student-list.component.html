@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <h2>Lista Studentów</h2>
+
+    <!-- Wyświetlanie błędów -->
+    @if (errorMessage) {
+    <div class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+    }
+
+    <!-- Wyświetlanie listy studentów -->
+    @if (students.length > 0) {
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Imię</th>
+                    <th>Nazwisko</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                @for (student of students; track $index) {
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ student.firstName??"-" }}</td>
+                    <td>{{ student.lastName??"-" }}</td>
+                    <td>{{ student.email }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- Komunikat, gdy nie ma studentów -->
+    @if (students.length === 0) {
+    <div>
+        <p>Brak studentów do wyświetlenia.</p>
+    </div>
+    }
+</div>

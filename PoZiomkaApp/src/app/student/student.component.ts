@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { MenuComponent } from "../common/menu/menu.component";
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-student',
-  imports: [RouterModule],
+  imports: [RouterModule, MenuComponent],
   templateUrl: './student.component.html',
   styleUrl: './student.component.css'
 })
 export class StudentComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
+  logout(): void {
+    this.authService.logOut().subscribe({
+      next: _ => this.router.navigate(['/login'])
+    });
+  }
 }

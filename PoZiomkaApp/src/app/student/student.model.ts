@@ -18,9 +18,9 @@ export type StudentCreate = {
 }
 
 export type StudentUpdate = {
-  id: number,
-  firstName: number,
-  lastName: number,
-  indexNumber: number,
-  phoneNumber: number
-}
+  id: number;
+  firstName?: string;   
+  lastName?: string;    
+  indexNumber?: string; 
+  phoneNumber?: string; 
+};
