@@ -24,7 +24,7 @@ export class SignupComponent {
 
   signupForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-    password: ['', [Validators.required, Validators.maxLength(100)]]
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]]
   });
 
   get emailInvalid(): boolean {

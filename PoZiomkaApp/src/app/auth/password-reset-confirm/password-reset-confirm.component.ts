@@ -26,7 +26,7 @@ export class ResetPasswordConfirmComponent {
   successMessage = signal<string | undefined>(undefined);
 
   resetForm = this.formBuilder.group({
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]]
   });
 
   onResetPassword(): void {
