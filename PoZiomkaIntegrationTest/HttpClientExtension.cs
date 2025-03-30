@@ -45,7 +45,7 @@ public static class HttpClientExtension
 			Password = password
 		};
 
-		var loginResponse = await client.PostAsJsonAsync("api/login-admin", loginRequest);
+		var loginResponse = await client.PostAsJsonAsync("api/admin-login", loginRequest);
 		loginResponse.EnsureSuccessStatusCode();
 
 		string? cookieHeader = loginResponse.Headers.Contains("Set-Cookie")

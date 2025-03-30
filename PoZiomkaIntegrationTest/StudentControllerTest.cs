@@ -162,8 +162,10 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 		Assert.NotEmpty(data);
 		int countBefore = data.Count;
 
+		Random random = new Random();
+		int randomValue=random.Next(1,int.MaxValue);
 		var signUp = new SignupRequest(
-			Email: "newEmail@test.pl",
+			Email: "newEmail@test"+randomValue.ToString()+".pl",
 			Password: "password"
 			);
 
@@ -180,8 +182,8 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 
 		var getRequest3 = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
 		var response3 = await _client.SendAsyncWithCookie(getRequest3, cookie);
-		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-		var data3 = await response.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.Equal(HttpStatusCode.OK, response3.StatusCode);
+		var data3 = await response3.Content.ReadFromJsonAsync<List<StudentDisplay>>();
 		Assert.NotEmpty(data3);
 		int countAfter = data3.Count;
 
