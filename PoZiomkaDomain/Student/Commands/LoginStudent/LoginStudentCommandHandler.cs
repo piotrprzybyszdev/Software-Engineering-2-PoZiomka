@@ -2,12 +2,11 @@
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
-using System.Net.Http;
 using System.Security.Claims;
 
 namespace PoZiomkaDomain.Student.Commands.LoginStudent;
 
-public class LoginStudentCommandHandler(IPasswordService passwordService, IStudentRepository studentRepository, IEmailService emailService) : IRequestHandler<LoginStudentCommand, IEnumerable<Claim>>
+public class LoginStudentCommandHandler(IPasswordService passwordService, IStudentRepository studentRepository) : IRequestHandler<LoginStudentCommand, IEnumerable<Claim>>
 {
     public async Task<IEnumerable<Claim>> Handle(LoginStudentCommand request, CancellationToken cancellationToken)
     {
@@ -16,9 +15,14 @@ public class LoginStudentCommandHandler(IPasswordService passwordService, IStude
         {
             student = await studentRepository.GetStudentByEmail(request.Email, cancellationToken);
         }
-        catch (EmailNotRegisteredException)
+        catch (EmailNotRegisteredException e)
         {
-            throw new EmailNotRegisteredException($"User with email `{request.Email}` not found");
+            throw new InvalidCredentialsException($"User with email {request.Email} not registered", e);
+        }
+
+        if (!passwordService.VerifyHash(request.Password, student.PasswordHash))
+        {
+            throw new InvalidCredentialsException("Invalid password");
         }
 
         IEnumerable<Claim> claims = [

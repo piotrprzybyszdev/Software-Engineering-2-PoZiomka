@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
+using System.Security.Authentication;
 using System.Text.Json;
 
 namespace PoZiomkaApi;
@@ -86,6 +87,26 @@ public class ExceptionMiddleware(RequestDelegate next)
                 }
             };
         }
+        catch (InvalidCredentialException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Invalid email or password"
+            };
+        }
+        catch (StudentNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Student not found"
+            };
+        }
         catch (DomainException exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -106,36 +127,6 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Internal Server Infrastructure Layer Error - something went wrong"
             };
         }
-        catch (ObjectNotFound exception)
-        {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-            problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status404NotFound,
-                Detail = exception.Message,
-                Title = "Object not found"
-            };
-        }
-        catch(NoRowEditedException exception)
-        {
-			context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-			problemDetails = new ProblemDetails()
-            {
-				Status = StatusCodes.Status404NotFound,
-				Detail = exception.Message,
-				Title = "No row changed"
-			};
-		}
-        catch(DeleteException exception)
-        { 
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-			problemDetails = new ProblemDetails()
-			{
-				Status = StatusCodes.Status500InternalServerError,
-				Detail = exception.Message,
-				Title = "Error while deleting"
-			};
-		}
         catch (Exception exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
