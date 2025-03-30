@@ -61,10 +61,9 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 		var getLoggedInResponse = await _client.SendAsyncWithCookie(getRequest, cookie);
 		var userData = await getLoggedInResponse.Content.ReadFromJsonAsync<StudentDisplay>();
 		int myId = userData.Id;
-		string lastName = userData.LastName;
 
+		// setting request for updating
 		string newLastName = userData.LastName == "Big" ? "Small" : "Big";
-
 		var editInfo = new StudentEdit(
 			Id: myId,
 			Email: "student@example.com",
@@ -83,8 +82,9 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 		{
 			Content = content
 		};
-		var response=await _client.SendAsyncWithCookie(postRequest, cookie);
+		await _client.SendAsyncWithCookie(postRequest, cookie);
 
+		// checking if data was updated
 		var getRequest2 = new HttpRequestMessage(HttpMethod.Get, "api/student/get-logged-in");
 		var getLoggedInResponse2 = await _client.SendAsyncWithCookie(getRequest2, cookie);
 		var userData2 = await getLoggedInResponse2.Content.ReadFromJsonAsync<StudentDisplay>();
@@ -105,8 +105,8 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 		int myId = userData.Id;
 		string lastName = userData.LastName;
 
+		// setting request for updating
 		string newLastName = userData.LastName == "Big" ? "Small" : "Big";
-
 		var editInfo = new StudentEdit(
 			Id: myId+1,
 			Email: "student@example.com",
@@ -127,6 +127,7 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 		};
 		var response = await _client.SendAsyncWithCookie(postRequest, cookie);
 
+		// checking if user was authorized
 		Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
 	}
 }
