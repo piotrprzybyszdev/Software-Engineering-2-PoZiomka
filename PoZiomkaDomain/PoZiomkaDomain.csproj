@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Admin\Commands\" />
     <Folder Include="Room\Commands\" />
   </ItemGroup>
 
