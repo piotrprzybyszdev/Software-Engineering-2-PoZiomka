@@ -15,7 +15,7 @@ public class LoginAdminCommandHandler(IPasswordService passwordService, IAdminRe
         {
             Admin = await adminRepository.GetAdminByEmail(request.Email, cancellationToken);
         }
-        catch (EmailNotRegisteredException e)
+        catch (EmailNotFoundException e)
         {
             throw new InvalidCredentialsException($"Admin with email {request.Email} not registered", e);
         }

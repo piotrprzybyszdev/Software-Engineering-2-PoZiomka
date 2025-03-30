@@ -4,6 +4,11 @@ using PoZiomkaInfrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsEnvironment("IntegrationTest"))
+{
+	builder.Configuration.AddJsonFile("appsettings.IntegrationTest.json", optional: false, reloadOnChange: true);
+}
+
 Infrastructure.Initalize(builder.Configuration);
 Infrastructure.Configure(builder.Configuration, builder.Services);
 Domain.Configure(builder.Configuration, builder.Services);
@@ -39,3 +44,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
