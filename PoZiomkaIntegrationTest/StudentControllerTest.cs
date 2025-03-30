@@ -189,4 +189,58 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 
 		Assert.Equal(countBefore + 1, countAfter);
 	}
+
+	[Fact]
+	public async Task DeleteStudentByAdmin()
+	{
+		string cookie = await _client.LoginAsAdmin(_adminEmail, _adminPassword);
+
+		// create student
+		Random random = new Random();
+		int randomValue = random.Next(1, int.MaxValue);
+		string created_email = "newEmail@test" + randomValue.ToString() + ".pl";
+		var signUp = new SignupRequest(
+			Email: created_email,
+			Password: "password"
+			);
+
+		var json = JsonSerializer.Serialize(signUp);
+		var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+		var postRequest = new HttpRequestMessage(HttpMethod.Post, "api/student/create")
+		{
+			Content = content
+		};
+		var response0 = await _client.SendAsyncWithCookie(postRequest, cookie);
+
+		Assert.Equal(HttpStatusCode.OK, response0.StatusCode);
+
+		// get all students
+		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response = await _client.SendAsyncWithCookie(getRequest, cookie);
+		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		var data = await response.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data);
+		int countBefore = data.Count;
+
+		// choose created student id
+		var student = data.FirstOrDefault(student => student.Email== created_email);
+		Assert.NotNull(student);
+
+		// delete student
+		var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, "api/student/delete/" + student.Id);
+		var response2 = await _client.SendAsyncWithCookie(deleteRequest, cookie);
+		Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+
+		// get all students
+		var getRequest3 = new HttpRequestMessage(HttpMethod.Get, "api/student/get");
+		var response3 = await _client.SendAsyncWithCookie(getRequest3, cookie);
+		Assert.Equal(HttpStatusCode.OK, response3.StatusCode);
+		var data3 = await response3.Content.ReadFromJsonAsync<List<StudentDisplay>>();
+		Assert.NotEmpty(data3);
+		int countAfter = data3.Count;
+
+		// check if count is lower by 1
+		Assert.Equal(countBefore - 1, countAfter);
+	}
 }
