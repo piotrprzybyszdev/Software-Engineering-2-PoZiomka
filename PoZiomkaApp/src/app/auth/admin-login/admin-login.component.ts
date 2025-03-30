@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, SelectControlValueAccessor, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
+import { AdminService } from '../../admin/admin.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -14,6 +15,7 @@ import { CardConfiguration, CenteredCardComponent } from "../../common/centered-
 })
 export class AdminLoginComponent {
   private authService = inject(AuthService);
+  private adminService = inject(AdminService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
 
@@ -47,10 +49,17 @@ export class AdminLoginComponent {
       .subscribe({
         next: response => { 
           if (response.success) {
-            this.router.navigate(['/admin/dashboard']); 
+            this.adminService.fetchLoggedInAdmin().subscribe({
+              next: response => {
+                if (response.success) {
+                  this.router.navigate(['/admin/dashboard']); 
+                } else {
+                  this.error.set(response.error?.detail);
+                }
+              }
+            })
           } else {
-            this.router.navigate(['/admin/dashboard']); // no ver yet
-            //this.error.set(response.error?.detail);
+            this.error.set(response.error?.detail);
           }
         }
     });
