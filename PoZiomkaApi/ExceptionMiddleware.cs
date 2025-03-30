@@ -87,12 +87,12 @@ public class ExceptionMiddleware(RequestDelegate next)
                 }
             };
         }
-        catch (InvalidCredentialException exception)
+        catch (InvalidCredentialsException exception)
         {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             problemDetails = new ProblemDetails()
             {
-                Status = StatusCodes.Status400BadRequest,
+                Status = StatusCodes.Status401Unauthorized,
                 Detail = exception.Message,
                 Title = "Invalid email or password"
             };

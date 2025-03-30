@@ -32,6 +32,18 @@ public class AuthController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
+    [HttpPost("admin-login")]
+    public async Task<IActionResult> AdminLogin([FromBody] AdminLoginRequest loginRequest)
+    {
+        IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginAdminCommand());
+
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+
+        await HttpContext.SignInAsync(principal);
+
+        return Ok();
+    }
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

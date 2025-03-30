@@ -23,5 +23,5 @@ public class PasswordServiceTest
 
         var hash = passwordService.ComputeHash(password1);
         Assert.False(passwordService.VerifyHash(password2, hash));
-    }
+    }     
 }
