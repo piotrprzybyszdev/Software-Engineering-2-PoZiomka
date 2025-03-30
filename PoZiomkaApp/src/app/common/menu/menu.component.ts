@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -10,4 +11,10 @@ import { Component, input } from '@angular/core';
 export class MenuComponent {
   logoLink = input.required<string>();
   logoStyle = input.required<string>();
+
+  router = inject(Router);
+
+  onLogoClick(): void {
+    this.router.navigate([this.logoLink()]);
+  }
 }

@@ -15,6 +15,7 @@ export class StudentsListComponent implements OnInit {
   constructor(private studentService: StudentService) {}
 
   ngOnInit(): void {
+    console.log('helo');
     this.studentService.getAllStudents().subscribe({
       next: (response) => {
         if (response.success) {

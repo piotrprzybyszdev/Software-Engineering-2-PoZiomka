@@ -13,6 +13,10 @@ export class StudentComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  onProfileClick(): void {
+    this.router.navigate(['/student/profile']);
+  }
+
   logout(): void {
     this.authService.logOut().subscribe({
       next: _ => this.router.navigate(['/login'])

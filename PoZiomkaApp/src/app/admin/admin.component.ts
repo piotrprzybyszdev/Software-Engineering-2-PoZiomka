@@ -13,6 +13,14 @@ export class AdminComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  onProfileClick(): void {
+    this.router.navigate(['/admin/profile']);
+  }
+
+  onStudentListClick(): void {
+    this.router.navigate(['/admin/students']);
+  }
+
   logout(): void {
     this.authService.logOut().subscribe({
       next: _ => this.router.navigate(['/login'])
