@@ -70,14 +70,14 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPut("update")]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
     {
-  //      if(studentEdit.Id != User.GetUserId() && User.IsInRole(Roles.Administrator))
-  //      {
-		//	return Unauthorized();
-		//}
-		EditStudentCommand editStudentCommand = new(studentEdit);
+        if (studentEdit.Id != User.GetUserId() && User.IsInRole(Roles.Administrator))
+        {
+            return Unauthorized();
+        }
+        EditStudentCommand editStudentCommand = new(studentEdit);
         await mediator.Send(editStudentCommand);
         
         return Ok();

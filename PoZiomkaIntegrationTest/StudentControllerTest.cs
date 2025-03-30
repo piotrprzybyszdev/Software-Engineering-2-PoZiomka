@@ -47,8 +47,45 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 
 		// 5. Verify user details are returned
 		var userData = await getLoggedInResponse.Content.ReadFromJsonAsync<StudentDisplay>();
-		Assert.NotNull(userData);
-		//Assert.Equal("teststudent", userData.Username);
+		//Assert.NotNull(userData);
+		Assert.Equal("student@example.com", userData.Email);
 	}
 
+	[Fact]
+	public async Task UpdatingUserData()
+	{
+		string cookie = await _client.LoginAsUser("student@example.com", "password");
+
+		// getting Id
+		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get-logged-in");
+		var getLoggedInResponse = await _client.SendAsyncWithCookie(getRequest, cookie);
+		var userData = await getLoggedInResponse.Content.ReadFromJsonAsync<StudentDisplay>();
+		int myId = userData.Id;
+
+		var editInfo = new StudentEdit(
+			Id: myId,
+			Email: "student@example.com",
+			FirstName: "John",
+			LastName: "Big",
+			PhoneNumber: "123-456-7890",
+			IndexNumber: "A12345",
+			IsPhoneNumberHidden: true,
+			IsIndexNumberHidden: false
+		);
+
+		var json = JsonSerializer.Serialize(editInfo);
+		var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+		var postRequest = new HttpRequestMessage(HttpMethod.Put, "api/student/update")
+		{
+			Content = content
+		};
+		var response=await _client.SendAsyncWithCookie(postRequest, cookie);
+
+		var getRequest2 = new HttpRequestMessage(HttpMethod.Get, "api/student/get-logged-in");
+		var getLoggedInResponse2 = await _client.SendAsyncWithCookie(getRequest2, cookie);
+		var userData2 = await getLoggedInResponse2.Content.ReadFromJsonAsync<StudentDisplay>();
+
+		Assert.Equal(HttpStatusCode.OK, getLoggedInResponse2.StatusCode);
+	}
 }
