@@ -65,13 +65,13 @@ VALUES (@email, @passwordHash, @isConfirmed);
         }
     }
 
-    public async Task<IEnumerable<StudentModel>> GetAllStudents()
+    public async Task<IEnumerable<StudentModel>> GetAllStudents(CancellationToken? cancellationToken)
     {
         var sqlQuery = @"SELECT * FROM Students";
 
 		try
 		{
-			return await connection.QueryAsync<StudentModel>(sqlQuery);
+			return await connection.QueryAsync<StudentModel>(new CommandDefinition(sqlQuery, cancellationToken: cancellationToken ?? default));
 		}
 		catch (SqlException exception)
 		{
@@ -97,7 +97,7 @@ UPDATE Students SET IsConfirmed = 1 WHERE Email = @email;
 
 		if (rowsAffected == 0) throw new EmailNotFoundException();
 	}
-	public async Task EditStudent(StudentEdit studentEdit)
+	public async Task EditStudent(StudentEdit studentEdit, CancellationToken? cancellationToken)
 	{
 		var sqlQuery = @"
 UPDATE Students
@@ -113,7 +113,7 @@ WHERE id = @id
 		int rowsAffected;
 		try
 		{
-			rowsAffected = await connection.ExecuteAsync(sqlQuery, studentEdit);
+			rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentEdit, cancellationToken: cancellationToken ?? default));
 		}
 		catch (SqlException exception)
 		{
@@ -122,14 +122,14 @@ WHERE id = @id
 		if (rowsAffected == 0) throw new NoRowsEditedException("User not found");
 	}
 
-	public async Task DeleteStudent(int id)
+	public async Task DeleteStudent(int id, CancellationToken? cancellationToken)
 	{
 		var sqlQuery = @"DELETE FROM Students WHERE id = @id";
 
 		int rowsAffected;
 		try
 		{
-			rowsAffected = await connection.ExecuteAsync(sqlQuery, new { id });
+			rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
 		}
 		catch (SqlException exception)
 		{

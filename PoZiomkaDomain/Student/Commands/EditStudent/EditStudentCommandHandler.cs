@@ -21,7 +21,7 @@ public class EditStudentCommandHandler(IStudentRepository studentRepository) : I
 
         try
         {
-			await studentRepository.EditStudent(request.studentEdit);
+			await studentRepository.EditStudent(request.studentEdit, cancellationToken);
 		}
 		catch (NoRowsEditedException e)
 		{

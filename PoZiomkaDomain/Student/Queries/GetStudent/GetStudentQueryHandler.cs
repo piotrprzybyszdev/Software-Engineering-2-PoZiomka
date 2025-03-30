@@ -5,16 +5,16 @@ using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student.Dtos;
 
-namespace PoZiomkaDomain.Student.Commands.GetStudent;
+namespace PoZiomkaDomain.Student.Queries.GetStudent;
 
-public class GetStudentCommandHandler(IStudentRepository studentRepository, IJudgeService judgeService) : IRequestHandler<GetStudentCommand, StudentDisplay>
+public class GetStudentQueryHandler(IStudentRepository studentRepository, IJudgeService judgeService) : IRequestHandler<GetStudentQuery, StudentDisplay>
 {
-    public async Task<StudentDisplay> Handle(GetStudentCommand request, CancellationToken cancellationToken)
+    public async Task<StudentDisplay> Handle(GetStudentQuery request, CancellationToken cancellationToken)
     {
         int loggedInUser = request.User.GetUserId();
         bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
-          (request.User.IsInRole(Roles.Student) &&
-          (loggedInUser == request.Id || await judgeService.IsMatch(loggedInUser, request.Id)));
+          request.User.IsInRole(Roles.Student) &&
+          (loggedInUser == request.Id || await judgeService.IsMatch(loggedInUser, request.Id));
 
         if (!isUserAuthorized)
             throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");

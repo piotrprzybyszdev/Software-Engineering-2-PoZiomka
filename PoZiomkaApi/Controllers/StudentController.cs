@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Student;
 using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Student.Commands.GetAllStudents;
-using PoZiomkaDomain.Student.Commands.GetStudent;
-using PoZiomkaDomain.Student.Commands.EditStudent; 
+using PoZiomkaDomain.Student.Commands.EditStudent;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaApi.Requests.Auth;
+using PoZiomkaDomain.Student.Commands.DeleteStudent;
+using PoZiomkaDomain.Student.Queries.GetStudent;
+using PoZiomkaDomain.Student.Queries.GetAllStudents;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -35,7 +36,7 @@ public class StudentController(IMediator mediator) : Controller
     {
         int loggedInUserId = User.GetUserId();
 
-        GetStudentCommand getStudent = new(loggedInUserId, User);
+        GetStudentQuery getStudent = new(loggedInUserId, User);
         return Ok(await mediator.Send(getStudent));
     }
 
@@ -43,7 +44,7 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Get()
     {
-        GetAllStudentsCommand command = new();
+        GetAllStudentsQuery command = new();
         return Ok(await mediator.Send(command));
     }
 
@@ -54,7 +55,7 @@ public class StudentController(IMediator mediator) : Controller
     {
         int loggedInUserId = User.GetUserId();
 
-        GetStudentCommand getStudent = new(id, User);
+        GetStudentQuery getStudent = new(id, User);
         var student = await mediator.Send(getStudent);
 
         return Ok(student);
