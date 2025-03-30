@@ -10,6 +10,7 @@ using PoZiomkaApi.Requests.Auth;
 using System.Net.Http.Headers;
 using System.Net;
 using System.Net.Http.Json;
+using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaIntegrationTest;
 
@@ -36,44 +37,18 @@ public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program
 	[Fact]
 	public async Task LoginAndGetLoggedInUser_ShouldReturnSuccess()
 	{
-		// 1. Define login request payload
-		var loginRequest = new
-		{
-			Email = "student@example.com",
-			Password = "pass"
-		};
+		string cookie = await _client.LoginAsUser("student@example.com", "password");
 
-		// 2. Send login request
-		var loginResponse = await _client.PostAsJsonAsync("api/login", loginRequest);
-		Assert.Equal(HttpStatusCode.OK, loginResponse.StatusCode);
-
-		// 3. Extract Set-Cookie header
-		string? cookieHeader = loginResponse.Headers.Contains("Set-Cookie")
-			? loginResponse.Headers.GetValues("Set-Cookie").FirstOrDefault()
-			: null;
-
-		Assert.NotNull(cookieHeader); // Ensure the cookie is set
-
-		Console.WriteLine($"Extracted Cookie: {cookieHeader}");
-
-		// 4. Attach cookie to next request
 		var getRequest = new HttpRequestMessage(HttpMethod.Get, "api/student/get-logged-in");
-		getRequest.Headers.Add("Cookie", cookieHeader); // Manually adding cookie header
+		var getLoggedInResponse = await _client.SendAsyncWithCookie(getRequest, cookie);
 
-		var getLoggedInResponse = await _client.SendAsync(getRequest);
+
 		Assert.Equal(HttpStatusCode.OK, getLoggedInResponse.StatusCode);
 
 		// 5. Verify user details are returned
-		var userData = await getLoggedInResponse.Content.ReadFromJsonAsync<StudentDto>();
+		var userData = await getLoggedInResponse.Content.ReadFromJsonAsync<StudentDisplay>();
 		Assert.NotNull(userData);
 		//Assert.Equal("teststudent", userData.Username);
 	}
 
-}
-
-// DTO class for expected user response
-public class StudentDto
-{
-	public int Id { get; set; }
-	public string Username { get; set; }
 }
