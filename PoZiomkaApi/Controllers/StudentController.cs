@@ -73,7 +73,7 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize]
     public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
     {
-        if (studentEdit.Id != User.GetUserId() && User.IsInRole(Roles.Administrator))
+        if (studentEdit.Id != User.GetUserId() && !User.IsInRole(Roles.Administrator))
         {
             return Unauthorized();
         }
