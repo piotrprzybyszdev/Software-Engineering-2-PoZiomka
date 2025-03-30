@@ -7,11 +7,10 @@ using PoZiomkaDomain.Admin.Dtos;
 
 namespace PoZiomkaDomain.Admin.Queries.GetAdmin;
 
-public class GetAdminQueryHandler(IAdminRepository adminRepository, IJudgeService judgeService) : IRequestHandler<GetAdminQuery, AdminDisplay>
+public class GetAdminQueryHandler(IAdminRepository adminRepository) : IRequestHandler<GetAdminQuery, AdminDisplay>
 {
     public async Task<AdminDisplay> Handle(GetAdminQuery request, CancellationToken cancellationToken)
     {
-        int loggedInUser = request.User.GetUserId();
         bool isUserAuthorized = request.User.IsInRole(Roles.Administrator);
 
         if (!isUserAuthorized)

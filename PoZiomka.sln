@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaInfrastructure", "P
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{473238F2-903D-43A8-8079-53D7EB9766EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaIntegrationTest", "PoZiomkaIntegrationTest\PoZiomkaIntegrationTest.csproj", "{1E471241-ADC9-4544-B200-F09FFBBF5DFB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +47,6 @@ Global
 		{473238F2-903D-43A8-8079-53D7EB9766EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473238F2-903D-43A8-8079-53D7EB9766EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473238F2-903D-43A8-8079-53D7EB9766EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E471241-ADC9-4544-B200-F09FFBBF5DFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E471241-ADC9-4544-B200-F09FFBBF5DFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E471241-ADC9-4544-B200-F09FFBBF5DFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E471241-ADC9-4544-B200-F09FFBBF5DFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
