@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Interface;
 using System.Security.Claims;
 using System.Text;
 

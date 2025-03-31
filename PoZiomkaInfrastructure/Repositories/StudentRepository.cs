@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
-using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaInfrastructure.Constants;
@@ -140,7 +139,7 @@ WHERE id = @id
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
-        if (rowsAffected == 0) throw new NoRowsEditedException("User not found");
+        if (rowsAffected == 0) throw new IdNotFoundException();
     }
 
     public async Task DeleteStudent(int id, CancellationToken? cancellationToken)
@@ -156,10 +155,10 @@ WHERE id = @id
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
-        if (rowsAffected == 0) throw new NoRowsEditedException("No rows was deleted");
+        if (rowsAffected == 0) throw new IdNotFoundException();
     }
 
-    public async Task ResetPassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken)
+    public async Task UpdatePassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"
 UPDATE Students
@@ -175,6 +174,6 @@ WHERE Email = @Email
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
-        if (rowsAffected == 0) throw new NoRowsEditedException("User not found");
+        if (rowsAffected == 0) throw new EmailNotFoundException();
     }
 }

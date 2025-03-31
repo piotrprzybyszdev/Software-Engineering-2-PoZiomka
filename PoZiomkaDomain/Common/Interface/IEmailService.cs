@@ -1,4 +1,4 @@
-﻿namespace PoZiomkaDomain.Common;
+﻿namespace PoZiomkaDomain.Common.Interface;
 
 public interface IEmailService
 {

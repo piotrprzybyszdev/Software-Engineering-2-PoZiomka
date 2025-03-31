@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
 using System.Security.Claims;
@@ -29,7 +29,7 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
         }
 
         var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email)
-            ?? throw new ClaimNotFoundException("Email claim not found");
+            ?? throw new InvalidTokenException("Email claim not found in token");
 
         var email = emailClaim.Value;
 
@@ -41,7 +41,7 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
         }
         catch (EmailNotFoundException e)
         {
-            throw new EmailNotRegisteredException($"User with email `{email}` not registered", e);
+            throw new UserNotFoundException($"User with email `{email}` not registered", e);
         }
     }
 }

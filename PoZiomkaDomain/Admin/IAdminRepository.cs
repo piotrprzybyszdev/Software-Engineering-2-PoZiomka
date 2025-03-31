@@ -2,9 +2,8 @@
 
 namespace PoZiomkaDomain.Admin;
 
-public class EmailNotUniqueException : Exception;
-
 public class EmailNotFoundException : Exception;
+public class IdNotFoundException : Exception;
 
 public interface IAdminRepository
 {

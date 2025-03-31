@@ -28,17 +28,6 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Email is taken"
             };
         }
-        catch (EmailNotRegisteredException exception)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Detail = exception.Message,
-                Title = "Email not registered"
-            };
-        }
         catch (UnauthorizedException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -59,17 +48,6 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status400BadRequest,
                 Detail = exception.Message,
                 Title = "Given token is invalid"
-            };
-        }
-        catch (ClaimNotFoundException exception)
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-
-            problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status401Unauthorized,
-                Detail = exception.Message,
-                Title = "Request is unauthorized because a claim could not be found"
             };
         }
         catch (ValidationException exception)
@@ -96,17 +74,17 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Password for this is not set"
             };
         }
-        catch (InvalidCredentialsException exception)
+        catch (EmailNotConfirmedException exception)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             problemDetails = new ProblemDetails()
             {
                 Status = StatusCodes.Status401Unauthorized,
                 Detail = exception.Message,
-                Title = "Invalid email or password"
+                Title = "Account can't be logged into because email is not confirmed"
             };
         }
-        catch (StudentNotFoundException exception)
+        catch (UserNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             problemDetails = new ProblemDetails()

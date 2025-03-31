@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 
 namespace PoZiomkaDomain.Student.Commands.RequestPasswordReset;
@@ -9,7 +9,7 @@ public class RequestPasswordResetCommandHandler(IStudentRepository studentReposi
     public async Task Handle(RequestPasswordResetCommand request, CancellationToken cancellationToken)
     {
         if (await studentRepository.GetStudentByEmail(request.Email, cancellationToken) == null)
-            throw new StudentNotFoundException(request.Email);
+            throw new UserNotFoundException(request.Email);
 
         await emailService.SendPasswordResetEmail(request.Email);
     }

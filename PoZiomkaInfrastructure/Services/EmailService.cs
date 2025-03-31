@@ -1,4 +1,4 @@
-﻿using PoZiomkaDomain.Common;
+﻿using PoZiomkaDomain.Common.Interface;
 using System.Net;
 using System.Net.Mail;
 

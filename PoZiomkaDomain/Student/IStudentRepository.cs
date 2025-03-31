@@ -3,8 +3,8 @@
 namespace PoZiomkaDomain.Student;
 
 public class EmailNotUniqueException : Exception;
-
 public class EmailNotFoundException : Exception;
+public class IdNotFoundException : Exception;
 
 public interface IStudentRepository
 {
@@ -16,5 +16,5 @@ public interface IStudentRepository
     public Task UpdateStudent(StudentUpdate studentEdit, CancellationToken? cancellationToken);
     public Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken);
     public Task DeleteStudent(int id, CancellationToken? cancellationToken);
-    public Task ResetPassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken);
+    public Task UpdatePassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken);
 }

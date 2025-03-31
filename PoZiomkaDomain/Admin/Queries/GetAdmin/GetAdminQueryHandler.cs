@@ -21,7 +21,7 @@ public class GetAdminQueryHandler(IAdminRepository adminRepository) : IRequestHa
         }
         catch
         {
-            throw new StudentNotFoundException($"Student with id `{request.Id}` not found");
+            throw new UserNotFoundException($"Student with id `{request.Id}` not found");
         }
     }
 }
