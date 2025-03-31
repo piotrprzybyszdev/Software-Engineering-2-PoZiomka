@@ -41,9 +41,16 @@ public class RoomController(IMediator mediator) : ControllerBase
         return NotFound();
     }
 
-    [HttpPut("update")]
+    [HttpPut("add-student")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<IActionResult> Update([FromBody] UpdateRequest updateRequest)
+    public async Task<IActionResult> AddStudent([FromBody] AddStudentRequest addStudentRequest)
+    {
+        return NotFound();
+    }
+
+    [HttpPut("remove-student")]
+    [Authorize(Roles = Roles.Administrator)]
+    public async Task<IActionResult> RemoveStudent([FromBody] RemoveStudentRequest removeStudentRequest)
     {
         return NotFound();
     }

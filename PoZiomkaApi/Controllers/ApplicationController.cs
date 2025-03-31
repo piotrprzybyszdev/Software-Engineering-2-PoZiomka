@@ -12,14 +12,14 @@ namespace PoZiomkaApi.Controllers;
 [ApiController]
 public class ApplicationController(IMediator mediator) : ControllerBase
 {
-    [HttpPost("submit/{id}")]
-    [Authorize(Roles = Roles.Student)]
-    public async Task<IActionResult> Submit(int id, IFormFile file)
+    [HttpGet("get-types")]
+    [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
+    public async Task<IActionResult> GetTypes()
     {
-        return NotFound();
+        return Ok(new List<ApplicationTypeModel>([new ApplicationTypeModel(1, "Test application type", "Test application type description")]));
     }
 
-    [HttpPut("resolve/{id}")]
+    [HttpPut("resolve")]
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Resolve([FromBody] ResolveRequest resolveRequest)
     {
@@ -27,7 +27,8 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("get")]
-    public async Task<IActionResult> Get()
+    [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
+    public async Task<IActionResult> Get([FromQuery] GetRequest getRequest)
     {
         return Ok(new List<ApplicationDisplay>([new ApplicationDisplay(
             1, 3, new ApplicationTypeModel(1, "Test application type", "Test application type description"), new NetworkFile(), ApplicationStatus.Pending
