@@ -40,7 +40,7 @@ VALUES (@email, @passwordHash, 0);
         try
         {
             var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
-            return student ?? throw new QueryExecutionException("Student not found", id);
+            return student ?? throw new StudentNotFoundException("Student not found with id: "+id.ToString());
         }
         catch (SqlException exception)
         {
