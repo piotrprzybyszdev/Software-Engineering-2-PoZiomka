@@ -54,7 +54,9 @@ VALUES (@email, @passwordHash, 0);
 
         try
         {
-            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { email }, cancellationToken: cancellationToken ?? default));
+            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(
+                new CommandDefinition(sqlQuery, new { email },
+                cancellationToken: cancellationToken ?? default));
             return student ?? throw new EmailNotFoundException();
         }
         catch (SqlException exception)
