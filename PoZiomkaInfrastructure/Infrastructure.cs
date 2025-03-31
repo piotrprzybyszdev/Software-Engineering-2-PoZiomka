@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoZiomkaDomain.Admin;
+using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
@@ -18,7 +19,7 @@ public static class Infrastructure
 {
     public static void Initalize(IConfiguration configuration)
     {
-        var connectionString = configuration["DB:Connection-String"];
+        var connectionString = configuration["DB:ConnectionString"];
 
         EnsureDatabase.For.SqlDatabase(connectionString);
 
@@ -36,7 +37,7 @@ public static class Infrastructure
 
     public static void Configure(IConfiguration configuration, IServiceCollection services)
     {
-        var connectionString = configuration["DB:Connection-String"];
+        var connectionString = configuration["DB:ConnectionString"];
 
         services.AddScoped<IDbConnection>(_ => new SqlConnection(connectionString));
 
@@ -56,5 +57,14 @@ public static class Infrastructure
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
+
+        if (bool.Parse(configuration["FileStorage:IsLocal"]!))
+            services.AddScoped<IFileStorage>(_ => new LocalFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
+                configuration["FileStorage:RootDirectory"]!, configuration["FileStorage:ApplicationsDirectory"]!
+            ));
+        else
+            services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
+                configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
+            );
     }
 }

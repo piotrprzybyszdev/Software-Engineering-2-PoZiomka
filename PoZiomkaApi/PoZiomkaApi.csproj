@@ -26,8 +26,4 @@
     <ProjectReference Include="..\PoZiomkaInfrastructure\PoZiomkaInfrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Requests\Room\" />
-  </ItemGroup>
-
 </Project>
