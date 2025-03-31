@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
 

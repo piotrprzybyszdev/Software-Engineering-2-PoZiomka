@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Admin.Queries.GetAdmin;
 using PoZiomkaDomain.Common;
 

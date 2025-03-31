@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Auth;
 using PoZiomkaApi.Requests.Student;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Student.Commands.DeleteStudent;
 using PoZiomkaDomain.Student.Commands.EditStudent;
@@ -18,7 +17,7 @@ namespace PoZiomkaApi.Controllers;
 public class StudentController(IMediator mediator) : Controller
 {
     [HttpPut("confirm")]
-    public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
+    public async Task<IActionResult> Confirm(ConfirmRequest confirmRequest)
     {
         await mediator.Send(confirmRequest.ToConfirmStudentCommand());
         return Ok();
@@ -42,13 +41,11 @@ public class StudentController(IMediator mediator) : Controller
         return Ok(await mediator.Send(command));
     }
 
-    [HttpGet("get/{id}")]
+    [HttpGet("get/{id: int}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     [Authorize]
     public async Task<IActionResult> GetStudentById(int id)
     {
-        int loggedInUserId = User.GetUserId();
-
         GetStudentQuery getStudent = new(id, User);
         var student = await mediator.Send(getStudent);
 
@@ -57,7 +54,7 @@ public class StudentController(IMediator mediator) : Controller
 
     [HttpPost("create")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<IActionResult> CreateStudent([FromBody] SignupRequest signupRequest)
+    public async Task<IActionResult> CreateStudent(SignupRequest signupRequest)
     {
         await mediator.Send(signupRequest.ToSignupStudentByAdminCommand());
         return Ok();
@@ -65,7 +62,7 @@ public class StudentController(IMediator mediator) : Controller
 
     [HttpPut("update")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-    public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
+    public async Task<IActionResult> UpdateStudent(StudentEdit studentEdit)
     {
         EditStudentCommand editStudentCommand = new(studentEdit, User);
 
@@ -74,7 +71,7 @@ public class StudentController(IMediator mediator) : Controller
         return Ok();
     }
 
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("delete/{id: int}")]
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> DeleteStudent(int id)
     {
@@ -84,7 +81,7 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPost("request-password-reset")]
-    public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetRequest requestPasswordResetRequest)
+    public async Task<IActionResult> RequestPasswordReset(RequestPasswordResetRequest requestPasswordResetRequest)
     {
         await mediator.Send(requestPasswordResetRequest.ToRequestPasswordResetCommand());
 
@@ -92,7 +89,7 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPut("password-reset")]
-    public async Task<IActionResult> PasswordReset([FromBody] PasswordResetRequest passwordResetRequest)
+    public async Task<IActionResult> PasswordReset(PasswordResetRequest passwordResetRequest)
     {
         await mediator.Send(passwordResetRequest.ToResetPasswordCommand());
 
