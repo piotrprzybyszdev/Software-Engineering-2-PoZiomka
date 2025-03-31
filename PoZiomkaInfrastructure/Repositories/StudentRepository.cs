@@ -39,7 +39,7 @@ VALUES (@email, @passwordHash, 0);
         try
         {
             var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
-            return student ?? throw new QueryExecutionException("Student not found", id);
+            return student ?? throw new IdNotFoundException();
         }
         catch (SqlException exception)
         {
@@ -53,7 +53,9 @@ VALUES (@email, @passwordHash, 0);
 
         try
         {
-            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(new CommandDefinition(sqlQuery, new { email }, cancellationToken: cancellationToken ?? default));
+            var student = await connection.QuerySingleOrDefaultAsync<StudentModel>(
+                new CommandDefinition(sqlQuery, new { email },
+                cancellationToken: cancellationToken ?? default));
             return student ?? throw new EmailNotFoundException();
         }
         catch (SqlException exception)
