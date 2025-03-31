@@ -20,10 +20,11 @@ public class LoginStudentCommandHandler(IPasswordService passwordService, IStude
             throw new InvalidCredentialsException($"User with email {request.Email} not registered", e);
         }
 
+        if (student.PasswordHash == null)
+            throw new PasswordNotSet($"Password for user with email {request.Email} not set");
+
         if (!passwordService.VerifyHash(request.Password, student.PasswordHash))
-        {
-            throw new InvalidCredentialsException("Invalid password");
-        }
+            throw new InvalidCredentialsException($"Password for user with email {request.Email} is invalid");
 
         IEnumerable<Claim> claims = [
             new(ClaimTypes.NameIdentifier, student.Id.ToString()),

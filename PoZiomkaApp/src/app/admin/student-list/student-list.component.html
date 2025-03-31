@@ -14,23 +14,56 @@
         <div>
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Imię</th>
-                        <th>Nazwisko</th>
-                        <th>Email</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Imię</th>
+                            <th scope="col">Nazwisko</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Number telefonu</th>
+                            <th scope="col">Number indeksu</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
                 </thead>
                 <tbody>
-
                     @for (student of students; track $index) {
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ student.firstName??"-" }}</td>
-                        <td>{{ student.lastName??"-" }}</td>
-                        <td>{{ student.email }}</td>
-                    </tr>
+                        <tr scope="row">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ student.firstName ?? "-" }}</td>
+                            <td>{{ student.lastName ?? "-" }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.phoneNumber ?? "-" }}</td>
+                            <td>{{ student.indexNumber ?? "-" }}</td>
+                            @if (isStudentEditMode[$index]()) {
+                                <td></td>
+                                <td><button class="btn" (click)="onStudentSave($index)"><i class="bi bi-save"></i></button></td>
+                            } @else {
+                                <td><button class="btn" (click)="onStudentEdit($index)"><i class="bi bi-pencil-square"></i></button></td>
+                                <td><button class="btn" (click)="onStudentDelete($index)"><i class="bi bi-trash"></i></button></td>
+                            }
+                        </tr>
                     }
+                    <tr>
+                        @if (isAddingStudent()) {
+                            <td></td>
+                            <td>{{ studentCreate().firstName ?? "-" }}</td>
+                            <td>{{ studentCreate().lastName ?? "-" }}</td>
+                            <td>{{ studentCreate().email }}</td>
+                            <td>{{ studentCreate().phoneNumber ?? "-" }}</td>
+                            <td>{{ studentCreate().indexNumber ?? "-" }}</td>
+                            <td></td>
+                            <td><button class="btn" (click)="onStudentRegister()"><i class="bi bi-save"></i></button></td>
+                        } @else {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><button class="btn btn-primary rounded-circle m-2 py-1 px-2" (click)="onStudentAdd()"><i class="bi bi-plus"></i></button></td>
+                        }
+                    </tr>
                 </tbody>
             </table>
         </div>

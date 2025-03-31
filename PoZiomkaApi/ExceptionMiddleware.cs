@@ -86,6 +86,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 }
             };
         }
+        catch (PasswordNotSet exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "Password for this is not set"
+            };
+        }
         catch (InvalidCredentialsException exception)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;

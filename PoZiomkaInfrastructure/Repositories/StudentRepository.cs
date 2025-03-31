@@ -11,16 +11,16 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class StudentRepository(IDbConnection connection) : IStudentRepository
 {
-    public async Task CreateStudent(StudentCreate studentCreate, CancellationToken? cancellationToken)
+    public async Task RegisterStudent(StudentRegister studentRegister, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"
 INSERT INTO Students (Email, PasswordHash, IsConfirmed)
-VALUES (@email, @passwordHash, @isConfirmed);
+VALUES (@email, @passwordHash, 0);
 ";
 
         try
         {
-            await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentCreate, cancellationToken: cancellationToken ?? default));
+            await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentRegister, cancellationToken: cancellationToken ?? default));
         }
         catch (SqlException exception)
         when (exception.Number == ErrorNumbers.UniqueConstraintViolation)
@@ -32,7 +32,6 @@ VALUES (@email, @passwordHash, @isConfirmed);
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
-
 
     public async Task<StudentModel> GetStudentById(int id, CancellationToken? cancellationToken)
     {
@@ -48,7 +47,6 @@ VALUES (@email, @passwordHash, @isConfirmed);
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
-
 
     public async Task<StudentModel> GetStudentByEmail(string email, CancellationToken? cancellationToken)
     {
@@ -97,7 +95,30 @@ UPDATE Students SET IsConfirmed = 1 WHERE Email = @email;
 
         if (rowsAffected == 0) throw new EmailNotFoundException();
     }
-    public async Task EditStudent(StudentEdit studentEdit, CancellationToken? cancellationToken)
+
+    public async Task CreateStudent(StudentCreate studentCreate, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"
+INSERT INTO Students (Email, FirstName, LastName, IndexNumber, PhoneNumber, IsConfirmed)
+VALUES (@email, @firstName, @lastName, @indexNumber, @phoneNumber, 1);
+";
+
+        try
+        {
+            await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentCreate, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        when (exception.Number == ErrorNumbers.UniqueConstraintViolation)
+        {
+            throw new EmailNotUniqueException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
+
+    public async Task UpdateStudent(StudentUpdate studentUpdate, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"
 UPDATE Students
@@ -113,7 +134,7 @@ WHERE id = @id
         int rowsAffected;
         try
         {
-            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentEdit, cancellationToken: cancellationToken ?? default));
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, studentUpdate, cancellationToken: cancellationToken ?? default));
         }
         catch (SqlException exception)
         {

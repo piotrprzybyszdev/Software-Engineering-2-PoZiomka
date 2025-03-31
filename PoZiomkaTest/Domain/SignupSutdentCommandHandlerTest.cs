@@ -26,8 +26,8 @@ public class SignupSutdentCommandHandlerTest
         await handler.Handle(command, default);
 
         studentRepository.Verify(
-            m => m.CreateStudent(
-                It.Is<StudentCreate>(s => s.PasswordHash == hash), It.IsAny<CancellationToken?>()
+            m => m.RegisterStudent(
+                It.Is<StudentRegister>(s => s.PasswordHash == hash), It.IsAny<CancellationToken?>()
             ), Times.Once
         );
 
@@ -46,8 +46,8 @@ public class SignupSutdentCommandHandlerTest
 
         var studentRepository = new Mock<IStudentRepository>();
         studentRepository.Setup(
-            m => m.CreateStudent(
-                It.IsAny<StudentCreate>(), It.IsAny<CancellationToken?>())
+            m => m.RegisterStudent(
+                It.IsAny<StudentRegister>(), It.IsAny<CancellationToken?>())
             ).Throws<EmailNotUniqueException>();
 
         SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);

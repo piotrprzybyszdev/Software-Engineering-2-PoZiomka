@@ -3,7 +3,7 @@
 	Email varchar(100) UNIQUE NOT NULL,
 	FirstName varchar(100) NULL,
 	LastName varchar(100) NULL,
-	PasswordHash varchar(60) NOT NULL,
+	PasswordHash varchar(60),
 	IsConfirmed bit NOT NULL,
 	PhoneNumber varchar(20) NULL,
 	IndexNumber varchar(20) NULL,
