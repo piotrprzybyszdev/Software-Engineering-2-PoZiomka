@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
 
 namespace PoZiomkaDomain.Student.Commands.DeleteStudent;

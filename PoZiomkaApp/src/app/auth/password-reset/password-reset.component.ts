@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '../../student/student.service';
 import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reset-password',
@@ -13,6 +14,7 @@ import { CardConfiguration, CenteredCardComponent } from "../../common/centered-
 })
 export class ResetPasswordComponent {
   private studentService = inject(StudentService);
+  private toastrService = inject(ToastrService);
   private formBuilder = inject(FormBuilder);
 
   CardConfiguration = CardConfiguration;
@@ -39,13 +41,12 @@ export class ResetPasswordComponent {
 
     this.studentService.requestPasswordReset(this.resetForm.value.email!)
       .subscribe({
-        next: () => {
-          this.successMessage.set('Link do resetowania hasła został wysłany.');
-          this.errorMessage.set(undefined);
-        },
-        error: () => {
-          this.errorMessage.set('Nie udało się wysłać linku resetującego.');
-          this.successMessage.set(undefined);
+        next: response => {
+          if (response.success) {
+            this.toastrService.success('Link do resetowanie hasła został wysłany')
+          } else {
+            this.toastrService.error(response.error!.detail, response.error!.title);
+          }
         }
       });
   }

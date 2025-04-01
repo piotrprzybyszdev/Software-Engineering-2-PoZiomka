@@ -6,7 +6,8 @@ export type StudentModel = {
   indexNumber?: string,
   phoneNumber?: string,
   reservationId?: number,
-  hasAcceptedReservation: boolean
+  hasAcceptedReservation?: boolean,
+  canFillForms?: boolean
 }
 
 export type StudentCreate = {

@@ -1,6 +1,7 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { StudentService } from '../../student/student.service';  
 import { StudentCreate, StudentModel } from '../../student/student.model'; 
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-students-list',
@@ -9,8 +10,9 @@ import { StudentCreate, StudentModel } from '../../student/student.model';
   styleUrl: './student-list.component.css'
 })
 export class StudentsListComponent implements OnInit {
+  private toastrService = inject(ToastrService);
+
   students: StudentModel[] = [];
-  errorMessage: string | null = null;
 
   isStudentEditMode: WritableSignal<boolean>[] = [];
   isAddingStudent = signal<boolean>(false);
@@ -30,12 +32,8 @@ export class StudentsListComponent implements OnInit {
           this.students = response.palyload ?? [];
           this.isStudentEditMode = Array(this.students.length).fill(signal<boolean>(false));
         } else {
-          this.errorMessage = 'Nie udało się załadować studentów';
+          this.toastrService.error(response.error!.detail, response.error!.title);
         }
-      },
-      error: (err) => {
-        console.error('Błąd pobierania studentów:', err);
-        this.errorMessage = 'Wystąpił błąd podczas pobierania danych';
       }
     });
   }
@@ -47,7 +45,12 @@ export class StudentsListComponent implements OnInit {
   onStudentSave(studentIndex: number): void {
     this.isStudentEditMode[studentIndex].set(false);
     this.studentService.updateStudent(this.students[studentIndex]).subscribe({
-      next: _ => {
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Dane studenta zostały pomyślnie zapisane');
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
         this.fetchStudents();
       }
     });
@@ -55,7 +58,12 @@ export class StudentsListComponent implements OnInit {
 
   onStudentDelete(studentIndex: number): void {
     this.studentService.deleteStudent(this.students[studentIndex].id).subscribe({
-      next: _ => {
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Student został pomyślnie usunięty z systemu');
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
         this.fetchStudents();
       }
     });
@@ -67,7 +75,12 @@ export class StudentsListComponent implements OnInit {
 
   onStudentRegister(): void {
     this.studentService.createStudent(this.studentCreate()).subscribe({
-      next: _ => {
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Student został pomyślnie dodany do systemu');
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
         this.fetchStudents();
       }
     });

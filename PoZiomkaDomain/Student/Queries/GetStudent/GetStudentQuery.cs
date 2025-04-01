@@ -4,5 +4,5 @@ using System.Security.Claims;
 
 namespace PoZiomkaDomain.Student.Queries.GetStudent;
 
-public record GetStudentQuery(int Id, ClaimsPrincipal User) : IRequest<StudentDisplay>;
+public record GetStudentQuery(int? Id, ClaimsPrincipal User) : IRequest<StudentDisplay>;
 

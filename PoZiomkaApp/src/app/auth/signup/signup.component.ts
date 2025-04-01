@@ -49,7 +49,7 @@ export class SignupComponent {
           if (response.success) {
             this.router.navigate(['/login']);
           } else {
-            this.error.set(response.error?.detail);
+            this.error.set(response.error!.detail);
           }
         }
     });
@@ -58,5 +58,4 @@ export class SignupComponent {
   navigateToLogin(): void {
     this.router.navigate(['/login']);
   }
-
 }

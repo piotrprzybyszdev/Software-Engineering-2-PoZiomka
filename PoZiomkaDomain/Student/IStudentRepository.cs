@@ -3,8 +3,6 @@
 namespace PoZiomkaDomain.Student;
 
 public class EmailNotUniqueException : Exception;
-public class EmailNotFoundException : Exception;
-public class IdNotFoundException : Exception;
 
 public interface IStudentRepository
 {

@@ -1,5 +1,6 @@
 ﻿using Moq;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.SignupStudent;

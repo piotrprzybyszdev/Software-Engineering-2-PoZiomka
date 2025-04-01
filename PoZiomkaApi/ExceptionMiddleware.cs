@@ -125,7 +125,6 @@ public class ExceptionMiddleware(RequestDelegate next)
             };
         }
 
-
         context.Response.ContentType = "application/problem+json";
         await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
     }

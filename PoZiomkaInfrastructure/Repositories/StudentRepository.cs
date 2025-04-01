@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaInfrastructure.Constants;

@@ -2,16 +2,9 @@
     <h2>Lista Studentów</h2>
 
     <div class="p-3">
-        <!-- Wyświetlanie błędów -->
-        @if (errorMessage) {
-        <div class="alert alert-danger">
-            {{ errorMessage }}
-        </div>
-        }
-
         <!-- Wyświetlanie listy studentów -->
         @if (students.length > 0) {
-        <div>
+        <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                         <tr>
@@ -19,8 +12,9 @@
                             <th scope="col">Imię</th>
                             <th scope="col">Nazwisko</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Number telefonu</th>
-                            <th scope="col">Number indeksu</th>
+                            <th scope="col">Numer telefonu</th>
+                            <th scope="col">Numer indeksu</th>
+                            <th scope="col"><i class="bi bi-card-checklist"></i></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                         </tr>
@@ -34,6 +28,13 @@
                             <td>{{ student.email }}</td>
                             <td>{{ student.phoneNumber ?? "-" }}</td>
                             <td>{{ student.indexNumber ?? "-" }}</td>
+                            <td>
+                                @if (student.canFillForms) {
+                                    <i class="bi bi-check-square pt-2 d-inline-block" style="color: green"></i>
+                                } @else {
+                                    <i class="bi bi-x-square pt-2 d-inline-block" style="color: red"></i>
+                                }
+                            </td>
                             @if (isStudentEditMode[$index]()) {
                                 <td></td>
                                 <td><button class="btn" (click)="onStudentSave($index)"><i class="bi bi-save"></i></button></td>
@@ -52,8 +53,10 @@
                             <td>{{ studentCreate().phoneNumber ?? "-" }}</td>
                             <td>{{ studentCreate().indexNumber ?? "-" }}</td>
                             <td></td>
+                            <td></td>
                             <td><button class="btn" (click)="onStudentRegister()"><i class="bi bi-save"></i></button></td>
                         } @else {
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

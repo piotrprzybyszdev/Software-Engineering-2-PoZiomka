@@ -13,12 +13,6 @@
         <div class="text-center">
             <button class="btn btn-danger px-4" type="button" (click)="confirmEmail()">Potwierdź email</button>
         </div>
-
-        @if (isError) {
-            <div class="text-danger mt-3 text-center">
-                Błąd podczas potwierdzania. Spróbuj ponownie.
-            </div>
-        }
         
         @if (isSuccess) {
             <div class="text-success mt-3 text-center">

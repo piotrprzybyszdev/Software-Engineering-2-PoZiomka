@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;

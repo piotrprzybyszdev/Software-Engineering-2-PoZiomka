@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
 
@@ -10,7 +10,8 @@ public class UpdateStudentCommandHandler(IStudentRepository studentRepository) :
 {
     public async Task Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
     {
-        int loggedInUser = request.User.GetUserId();
+        int loggedInUser = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
+
         bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
           request.User.IsInRole(Roles.Student) &&
           loggedInUser == request.Id;

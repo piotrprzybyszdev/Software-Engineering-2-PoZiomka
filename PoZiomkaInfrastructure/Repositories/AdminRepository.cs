@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Admin.Dtos;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
 

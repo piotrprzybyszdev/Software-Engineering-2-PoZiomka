@@ -54,12 +54,12 @@ export class AdminLoginComponent {
                 if (response.success) {
                   this.router.navigate(['/admin/dashboard']); 
                 } else {
-                  this.error.set(response.error?.detail);
+                  this.error.set(response.error!.detail);
                 }
               }
             })
           } else {
-            this.error.set(response.error?.detail);
+            this.error.set(response.error!.detail);
           }
         }
     });

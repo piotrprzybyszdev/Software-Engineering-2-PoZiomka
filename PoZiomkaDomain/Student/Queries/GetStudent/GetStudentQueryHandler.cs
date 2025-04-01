@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Match;
@@ -11,24 +10,26 @@ public class GetStudentQueryHandler(IStudentRepository studentRepository, IJudge
 {
 	public async Task<StudentDisplay> Handle(GetStudentQuery request, CancellationToken cancellationToken)
 	{
-		int loggedInUser = request.User.GetUserId();
-		bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
+        int loggedInUserId = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
+        int userId = request.Id ?? loggedInUserId;
+
+        bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
 		  request.User.IsInRole(Roles.Student) &&
-		  (loggedInUser == request.Id || await judgeService.IsMatch(loggedInUser, request.Id));
+		  (loggedInUserId == userId || await judgeService.IsMatch(loggedInUserId, userId));
 
 		if (!isUserAuthorized)
 			throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");
 
-		var hidePersonalInfo = !(request.User.IsInRole(Roles.Administrator) || loggedInUser == request.Id);
+		var hidePersonalInfo = !(request.User.IsInRole(Roles.Administrator) || loggedInUserId == userId);
 
         try
         {
-            var student = await studentRepository.GetStudentById(request.Id, cancellationToken);
+            var student = await studentRepository.GetStudentById(userId, cancellationToken);
             return student.ToStudentDisplay(hidePersonalInfo);
         }
         catch
         {
-            throw new UserNotFoundException($"Student with id `{request.Id}` not found");
+            throw new UserNotFoundException($"Student with id `{userId}` not found");
         }
     }
 }

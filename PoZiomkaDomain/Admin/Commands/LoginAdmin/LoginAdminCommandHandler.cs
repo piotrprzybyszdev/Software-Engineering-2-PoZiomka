@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Admin.Dtos;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using System.Security.Claims;

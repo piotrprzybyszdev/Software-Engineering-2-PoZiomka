@@ -2,6 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { StudentService } from '../student/student.service';
 import { CardConfiguration, CenteredCardComponent } from '../common/centered-card/centered-card.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-confirm-email',
@@ -11,11 +12,11 @@ import { CardConfiguration, CenteredCardComponent } from '../common/centered-car
 })
 export class ConfirmEmailComponent {
   isSuccess: boolean = false;
-  isError: boolean = false;
 
   CardConfiguration = CardConfiguration;
 
   private router = inject(Router);
+  private toastrService = inject(ToastrService);
   private studentService = inject(StudentService);
   token = input.required<string>();
 
@@ -25,7 +26,7 @@ export class ConfirmEmailComponent {
         if (response.success) {
           this.router.navigate(['/login']);
         } else {
-          this.isError = true;
+          this.toastrService.error(response.error!.detail, response.error!.title);
         }
       }
     });

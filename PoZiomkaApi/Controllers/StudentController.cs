@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Auth;
 using PoZiomkaApi.Requests.Student;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Student.Commands.DeleteStudent;
 using PoZiomkaDomain.Student.Queries.GetAllStudents;
@@ -26,9 +25,7 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetLoggedIn()
     {
-        int loggedInUserId = User.GetUserId();
-
-        GetStudentQuery getStudent = new(loggedInUserId, User);
+        GetStudentQuery getStudent = new(null, User);
         return Ok(await mediator.Send(getStudent));
     }
 
@@ -80,7 +77,6 @@ public class StudentController(IMediator mediator) : Controller
     public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetRequest requestPasswordResetRequest)
     {
         await mediator.Send(requestPasswordResetRequest.ToRequestPasswordResetCommand());
-
         return Ok();
     }
 
@@ -88,7 +84,6 @@ public class StudentController(IMediator mediator) : Controller
     public async Task<IActionResult> PasswordReset([FromBody] PasswordResetRequest passwordResetRequest)
     {
         await mediator.Send(passwordResetRequest.ToResetPasswordCommand());
-
         return Ok();
     }
 }
