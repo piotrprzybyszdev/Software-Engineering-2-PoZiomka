@@ -23,4 +23,4 @@ export type StudentUpdate = {
   lastName?: string;    
   indexNumber?: string; 
   phoneNumber?: string; 
-};
+}

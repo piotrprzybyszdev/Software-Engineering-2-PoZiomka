@@ -1,0 +1,34 @@
+import { inject, Injectable } from "@angular/core";
+import { ApiResponse, pipeApiResponse } from "../common/api";
+import { Observable } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { RoomCreate, RoomModel } from "./room.model";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RoomService {
+  private httpClient = inject(HttpClient);
+
+  getRooms(): Observable<ApiResponse<RoomModel[]>> {
+    return pipeApiResponse(this.httpClient.get<RoomModel[]>('/api/room/get'));
+  }
+
+  getRoom(id: number): Observable<ApiResponse<RoomModel>> {
+    return pipeApiResponse(this.httpClient.get<RoomModel>(`/api/room/get/${id}`));
+  }
+
+  createRoom(roomCreate: RoomCreate): Observable<ApiResponse<void>> {
+    return pipeApiResponse(this.httpClient.post<void>('/api/room/create', roomCreate));
+  }
+
+  updateRoom(studentIds: number[]): Observable<ApiResponse<void>> {
+    return pipeApiResponse(this.httpClient.put<void>('/api/room/update', {
+        studentIds: studentIds
+    }));
+  }
+
+  deleteRoom(id: number): Observable<ApiResponse<void>> {
+    return pipeApiResponse(this.httpClient.delete<void>(`/api/room/delete/${id}`));
+  }
+}
