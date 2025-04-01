@@ -8,10 +8,6 @@ using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaApi.Controllers;
 
-/*
-/room/delete/{id} (delete) [Authorize admin]
- */
-
 [Route("/room")]
 [ApiController]
 public class RoomController(IMediator mediator) : ControllerBase
@@ -27,7 +23,7 @@ public class RoomController(IMediator mediator) : ControllerBase
         )]));
     }
 
-    [HttpGet("get/{id: int}")]
+    [HttpGet("get/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -52,7 +48,7 @@ public class RoomController(IMediator mediator) : ControllerBase
         return NotFound();
     }
 
-    [HttpDelete("delete/{id: int}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         return NotFound();

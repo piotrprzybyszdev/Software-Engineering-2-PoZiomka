@@ -41,7 +41,7 @@ public class StudentController(IMediator mediator) : Controller
         return Ok(await mediator.Send(command));
     }
 
-    [HttpGet("get/{id: int}")]
+    [HttpGet("get/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     [Authorize]
     public async Task<IActionResult> GetStudentById(int id)
@@ -71,7 +71,7 @@ public class StudentController(IMediator mediator) : Controller
         return Ok();
     }
 
-    [HttpDelete("delete/{id: int}")]
+    [HttpDelete("delete/{id}")]
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> DeleteStudent(int id)
     {
