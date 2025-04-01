@@ -20,11 +20,19 @@ public static class Infrastructure
     {
         var connectionString = configuration["DB:Connection-String"];
 
+        if (bool.Parse(configuration["DB:Drop"]!))
+            DropDatabase.For.SqlDatabase(connectionString);
+
         EnsureDatabase.For.SqlDatabase(connectionString);
 
         var upgrader = DeployChanges.To
             .SqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), name =>
+            {
+                if (name.EndsWith("InsertSampleData.sql"))
+                    return bool.Parse(configuration["DB:InsertSampleData"]!);
+                return true;
+            })
             .LogToConsole()
             .Build();
 
