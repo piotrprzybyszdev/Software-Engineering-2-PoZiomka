@@ -1,4 +1,4 @@
-name: CI - Unit Test
+name: CI - Integration Test
 
 on:
   pull_request:
@@ -6,9 +6,18 @@ on:
       - main
 
 jobs:
-  Unit-Tests:
-    name: Run Unit Tests for .Net
+  Integration-Tests:
+    name: Run Integration Tests for .Net
     runs-on: ubuntu-latest
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          MSSQL_SA_PASSWORD: Pass@word
+          ACCEPT_EULA: Y
+        ports:
+          - 1433:1433
 
     steps:
       - name: Checkout
@@ -25,12 +34,12 @@ jobs:
       - name: Build the solution
         run: dotnet build ./PoZiomka.sln --configuration Release --no-restore
 
-      - name: Run unit tests
-        run: dotnet test ./PoZiomkaUnitTest/PoZiomkaUnitTest.csproj --configuration Release --no-build --logger "trx;LogFileName=UnitTestResults.trx"
+      - name: Run integration tests
+        run: dotnet test ./PoZiomkaIntegrationTest/PoZiomkaIntegrationTest.csproj --configuration Release --no-build --logger "trx;LogFileName=IntegrationTestResults.trx"
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: TestResults
-          path: ./PoZiomkaUnitTest/TestResults/UnitTestResults.trx
+          path: ./PoZiomkaIntegrationTest/TestResults/IntegrationTestResults.trx

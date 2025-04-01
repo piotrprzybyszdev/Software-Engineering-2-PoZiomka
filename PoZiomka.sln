@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaApi", "PoZiomkaApi\
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "PoZiomkaApp", "PoZiomkaApp\PoZiomkaApp.esproj", "{95CE506A-7F91-4BCE-B707-0242266EE32D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaTest", "PoZiomkaTest\PoZiomkaTest.csproj", "{8ADCD66F-F178-488F-AB15-FD95232C9C88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaUnitTest", "PoZiomkaTest\PoZiomkaUnitTest.csproj", "{8ADCD66F-F178-488F-AB15-FD95232C9C88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaDomain", "PoZiomkaDomain\PoZiomkaDomain.csproj", "{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}"
 EndProject
