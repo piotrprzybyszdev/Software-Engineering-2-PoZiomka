@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { StudentAuthService } from './student/auth/auth.service';
+import { StudentService } from './student/student.service';
+import { AdminService } from './admin/admin.service';
 
 @Component({
   selector: 'app-root',
@@ -10,14 +11,23 @@ import { StudentAuthService } from './student/auth/auth.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
+  private studentService = inject(StudentService);
+  private adminService = inject(AdminService);
   private router = inject(Router);
-  private studentAuthService = inject(StudentAuthService);
 
   ngOnInit(): void {
-    this.studentAuthService.fetchLoggedInStudent().subscribe({
+    this.studentService.fetchLoggedInStudent().subscribe({
       next: response => {
-        if (response.palyload) {
-          this.router.navigate(['/student/profile']);
+        if (response.success) {
+          this.router.navigate(['/student']);
+        }
+      }
+    });
+
+    this.adminService.fetchLoggedInAdmin().subscribe({
+      next: response => {
+        if (response.success) {
+          this.router.navigate(['/admin']);
         }
       }
     });

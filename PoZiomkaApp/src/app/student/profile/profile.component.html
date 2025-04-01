@@ -1,0 +1,70 @@
+<div class="py-3 py-md-5 px-5 mx-md-4">
+    <h1 class="text-center mt-1">Twój Profil</h1>
+    <hr>
+
+    <div class="p-5">
+        <!-- Tryb Wyświetlania -->
+        <div *ngIf="!isEditingData() && !isEditingPassword()">
+            <div class="mb-4">
+                <h4>Imię i nazwisko:</h4>
+                <p>{{ student?.firstName }} {{ student?.lastName }}</p>
+            </div>
+
+            <div class="mb-4">
+                <h4>Email:</h4>
+                <p>{{ student?.email }}</p>
+            </div>
+
+            <div class="mb-4">
+                <h4>Numer Indeksu:</h4>
+                <p>{{ student?.indexNumber }}</p>
+            </div>
+
+            <div class="mb-4">
+                <h4>Telefon:</h4>
+                <p>{{ student?.phoneNumber }}</p>
+            </div>
+
+            <div class="text-center mt-4">
+                <button class="btn btn-primary me-3" (click)="toggleDataEdit()">Edytuj dane</button>
+            </div>
+        </div>
+
+        <!-- Tryb Edycji Danych -->
+        <form *ngIf="isEditingData()" [formGroup]="dataForm" (ngSubmit)="updateData()">
+            <div class="mb-3">
+                <label class="form-label">Imię</label>
+                <input class="form-control" formControlName="firstName">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nazwisko</label>
+                <input class="form-control" formControlName="lastName">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" formControlName="email">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Numer indeksu</label>
+                <input class="form-control" formControlName="indexNumber">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Numer telefonu</label>
+                <input class="form-control" formControlName="phoneNumber">
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success me-2" [disabled]="dataForm.invalid">Zapisz</button>
+                <button type="button" class="btn btn-secondary" (click)="toggleDataEdit()">Anuluj</button>
+            </div>
+        </form>
+
+        <!-- Komunikaty -->
+        <div *ngIf="errorMessage()" class="alert alert-danger mt-3">{{ errorMessage() }}</div>
+        <div *ngIf="successMessage()" class="alert alert-success mt-3">{{ successMessage() }}</div>
+    </div>
+</div>

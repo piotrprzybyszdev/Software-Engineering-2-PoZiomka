@@ -1,15 +1,15 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PoZiomkaApi.Requests.Auth;
 using PoZiomkaApi.Requests.Student;
 using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Student.Commands.DeleteStudent;
 using PoZiomkaDomain.Student.Commands.EditStudent;
 using PoZiomkaDomain.Student.Dtos;
-using PoZiomkaApi.Requests.Auth;
-using PoZiomkaDomain.Student.Commands.DeleteStudent;
-using PoZiomkaDomain.Student.Queries.GetStudent;
 using PoZiomkaDomain.Student.Queries.GetAllStudents;
+using PoZiomkaDomain.Student.Queries.GetStudent;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -60,21 +60,17 @@ public class StudentController(IMediator mediator) : Controller
     public async Task<IActionResult> CreateStudent([FromBody] SignupRequest signupRequest)
     {
         await mediator.Send(signupRequest.ToSignupStudentByAdminCommand());
-		return Ok();
+        return Ok();
     }
 
     [HttpPut("update")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> UpdateStudent([FromBody] StudentEdit studentEdit)
     {
-		if (studentEdit.Id != User.GetUserId() && !User.IsInRole(Roles.Administrator))
-		{
-			return Unauthorized();
-		}
-		EditStudentCommand editStudentCommand = new(studentEdit, User);
+        EditStudentCommand editStudentCommand = new(studentEdit, User);
 
         await mediator.Send(editStudentCommand);
-        
+
         return Ok();
     }
 
@@ -82,9 +78,9 @@ public class StudentController(IMediator mediator) : Controller
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> DeleteStudent(int id)
     {
-		DeleteStudentCommand deleteStudentCommand = new(id);
-		await mediator.Send(deleteStudentCommand);
-		return Ok();
+        DeleteStudentCommand deleteStudentCommand = new(id);
+        await mediator.Send(deleteStudentCommand);
+        return Ok();
     }
 
     [HttpPost("request-password-reset")]

@@ -1,5 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using PoZiomkaDomain.Common;
+﻿using PoZiomkaDomain.Common;
 using PoZiomkaInfrastructure.Services;
 using System.Security.Claims;
 
