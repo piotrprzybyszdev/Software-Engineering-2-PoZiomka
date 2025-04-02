@@ -22,9 +22,17 @@ export class RoomService {
     return pipeApiResponse(this.httpClient.post<void>('/api/room/create', roomCreate));
   }
 
-  updateRoom(studentIds: number[]): Observable<ApiResponse<void>> {
-    return pipeApiResponse(this.httpClient.put<void>('/api/room/update', {
-        studentIds: studentIds
+  addStudentToRoom(id: number, studentId: number): Observable<ApiResponse<void>> {
+    return pipeApiResponse(this.httpClient.put<void>('/api/room/add-student', {
+      id: id,
+      studentId: studentId
+    }));
+  }
+
+  removeStudentFromRoom(id: number, studentId: number): Observable<ApiResponse<void>> {
+    return pipeApiResponse(this.httpClient.put<void>('/api/room/remove-student', {
+      id: id,
+      studentId: studentId
     }));
   }
 
