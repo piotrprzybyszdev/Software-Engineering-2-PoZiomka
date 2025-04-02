@@ -41,7 +41,7 @@ public class ExceptionMiddleware(RequestDelegate next)
         }
         catch (UnauthorizedException exception)
         {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
             problemDetails = new ProblemDetails()
             {

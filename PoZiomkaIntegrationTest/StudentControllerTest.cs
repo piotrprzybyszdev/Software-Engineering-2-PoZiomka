@@ -1,44 +1,21 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-using PoZiomkaInfrastructure;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using PoZiomkaApi.Requests.Auth;
-using System.Net.Http.Headers;
 using System.Net;
 using System.Net.Http.Json;
 using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaIntegrationTest;
 
-public class StudentControllerTest : IClassFixture<WebApplicationFactory<Program>>
+public class StudentControllerTest(MockWebApplicationFactory<Program> _factory) : IClassFixture<MockWebApplicationFactory<Program>>
 {
-	private readonly HttpClient _client;
+	private readonly HttpClient _client = _factory.CreateClient();
 
 	private readonly string _userEmail = "student@example.com";
-	private readonly string _userPassword = "test";
+	private readonly string _userPassword = "asdf";
 	private readonly string _adminEmail = "admin@example.com";
-	private readonly string _adminPassword = "test";
+	private readonly string _adminPassword = "asdf";
 
-	public StudentControllerTest(WebApplicationFactory<Program> factory)
-	{
-
-		var options = new WebApplicationFactoryClientOptions
-		{
-			AllowAutoRedirect = true, // Follow redirects if necessary
-			HandleCookies = false, // Enable cookies for authentication persistence
-		};
-
-		_client = factory
-		   .WithWebHostBuilder(builder =>
-		   {
-			   builder.UseEnvironment("IntegrationTest"); // Set environment to "Testing" for appsettings.IntegrationTest.json
-		   })
-		   .CreateClient(options);
-	}
 	[Fact]
 	public async Task LoginAndGetLoggedInUser_ShouldReturnSuccess()
 	{

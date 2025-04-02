@@ -13,7 +13,7 @@
 	IsIndexNumberHidden bit NOT NULL DEFAULT 1,
 );
 
-CREATE TABLE Admin(
+CREATE TABLE Administrators(
 	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
 	Email varchar(100) UNIQUE NOT NULL,
 	PasswordHash varchar(60) NOT NULL
