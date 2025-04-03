@@ -12,7 +12,7 @@ public class AdminRepository(IDbConnection connection) : IAdminRepository
 {
     public async Task<AdminModel> GetAdminById(int id, CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"SELECT * FROM Admin WHERE Id = @id";
+        var sqlQuery = @"SELECT * FROM Administrators WHERE Id = @id";
 
         try
         {
@@ -27,7 +27,7 @@ public class AdminRepository(IDbConnection connection) : IAdminRepository
 
     public async Task<AdminModel> GetAdminByEmail(string email, CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"SELECT * FROM Admin WHERE Email = @email";
+        var sqlQuery = @"SELECT * FROM Administrators WHERE Email = @email";
 
         try
         {

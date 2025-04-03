@@ -34,6 +34,7 @@ public class GetStudentQueryHandlerTest
 			IndexNumber: "S123456",
 			ReservationId: 1001,
 			HasAcceptedReservation: true,
+			RoomId: 1,
 			IsPhoneNumberHidden: true,
 			IsIndexNumberHidden: false
 		);

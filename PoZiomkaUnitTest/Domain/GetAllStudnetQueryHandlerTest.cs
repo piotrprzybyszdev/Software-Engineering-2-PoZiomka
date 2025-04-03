@@ -25,6 +25,7 @@ public class GetAllStudnetQueryHandlerTest
 			IndexNumber: "S123456",
 			ReservationId: 1001,
 			HasAcceptedReservation: true,
+			RoomId: 1,
 			IsPhoneNumberHidden: false,
 			IsIndexNumberHidden: false
 		);
