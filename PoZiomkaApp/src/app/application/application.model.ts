@@ -12,13 +12,20 @@ export type ApplicationModel = {
   id: number,
   studentId: number,
   applicationType: ApplicationTypeModel,
-  file: File
   applicationStatus: ApplicationStatus
 }
 
 export type ApplicationSearchParams = {
-  studentId?: number,
   studentEmail?: string,
   studentIndex?: string,
-  status?: ApplicationStatus
+  applicationTypeId?: number,
+  applicationStatus?: ApplicationStatus
+}
+
+export function saveFileToDisk(blob: Blob, fileName: string): void {
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+  link.remove();
 }

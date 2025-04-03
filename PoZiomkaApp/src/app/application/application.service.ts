@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
-import { ApiResponse, pipeApiResponse } from "../common/api";
+import { ApiResponse, pipeApiResponse, toQueryString } from "../common/api";
 import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { ApplicationModel, ApplicationSearchParams, ApplicationStatus, ApplicationTypeModel } from "./application.model";
 
 @Injectable({
@@ -14,24 +14,28 @@ export class ApplicationService {
     return pipeApiResponse(this.httpClient.get<ApplicationTypeModel[]>('/api/aplication/get-types'));
   }
 
-  submitApplication(typeId: number, file: File): Observable<ApiResponse<void>> {
-    const formData = new FormData();
-    formData.append("id", typeId.toString());
-    formData.append("file", file);
-
-    return pipeApiResponse(this.httpClient.post<void>('/api/aplication/get-types', formData));
-  }
-
-  resolveApplication(id: number, status: ApplicationStatus) {
-    return pipeApiResponse(this.httpClient.put<void>('/api/application/resolve', {
-        id: id,
-        status: status
-    }));
-  }
-
   getApplications(params: ApplicationSearchParams): Observable<ApiResponse<ApplicationModel[]>> {
     return pipeApiResponse(this.httpClient.get<ApplicationModel[]>(
-        `/api/aplication/get-types${encodeURIComponent(JSON.stringify(params))}`
+        `/api/aplication/get${toQueryString(params)}`
     ));
+  }
+
+  getStudentApplications(): Observable<ApiResponse<ApplicationModel[]>> {
+    return pipeApiResponse(this.httpClient.get<ApplicationModel[]>('/api/application/get-student'));
+  }
+
+  submitApplication(id: number, file: File): Observable<ApiResponse<void>> {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return pipeApiResponse(this.httpClient.post<void>(`/api/aplication/submit/${id}`, formData));
+  }
+
+  resolveApplication(id: number, status: ApplicationStatus): Observable<ApiResponse<void>> {
+    return pipeApiResponse(this.httpClient.put<void>(`/api/application/resolve/${id}?status=${status}`, {}));
+  }
+
+  downloadApplicationFile(id: number): Observable<ApiResponse<Blob>> {
+    return pipeApiResponse(this.httpClient.get<Blob>(`/api/application/download/${id}`, { responseType: 'blob' as 'json' }));
   }
 }

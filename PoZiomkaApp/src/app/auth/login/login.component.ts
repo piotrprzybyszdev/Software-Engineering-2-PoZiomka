@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { StudentService } from '../../student/student.service'; // Importujemy StudentService
 import { CardConfiguration, CenteredCardComponent } from '../../common/centered-card/centered-card.component';
+import { ApplicationService } from '../../application/application.service';
+import { saveFileToDisk } from '../../application/application.model';
 
 @Component({
   selector: 'app-login',

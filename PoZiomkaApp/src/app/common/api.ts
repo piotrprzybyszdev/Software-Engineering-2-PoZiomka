@@ -13,6 +13,15 @@ export type ApiResponse<T> = {
   palyload?: T
 }
 
+export function toQueryString(data: any): string {
+  const keys = Object.keys(data);
+  if (keys.length === 0) {
+    return '';
+  }
+
+  return '?' + keys.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
+}
+
 export function pipeApiResponse<T>(observable: Observable<T>): Observable<ApiResponse<T>> {
   return observable.pipe(map(response => {
     return {
