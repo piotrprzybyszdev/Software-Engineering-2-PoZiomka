@@ -3,8 +3,15 @@
     <hr>
 
     <div class="p-5">
+        <!-- Komunikat canFillForms -->
+        <div *ngIf="student">
+            <div class="alert" [ngClass]="student.canFillForms ? 'alert-success' : 'alert-danger'">
+                {{ student.canFillForms ? 'Możesz wypełniać formularze' : 'Nie możesz wypełniać formularzy' }}
+            </div>
+        </div>
+
         <!-- Tryb Wyświetlania -->
-        <div *ngIf="!isEditingData() && !isEditingPassword()">
+        <div *ngIf="!isEditingData()">
             <div class="mb-4">
                 <h4>Imię i nazwisko:</h4>
                 <p>{{ student?.firstName }} {{ student?.lastName }}</p>
@@ -15,14 +22,18 @@
                 <p>{{ student?.email }}</p>
             </div>
 
-            <div class="mb-4">
-                <h4>Numer Indeksu:</h4>
-                <p>{{ student?.indexNumber }}</p>
+            <div class="mb-4 d-flex align-items-center justify-content-between">
+                <div>
+                    <h4>Numer Indeksu:</h4>
+                    <p>{{ student?.isIndexNumberHidden ? 'Ukryte' : student?.indexNumber }}</p>
+                </div>
             </div>
 
-            <div class="mb-4">
-                <h4>Telefon:</h4>
-                <p>{{ student?.phoneNumber }}</p>
+            <div class="mb-4 d-flex align-items-center justify-content-between">
+                <div>
+                    <h4>Telefon:</h4>
+                    <p>{{ student?.isPhoneNumberHidden ? 'Ukryte' : student?.phoneNumber }}</p>
+                </div>
             </div>
 
             <div class="text-center mt-4">
@@ -32,29 +43,42 @@
 
         <!-- Tryb Edycji Danych -->
         <form *ngIf="isEditingData()" [formGroup]="dataForm" (ngSubmit)="updateData()">
-            <div class="mb-3">
-                <label class="form-label">Imię</label>
-                <input class="form-control" formControlName="firstName">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nazwisko</label>
-                <input class="form-control" formControlName="lastName">
+            <div class="mb-3 d-flex justify-content-between">
+                <div class="w-50">
+                    <label class="form-label">Imię</label>
+                    <input class="form-control" formControlName="firstName">
+                </div>
+                <div class="w-50">
+                    <label class="form-label">Nazwisko</label>
+                    <input class="form-control" formControlName="lastName">
+                </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control" formControlName="email">
+                <input type="email" class="form-control" formControlName="email" readonly>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Numer indeksu</label>
-                <input class="form-control" formControlName="indexNumber">
+            <div class="mb-3 d-flex align-items-center justify-content-between">
+                <div class="w-50">
+                    <label class="form-label">Numer indeksu</label>
+                    <input class="form-control" formControlName="indexNumber">
+                </div>
+                <div class="d-flex align-items-center" *ngIf="isEditingData()">
+                    <input type="checkbox" class="form-check-input" formControlName="isIndexNumberHidden">
+                    <label class="form-check-label ms-2">Ukryj numer indeksu</label>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Numer telefonu</label>
-                <input class="form-control" formControlName="phoneNumber">
+            <div class="mb-3 d-flex align-items-center justify-content-between">
+                <div class="w-50">
+                    <label class="form-label">Numer telefonu</label>
+                    <input class="form-control" formControlName="phoneNumber">
+                </div>
+                <div class="d-flex align-items-center" *ngIf="isEditingData()">
+                    <input type="checkbox" class="form-check-input" formControlName="isPhoneNumberHidden">
+                    <label class="form-check-label ms-2">Ukryj numer telefonu</label>
+                </div>
             </div>
 
             <div class="text-center mt-4">

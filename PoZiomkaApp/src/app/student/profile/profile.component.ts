@@ -19,11 +19,9 @@ export class ProfileComponent implements OnInit {
 
   student: StudentModel | null = null;
   isEditingData = signal<boolean>(false);
-  isEditingPassword = signal<boolean>(false);
-  dataForm!: FormGroup;
-  passwordForm!: FormGroup;
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+  dataForm!: FormGroup;
 
   ngOnInit(): void {
     this.fetchProfile();
@@ -49,14 +47,11 @@ export class ProfileComponent implements OnInit {
     this.dataForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       indexNumber: [''],
-      phoneNumber: ['']
-    });
-
-    this.passwordForm = this.formBuilder.group({
-      oldPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]]
+      phoneNumber: [''],
+      isPhoneNumberHidden: [false],
+      isIndexNumberHidden: [false]
     });
   }
 
@@ -71,8 +66,9 @@ export class ProfileComponent implements OnInit {
     if (this.dataForm.invalid || !this.student) {
       return;
     }
-    
-    const updatedStudent = { ...this.student, ...this.dataForm.value };
+
+    const updatedStudent = { ...this.student, ...this.dataForm.getRawValue() };
+
     this.studentService.updateStudent(updatedStudent).subscribe({
       next: response => {
         if (response.success) {
@@ -82,7 +78,6 @@ export class ProfileComponent implements OnInit {
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
-        this.fetchProfile();
       }
     });
   }
