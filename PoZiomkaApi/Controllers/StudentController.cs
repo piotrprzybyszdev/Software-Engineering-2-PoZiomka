@@ -65,11 +65,7 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpDelete("delete/{id}")]
-<<<<<<< HEAD
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-=======
-    [Authorize(Roles = Roles.Administrator)]
->>>>>>> 7da1cc3 (Updated endpoints)
     public async Task<IActionResult> DeleteStudent(int id)
     {
         DeleteStudentCommand deleteStudentCommand = new(id, HttpContext.User);

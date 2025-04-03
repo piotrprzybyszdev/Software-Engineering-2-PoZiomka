@@ -1,7 +1,8 @@
-﻿using PoZiomkaDomain.Application.Dtos;
+﻿using PoZiomkaDomain.Application;
 
 namespace PoZiomkaApi.Common;
 
-public class NetworkFile : IFile
+public class NetworkFile(IFormFile file) : IFile
 {
+    public Stream Stream => Stream.Null;
 }

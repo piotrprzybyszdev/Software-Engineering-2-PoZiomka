@@ -2,4 +2,4 @@
 
 namespace PoZiomkaApi.Requests.Application;
 
-public record GetRequest(int? StudentId, string? StudentEmail, string? StudentIndex, ApplicationStatus? ApplicationStatus);
+public record GetRequest(string? StudentEmail, string? StudentIndex, int? ApplicationTypeId, ApplicationStatus? ApplicationStatus);
