@@ -1,6 +1,9 @@
-﻿using PoZiomkaDomain.Application.Dtos;
+﻿namespace PoZiomkaDomain.Application;
 
-namespace PoZiomkaDomain.Application;
+public interface IFile
+{
+    Stream Stream { get; }
+}
 
 public interface IFileStorage
 {
