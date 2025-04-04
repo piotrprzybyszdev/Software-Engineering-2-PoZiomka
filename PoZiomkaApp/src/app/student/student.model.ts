@@ -9,8 +9,8 @@ export type StudentModel = {
   hasAcceptedReservation?: boolean,
   roomId?: number,
   canFillForms?: boolean
-  isPhoneNumberHidden: boolean;
-  isIndexNumberHidden: boolean;
+  isPhoneNumberHidden?: boolean;
+  isIndexNumberHidden?: boolean;
 }
 
 export type StudentCreate = {
@@ -27,6 +27,6 @@ export type StudentUpdate = {
   lastName?: string;    
   indexNumber?: string; 
   phoneNumber?: string; 
-  isPhoneNumberHidden: boolean;
-  isIndexNumberHidden: boolean;
+  isPhoneNumberHidden?: boolean;
+  isIndexNumberHidden?: boolean;
 };

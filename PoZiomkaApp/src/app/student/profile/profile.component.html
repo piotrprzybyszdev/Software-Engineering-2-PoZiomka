@@ -44,13 +44,22 @@
         <!-- Tryb Edycji Danych -->
         <form *ngIf="isEditingData()" [formGroup]="dataForm" (ngSubmit)="updateData()">
             <div class="mb-3 d-flex justify-content-between">
+                <!-- Imię -->
                 <div class="w-50">
                     <label class="form-label">Imię</label>
-                    <input class="form-control" formControlName="firstName">
+                    <input class="form-control" formControlName="firstName" maxlength="30">
+                    <small class="text-danger" *ngIf="dataForm.get('firstName')?.value?.length === 30">
+                    Imię może mieć maksymalnie 30 znaków
+                    </small>
                 </div>
+                
+                <!-- Nazwisko -->
                 <div class="w-50">
                     <label class="form-label">Nazwisko</label>
-                    <input class="form-control" formControlName="lastName">
+                    <input class="form-control" formControlName="lastName" maxlength="30">
+                    <small class="text-danger" *ngIf="dataForm.get('lastName')?.value?.length === 30">
+                    Nazwisko może mieć maksymalnie 30 znaków
+                    </small>
                 </div>
             </div>
 
