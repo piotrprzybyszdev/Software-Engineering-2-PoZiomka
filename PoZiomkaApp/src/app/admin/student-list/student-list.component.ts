@@ -3,10 +3,13 @@ import { StudentService } from '../../student/student.service';
 import { StudentCreate, StudentModel } from '../../student/student.model'; 
 import { ToastrService } from 'ngx-toastr';
 import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-students-list',
-  imports: [LoadingButtonComponent],
+  standalone: true,
+  imports: [CommonModule, FormsModule, LoadingButtonComponent],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.css'
 })
@@ -20,7 +23,7 @@ export class StudentsListComponent implements OnInit {
   isLoading = signal<boolean[]>([]);
   isLoadingRegister = signal<boolean>(false);
 
-  studentCreate = signal<StudentCreate>({email: ""});
+  studentCreate = signal<StudentCreate>({ email: "" });
 
   constructor(private studentService: StudentService) {}
 
@@ -85,7 +88,12 @@ export class StudentsListComponent implements OnInit {
   }
 
   onStudentAdd(): void {
+    this.studentCreate.set({ email: "" });
     this.isAddingStudent.set(true);
+  }
+
+  onStudentAddCancel(): void {
+    this.isAddingStudent.set(false);
   }
 
   onStudentRegister(): void {
