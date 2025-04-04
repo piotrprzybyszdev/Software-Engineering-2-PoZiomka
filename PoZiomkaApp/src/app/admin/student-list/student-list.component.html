@@ -1,82 +1,104 @@
 <div class="container mt-5 px-5">
     <h2>Lista Studentów</h2>
-
+  
     <div class="p-3">
-        <!-- Wyświetlanie listy studentów -->
-        @if (students.length > 0) {
+      @if (students.length > 0) {
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Imię</th>
-                            <th scope="col">Nazwisko</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Numer telefonu</th>
-                            <th scope="col">Numer indeksu</th>
-                            <th scope="col"><i class="bi bi-card-checklist"></i></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                </thead>
-                <tbody>
-                    @for (student of students; track $index) {
-                        <tr scope="row">
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ student.firstName ?? "-" }}</td>
-                            <td>{{ student.lastName ?? "-" }}</td>
-                            <td>{{ student.email }}</td>
-                            <td>{{ student.phoneNumber ?? "-" }}</td>
-                            <td>{{ student.indexNumber ?? "-" }}</td>
-                            <td>
-                                @if (student.canFillForms) {
-                                    <i class="bi bi-check-square pt-2 d-inline-block" style="color: green"></i>
-                                } @else {
-                                    <i class="bi bi-x-square pt-2 d-inline-block" style="color: red"></i>
-                                }
-                            </td>
-                            @if (isStudentEditMode[$index]()) {
-                                <td></td>
-                                <td><button class="btn" (click)="onStudentSave($index)"><i class="bi bi-save"></i></button></td>
-                            } @else {
-                                <td><button class="btn" (click)="onStudentEdit($index)"><i class="bi bi-pencil-square"></i></button></td>
-                                <td><button class="btn" (click)="onStudentDelete($index)"><i class="bi bi-trash"></i></button></td>
-                            }
-                        </tr>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Email</th>
+                <th>Numer telefonu</th>
+                <th>Numer indeksu</th>
+                <th><i class="bi bi-card-checklist"></i></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (student of students; track $index) {
+                <tr>
+                  <td>{{ $index + 1 }}</td>
+  
+                  <td>
+                    @if (editedStudentIndex() === $index) {
+                      <input type="text" class="form-control" [(ngModel)]="students[$index].firstName" />
+                    } @else {
+                      {{ student.firstName ?? "-" }}
                     }
-                    <tr>
-                        @if (isAddingStudent()) {
-                            <td></td>
-                            <td>{{ studentCreate().firstName ?? "-" }}</td>
-                            <td>{{ studentCreate().lastName ?? "-" }}</td>
-                            <td>{{ studentCreate().email }}</td>
-                            <td>{{ studentCreate().phoneNumber ?? "-" }}</td>
-                            <td>{{ studentCreate().indexNumber ?? "-" }}</td>
-                            <td></td>
-                            <td></td>
-                            <td><button class="btn" (click)="onStudentRegister()"><i class="bi bi-save"></i></button></td>
-                        } @else {
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><button class="btn btn-primary rounded-circle m-2 py-1 px-2" (click)="onStudentAdd()"><i class="bi bi-plus"></i></button></td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
+                  </td>
+  
+                  <td>
+                    @if (editedStudentIndex() === $index) {
+                      <input type="text" class="form-control" [(ngModel)]="students[$index].lastName" />
+                    } @else {
+                      {{ student.lastName ?? "-" }}
+                    }
+                  </td>
+  
+                  <td>{{ student.email }}</td>
+  
+                  <td>
+                    @if (editedStudentIndex() === $index) {
+                      <input type="text" class="form-control" [(ngModel)]="students[$index].phoneNumber" />
+                    } @else {
+                      {{ student.phoneNumber ?? "-" }}
+                    }
+                  </td>
+  
+                  <td>
+                    @if (editedStudentIndex() === $index) {
+                      <input type="text" class="form-control" [(ngModel)]="students[$index].indexNumber" />
+                    } @else {
+                      {{ student.indexNumber ?? "-" }}
+                    }
+                  </td>
+  
+                  <td>
+                    @if (student.canFillForms) {
+                      <i class="bi bi-check-square pt-2 d-inline-block" style="color: green"></i>
+                    } @else {
+                      <i class="bi bi-x-square pt-2 d-inline-block" style="color: red"></i>
+                    }
+                  </td>
+  
+                  @if (editedStudentIndex() === $index) {
+                    <td></td>
+                    <td><button class="btn btn-success" (click)="onStudentSave($index)"><i class="bi bi-save"></i></button></td>
+                  } @else {
+                    <td><button class="btn btn-warning" (click)="onStudentEdit($index)"><i class="bi bi-pencil-square"></i></button></td>
+                    <td><button class="btn btn-danger" (click)="onStudentDelete($index)"><i class="bi bi-trash"></i></button></td>
+                  }
+                </tr>
+              }
+  
+              <tr>
+                @if (isAddingStudent()) {
+                  <td></td>
+                  <td><input type="text" class="form-control" [(ngModel)]="studentCreate().firstName" /></td>
+                  <td><input type="text" class="form-control" [(ngModel)]="studentCreate().lastName" /></td>
+                  <td><input type="email" class="form-control" [(ngModel)]="studentCreate().email" /></td>
+                  <td><input type="text" class="form-control" [(ngModel)]="studentCreate().phoneNumber" /></td>
+                  <td><input type="text" class="form-control" [(ngModel)]="studentCreate().indexNumber" /></td>
+                  <td></td>
+                  <td></td>
+                  <td><button class="btn btn-success" (click)="onStudentRegister()"><i class="bi bi-save"></i></button></td>
+                } @else {
+                  <td colspan="8"></td>
+                  <td>
+                    <button class="btn btn-primary rounded-circle m-2 py-1 px-2" (click)="onStudentAdd()">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </td>
+                }
+              </tr>
+            </tbody>
+          </table>
         </div>
-        }
-
-        <!-- Komunikat, gdy nie ma studentów -->
-        @if (students.length === 0) {
-        <div>
-            <p>Brak studentów do wyświetlenia.</p>
-        </div>
-        }
+      }
     </div>
-</div>
+  </div>
+  

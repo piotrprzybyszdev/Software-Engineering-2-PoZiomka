@@ -2,10 +2,13 @@ import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core
 import { StudentService } from '../../student/student.service';  
 import { StudentCreate, StudentModel } from '../../student/student.model'; 
 import { ToastrService } from 'ngx-toastr';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-students-list',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.css'
 })
@@ -14,10 +17,10 @@ export class StudentsListComponent implements OnInit {
 
   students: StudentModel[] = [];
 
-  isStudentEditMode: WritableSignal<boolean>[] = [];
+  editedStudentIndex = signal<number | null>(null); 
   isAddingStudent = signal<boolean>(false);
 
-  studentCreate = signal<StudentCreate>({email: ""});
+  studentCreate = signal<StudentCreate>({ email: "" });
 
   constructor(private studentService: StudentService) {}
 
@@ -30,7 +33,6 @@ export class StudentsListComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.students = response.palyload ?? [];
-          this.isStudentEditMode = Array(this.students.length).fill(signal<boolean>(false));
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
@@ -39,12 +41,18 @@ export class StudentsListComponent implements OnInit {
   }
 
   onStudentEdit(studentIndex: number): void {
-    this.isStudentEditMode[studentIndex].set(true);
+    this.editedStudentIndex.set(studentIndex); 
   }
 
   onStudentSave(studentIndex: number): void {
-    this.isStudentEditMode[studentIndex].set(false);
-    this.studentService.updateStudent(this.students[studentIndex]).subscribe({
+    const student = this.students[studentIndex];
+    this.studentService.updateStudent({
+      id: student.id,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      phoneNumber: student.phoneNumber,
+      indexNumber: student.indexNumber
+    }).subscribe({
       next: response => {
         if (response.success) {
           this.toastrService.success('Dane studenta zostały pomyślnie zapisane');
@@ -54,6 +62,8 @@ export class StudentsListComponent implements OnInit {
         this.fetchStudents();
       }
     });
+
+    this.editedStudentIndex.set(null);
   }
 
   onStudentDelete(studentIndex: number): void {
@@ -70,7 +80,9 @@ export class StudentsListComponent implements OnInit {
   }
 
   onStudentAdd(): void {
+    this.studentCreate.set({ email: "" });
     this.isAddingStudent.set(true);
+    this.editedStudentIndex.set(null); 
   }
 
   onStudentRegister(): void {
