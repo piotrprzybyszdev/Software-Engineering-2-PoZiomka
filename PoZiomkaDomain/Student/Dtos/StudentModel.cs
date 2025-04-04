@@ -9,6 +9,7 @@ public record StudentModel(int Id, string Email, string? FirstName, string? Last
         Id, Email, FirstName, LastName,
         hidePersonalInfo && IsIndexNumberHidden ? null : IndexNumber,
         hidePersonalInfo && IsPhoneNumberHidden ? null : PhoneNumber,
-        ReservationId, HasAcceptedReservation, RoomId
+        ReservationId, HasAcceptedReservation, RoomId,
+        IsPhoneNumberHidden, IsIndexNumberHidden
     );
 };

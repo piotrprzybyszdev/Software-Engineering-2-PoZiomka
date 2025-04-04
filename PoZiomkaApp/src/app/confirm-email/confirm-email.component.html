@@ -11,14 +11,10 @@
         </div>
 
         <div class="text-center">
-            <button class="btn btn-danger px-4" type="button" (click)="confirmEmail()">Potwierdź email</button>
+            <app-loading-button [isLoading]="isLoading()" class="btn-danger px-4" (clicked)="confirmEmail()">
+                Potwierdź email
+            </app-loading-button>
         </div>
-        
-        @if (isSuccess) {
-            <div class="text-success mt-3 text-center">
-                Twój email został potwierdzony! Możesz teraz się zalogować.
-            </div>
-        }
 
         <div class="text-center mt-4">
             <a class="text-muted" href="/login">Powrót do logowania</a>

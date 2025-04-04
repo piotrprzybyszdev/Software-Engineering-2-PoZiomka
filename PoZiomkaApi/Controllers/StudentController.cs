@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Auth;
@@ -39,7 +40,6 @@ public class StudentController(IMediator mediator) : Controller
 
     [HttpGet("get/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-    [Authorize]
     public async Task<IActionResult> GetStudentById(int id)
     {
         GetStudentQuery getStudent = new(id, User);
@@ -65,11 +65,13 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpDelete("delete/{id}")]
-    [Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> DeleteStudent(int id)
     {
-        DeleteStudentCommand deleteStudentCommand = new(id);
+        DeleteStudentCommand deleteStudentCommand = new(id, HttpContext.User);
         await mediator.Send(deleteStudentCommand);
+        await HttpContext.SignOutAsync();
+
         return Ok();
     }
 

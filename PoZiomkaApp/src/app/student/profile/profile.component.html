@@ -38,6 +38,9 @@
 
             <div class="text-center mt-4">
                 <button class="btn btn-primary me-3" (click)="toggleDataEdit()">Edytuj dane</button>
+                <app-loading-button [isLoading]="isLoading()" (clicked)="deleteAccount()" class="btn-danger me-2">
+                    Usuń konto
+                </app-loading-button>
             </div>
         </div>
 
@@ -82,8 +85,10 @@
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success me-2" [disabled]="dataForm.invalid">Zapisz</button>
-                <button type="button" class="btn btn-secondary" (click)="toggleDataEdit()">Anuluj</button>
+                <app-loading-button [isLoading]="isLoading()" (clicked)="updateData()" class="btn-success me-2" [isDisabled]="dataForm.invalid">
+                    Zapisz
+                </app-loading-button>
+                <button type="button" class="btn btn-secondary" (click)="toggleDataEdit()" [disabled]="isLoading()">Anuluj</button>
             </div>
         </form>
 

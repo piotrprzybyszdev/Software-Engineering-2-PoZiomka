@@ -3,12 +3,11 @@ using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
-using PoZiomkaDomain.Student.Commands.SignupStudent;
 using PoZiomkaDomain.Student.Commands.UpdateStudent;
 using PoZiomkaDomain.Student.Dtos;
 using System.Security.Claims;
 
-namespace PoZiomkaTest.Domain;
+namespace PoZiomkaUnitTest.Domain;
 
 public class UpdateStudentCommandHandlerTest
 {

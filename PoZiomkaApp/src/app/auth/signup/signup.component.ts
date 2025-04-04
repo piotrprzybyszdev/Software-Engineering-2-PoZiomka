@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
+import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent],
+  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent, LoadingButtonComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
@@ -19,6 +20,7 @@ export class SignupComponent {
 
   CardConfiguration = CardConfiguration;
   
+  isLoading = signal<boolean>(false);
   isSubmitted = signal<boolean>(false);
   error = signal<string | undefined>(undefined);
 
@@ -43,6 +45,7 @@ export class SignupComponent {
       return;
     }
 
+    this.isLoading.set(true);
     this.authService.signUp(this.signupForm.value.email!, this.signupForm.value.password!)
       .subscribe({
         next: response => { 
@@ -50,6 +53,7 @@ export class SignupComponent {
             this.router.navigate(['/login']);
           } else {
             this.error.set(response.error!.detail);
+            this.isLoading.set(false);
           }
         }
     });

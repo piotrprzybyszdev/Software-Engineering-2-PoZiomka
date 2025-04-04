@@ -3,13 +3,11 @@ using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
-using PoZiomkaDomain.Student.Commands.SignupStudent;
 using PoZiomkaDomain.Student.Dtos;
-using PoZiomkaDomain.Student.Queries.GetAllStudents;
 using PoZiomkaDomain.Student.Queries.GetStudent;
 using System.Security.Claims;
 
-namespace PoZiomkaTest.Domain;
+namespace PoZiomkaUnitTest.Domain;
 
 public class GetStudentQueryHandlerTest
 {

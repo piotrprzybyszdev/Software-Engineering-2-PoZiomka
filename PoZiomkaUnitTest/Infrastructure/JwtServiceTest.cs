@@ -2,7 +2,7 @@
 using PoZiomkaInfrastructure.Services;
 using System.Security.Claims;
 
-namespace PoZiomkaTest.Infrastructure;
+namespace PoZiomkaUnitTest.Infrastructure;
 
 public class JwtServiceTest
 {

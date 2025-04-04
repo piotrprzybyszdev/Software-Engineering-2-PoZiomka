@@ -1,6 +1,6 @@
 ﻿using PoZiomkaInfrastructure.Services;
 
-namespace PoZiomkaTest.Infrastructure;
+namespace PoZiomkaUnitTest.Infrastructure;
 
 public class PasswordServiceTest
 {

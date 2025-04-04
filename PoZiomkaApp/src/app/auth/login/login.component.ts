@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { StudentService } from '../../student/student.service';
 import { CardConfiguration, CenteredCardComponent } from '../../common/centered-card/centered-card.component';
+import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent],
+  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent, LoadingButtonComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -21,6 +22,7 @@ export class LoginComponent {
 
   CardConfiguration = CardConfiguration;
   
+  isLoading = signal<boolean>(false);
   isSubmitted = signal<boolean>(false);
   error = signal<string | undefined>(undefined);
 
@@ -45,6 +47,7 @@ export class LoginComponent {
       return;
     }
 
+    this.isLoading.set(true);
     this.authService.logIn(this.loginForm.value.email!, this.loginForm.value.password!)
       .subscribe({
         next: response => { 
@@ -54,15 +57,16 @@ export class LoginComponent {
                 if (response.success) {
                   this.router.navigate(['/student/profile']); 
                 } else {
+                  this.isLoading.set(false);
                   this.error.set(response.error!.detail);
                 }
               }
             })
           } else {
+            this.isLoading.set(false);
             this.error.set(response.error!.detail);
           }
         }
     });
   }
 }
-

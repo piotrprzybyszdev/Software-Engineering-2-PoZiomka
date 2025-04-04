@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
 
@@ -8,6 +9,15 @@ public class DeleteStudentCommandHandler(IStudentRepository studentRepository) :
 {
     public async Task Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
     {
+        int loggedInUser = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
+
+        bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
+          request.User.IsInRole(Roles.Student) &&
+          loggedInUser == request.Id;
+
+        if (!isUserAuthorized)
+            throw new UnauthorizedException("User must be logged in as an administrator or as the student to delete");
+
         try
         {
             await studentRepository.DeleteStudent(request.Id, cancellationToken);

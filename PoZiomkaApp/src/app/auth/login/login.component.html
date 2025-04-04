@@ -1,6 +1,6 @@
 <app-centered-card [configuration]="CardConfiguration.PrimaryLeft" backgroundColor="bg-danger">
     <div id="secondary-card">
-        <img class="w-100" src="images/poziomka-splash.jpg" />
+        <img class="img-fluid" src="images/poziomka-splash.jpg" />
     </div>
     <div id="primary-card" class="py-3 py-md-5 px-5 mx-md-4">
         <div class="text-center mb-4">
@@ -29,12 +29,12 @@
 
             <div class="d-flex justify-content-between pe-3 mb-4">
                 <a class="text-muted" href="/password-reset">Zapomniałeś hasła?</a>
-                <button class="btn btn-danger px-4" type="button" (click)="onLoginButtonClick()">
+                <app-loading-button [class]="'btn-danger px-4'" [isLoading]="isLoading()" (clicked)="onLoginButtonClick()">
                     Zaloguj się
-                </button>
+                </app-loading-button>
             </div>
 
-            <div class="row mb-4 gx-3 pt-3">
+            <div class="row mb-4 gx-3 pt-2">
                 <div class="col"><hr></div>
                 <div class="col-auto"><h6 class="mb-0 mt-1">lub</h6></div>
                 <div class="col"><hr></div>
@@ -42,7 +42,7 @@
 
             <div class="mx-auto">
                 <div class="col">
-                    <div class="text-center mb-5">
+                    <div class="text-center mb-4">
                         Nie masz jeszcze konta? <a class="text-muted" href="/signup">Zarejestruj się</a>
                     </div>
                     <div class="text-center">
