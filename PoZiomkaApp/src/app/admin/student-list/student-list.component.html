@@ -1,9 +1,8 @@
 <div class="container mt-5 px-5">
     <h2>Lista Studentów</h2>
-
+  
     <div class="p-3">
-        <!-- Wyświetlanie listy studentów -->
-        @if (students.length > 0) {
+      @if (students.length > 0) {
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -23,11 +22,36 @@
                     @for (student of students; track $index) {
                         <tr scope="row">
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ student.firstName ?? "-" }}</td>
-                            <td>{{ student.lastName ?? "-" }}</td>
+
+                            <td>
+                                @if (isStudentEditMode()[$index]) {
+                                    <input type="text" class="form-control" [(ngModel)]="students[$index].firstName" />
+                                } @else {
+                                    {{ student.firstName ?? "-" }}
+                                }
+                            </td>
+                            <td>
+                                @if (isStudentEditMode()[$index]) {
+                                    <input type="text" class="form-control" [(ngModel)]="students[$index].lastName" />
+                                } @else {
+                                    {{ student.lastName ?? "-" }}
+                                }
+                            </td>
                             <td>{{ student.email }}</td>
-                            <td>{{ student.phoneNumber ?? "-" }}</td>
-                            <td>{{ student.indexNumber ?? "-" }}</td>
+                            <td>
+                                @if (isStudentEditMode()[$index]) {
+                                    <input type="text" class="form-control" [(ngModel)]="students[$index].phoneNumber" />
+                                } @else {
+                                    {{ student.phoneNumber ?? "-" }}
+                                }
+                            </td>
+                            <td>
+                                @if (isStudentEditMode()[$index]) {
+                                    <input type="text" class="form-control" [(ngModel)]="students[$index].indexNumber" />
+                                } @else {
+                                    {{ student.indexNumber ?? "-" }}
+                                }
+                            </td>
                             <td>
                                 @if (student.canFillForms) {
                                     <i class="bi bi-check-square pt-2 d-inline-block" style="color: green"></i>
@@ -35,17 +59,18 @@
                                     <i class="bi bi-x-square pt-2 d-inline-block" style="color: red"></i>
                                 }
                             </td>
+
                             @if (isStudentEditMode()[$index]) {
-                                <td></td>
+                                <td><button class="btn" [class]="'border-0'" (click)="onStudentEditCancel($index)" [disabled]="isLoading()[$index]"><i class="bi bi-x-lg"></i></button></td>
                                 <td>
                                     <app-loading-button [class]="'border-0'" (clicked)="onStudentSave($index)" [isLoading]="isLoading()[$index]">
                                         <i class="bi bi-save"></i>
                                     </app-loading-button>
                                 </td>
                             } @else {
-                                <td><button class="btn" [class]="'border-0'" (click)="onStudentEdit($index)" [disabled]="isLoading()[$index]"><i class="bi bi-pencil-square"></i></button></td>
+                                <td><button class="btn" [class]="'border-0'" (click)="onStudentEdit($index)" [disabled]="isAddingStudent() || isLoading()[$index]"><i class="bi bi-pencil-square"></i></button></td>
                                 <td>
-                                    <app-loading-button [class]="'border-0'" (clicked)="onStudentDelete($index)" [isLoading]="isLoading()[$index]">
+                                    <app-loading-button [class]="'border-0'" (clicked)="onStudentDelete($index)" [isDisabled]="isAddingStudent()" [isLoading]="isLoading()[$index]">
                                         <i class="bi bi-trash"></i>
                                     </app-loading-button>
                                 </td>
@@ -55,40 +80,27 @@
                     <tr>
                         @if (isAddingStudent()) {
                             <td></td>
-                            <td>{{ studentCreate().firstName ?? "-" }}</td>
-                            <td>{{ studentCreate().lastName ?? "-" }}</td>
-                            <td>{{ studentCreate().email }}</td>
-                            <td>{{ studentCreate().phoneNumber ?? "-" }}</td>
-                            <td>{{ studentCreate().indexNumber ?? "-" }}</td>
+                            <td><input type="text" class="form-control" [(ngModel)]="studentCreate().firstName" /></td>
+                            <td><input type="text" class="form-control" [(ngModel)]="studentCreate().lastName" /></td>
+                            <td><input type="email" class="form-control" [(ngModel)]="studentCreate().email" /></td>
+                            <td><input type="text" class="form-control" [(ngModel)]="studentCreate().phoneNumber" /></td>
+                            <td><input type="text" class="form-control" [(ngModel)]="studentCreate().indexNumber" /></td>
                             <td></td>
-                            <td></td>
+                            <td><button class="btn" [class]="'border-0'" (click)="onStudentAddCancel()"><i class="bi bi-x-lg"></i></button></td>
                             <td>
                                 <app-loading-button [class]="'border-0'" [isLoading]="isLoadingRegister()" (clicked)="onStudentRegister()">
                                     <i class="bi bi-save"></i>
                                 </app-loading-button>
                             </td>
                         } @else {
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td><button class="btn btn-primary rounded-circle m-2 py-1 px-2" (click)="onStudentAdd()"><i class="bi bi-plus"></i></button></td>
+                            <td colspan="8"></td>
+                            <td><button class="btn btn-primary rounded-circle m-2 py-1 px-2" [disabled]="isEditingStudent()" (click)="onStudentAdd()"><i class="bi bi-plus"></i></button></td>
                         }
                     </tr>
                 </tbody>
             </table>
         </div>
-        }
-
-        <!-- Komunikat, gdy nie ma studentów -->
-        @if (students.length === 0) {
-        <div>
-            <p>Brak studentów do wyświetlenia.</p>
-        </div>
-        }
+      }
     </div>
-</div>
+  </div>
+  

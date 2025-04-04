@@ -1,18 +1,23 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { StudentService } from '../../student/student.service';  
 import { StudentCreate, StudentModel } from '../../student/student.model'; 
 import { ToastrService } from 'ngx-toastr';
 import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
+import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-students-list',
-  imports: [LoadingButtonComponent],
+  standalone: true,
+  imports: [CommonModule, FormsModule, LoadingButtonComponent],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.css'
 })
 export class StudentsListComponent implements OnInit {
   private toastrService = inject(ToastrService);
+  private studentService = inject(StudentService);
 
+  uneditedStudents: StudentModel[] = [];
   students: StudentModel[] = [];
 
   isStudentEditMode = signal<boolean[]>([]);
@@ -20,9 +25,8 @@ export class StudentsListComponent implements OnInit {
   isLoading = signal<boolean[]>([]);
   isLoadingRegister = signal<boolean>(false);
 
-  studentCreate = signal<StudentCreate>({email: ""});
-
-  constructor(private studentService: StudentService) {}
+  studentCreate = signal<StudentCreate>({ email: "" });
+  isEditingStudent = computed(() => !this.isStudentEditMode().every(b => b === false));
 
   ngOnInit(): void {
     this.fetchStudents();
@@ -32,7 +36,8 @@ export class StudentsListComponent implements OnInit {
     this.studentService.getAllStudents().subscribe({
       next: (response) => {
         if (response.success) {
-          this.students = response.palyload ?? [];
+          this.students = response.payload ?? [];
+          this.uneditedStudents = structuredClone(this.students);
           this.isStudentEditMode.set(Array(this.students.length).fill(false));
           this.isLoading.set(Array(this.students.length).fill(false));
         } else {
@@ -44,12 +49,17 @@ export class StudentsListComponent implements OnInit {
 
   updateArr(arr: boolean[], index: number, value: boolean): boolean[] {
     const narr = [...arr];
-    narr[index] = true;
+    narr[index] = value;
     return narr;
   }
 
   onStudentEdit(studentIndex: number): void {
     this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, true));
+  }
+
+  onStudentEditCancel(studentIndex: number): void {
+    this.students[studentIndex] = structuredClone(this.uneditedStudents[studentIndex]);
+    this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, false));
   }
 
   onStudentSave(studentIndex: number): void {
@@ -58,19 +68,17 @@ export class StudentsListComponent implements OnInit {
       next: response => {
         if (response.success) {
           this.toastrService.success('Dane studenta zostały pomyślnie zapisane');
+          this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, false));
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
         this.isLoading.update(arr => this.updateArr(arr, studentIndex, false));
-        this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, false));
-        this.fetchStudents();
       }
     });
   }
-
+  
   onStudentDelete(studentIndex: number): void {
     this.isLoading.update(arr => this.updateArr(arr, studentIndex, true));
-
     this.studentService.deleteStudent(this.students[studentIndex].id).subscribe({
       next: response => {
         if (response.success) {
@@ -85,7 +93,12 @@ export class StudentsListComponent implements OnInit {
   }
 
   onStudentAdd(): void {
+    this.studentCreate.set({ email: "" });
     this.isAddingStudent.set(true);
+  }
+
+  onStudentAddCancel(): void {
+    this.isAddingStudent.set(false);
   }
 
   onStudentRegister(): void {
@@ -94,11 +107,11 @@ export class StudentsListComponent implements OnInit {
       next: response => {
         if (response.success) {
           this.toastrService.success('Student został pomyślnie dodany do systemu');
+          this.isAddingStudent.set(false);
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
         this.isLoadingRegister.set(false);
-        this.isAddingStudent.set(false);
         this.fetchStudents();
       }
     });

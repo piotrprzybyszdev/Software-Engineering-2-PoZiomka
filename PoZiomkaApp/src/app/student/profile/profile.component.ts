@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit {
     this.studentService.fetchLoggedInStudent().subscribe({
       next: (response) => {
         if (response.success) {
-          this.student = response.palyload!;
+          this.student = response.payload!;
           if (this.student) {
             this.dataForm.patchValue(this.student);
           }
@@ -49,8 +49,8 @@ export class ProfileComponent implements OnInit {
 
   initForms(): void {
     this.dataForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.maxLength(30)]],
+      lastName: ['', [Validators.required, Validators.maxLength(30)]],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       indexNumber: [''],
       phoneNumber: [''],

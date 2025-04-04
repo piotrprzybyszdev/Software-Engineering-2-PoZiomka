@@ -70,7 +70,9 @@ public class StudentController(IMediator mediator) : Controller
     {
         DeleteStudentCommand deleteStudentCommand = new(id, HttpContext.User);
         await mediator.Send(deleteStudentCommand);
-        await HttpContext.SignOutAsync();
+
+        if (User.IsInRole(Roles.Student))
+            await HttpContext.SignOutAsync();
 
         return Ok();
     }
