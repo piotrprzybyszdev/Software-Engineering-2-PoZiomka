@@ -17,6 +17,7 @@ export class StudentsListComponent implements OnInit {
   private toastrService = inject(ToastrService);
   private studentService = inject(StudentService);
 
+  uneditedStudents: StudentModel[] = [];
   students: StudentModel[] = [];
 
   isStudentEditMode = signal<boolean[]>([]);
@@ -35,7 +36,8 @@ export class StudentsListComponent implements OnInit {
     this.studentService.getAllStudents().subscribe({
       next: (response) => {
         if (response.success) {
-          this.students = response.palyload ?? [];
+          this.students = response.payload ?? [];
+          this.uneditedStudents = structuredClone(this.students);
           this.isStudentEditMode.set(Array(this.students.length).fill(false));
           this.isLoading.set(Array(this.students.length).fill(false));
         } else {
@@ -56,6 +58,7 @@ export class StudentsListComponent implements OnInit {
   }
 
   onStudentEditCancel(studentIndex: number): void {
+    this.students[studentIndex] = structuredClone(this.uneditedStudents[studentIndex]);
     this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, false));
   }
 

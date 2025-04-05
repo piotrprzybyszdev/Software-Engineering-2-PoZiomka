@@ -10,14 +10,14 @@ export type ApiError = {
 export type ApiResponse<T> = {
   success: boolean,
   error?: ApiError,
-  palyload?: T
+  payload?: T
 }
 
 export function pipeApiResponse<T>(observable: Observable<T>): Observable<ApiResponse<T>> {
   return observable.pipe(map(response => {
     return {
       success: true,
-      palyload: response
+      payload: response
     }
   }), catchError(error => {
     if (error instanceof HttpErrorResponse) {

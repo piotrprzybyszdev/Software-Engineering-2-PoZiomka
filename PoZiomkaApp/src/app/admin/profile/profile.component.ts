@@ -28,7 +28,7 @@ export class AdminProfileComponent implements OnInit {
     this.adminService.fetchLoggedInAdmin().subscribe({
       next: (response) => {
         if (response.success) {
-          this.admin.set(response.palyload ?? null);
+          this.admin.set(response.payload ?? null);
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }

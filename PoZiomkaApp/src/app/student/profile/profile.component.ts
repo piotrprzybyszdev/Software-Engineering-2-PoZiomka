@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit {
     this.studentService.fetchLoggedInStudent().subscribe({
       next: (response) => {
         if (response.success) {
-          this.student = response.palyload!;
+          this.student = response.payload!;
           if (this.student) {
             this.dataForm.patchValue(this.student);
           }
