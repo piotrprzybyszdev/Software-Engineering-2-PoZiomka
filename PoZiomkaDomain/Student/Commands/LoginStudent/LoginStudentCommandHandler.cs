@@ -26,7 +26,7 @@ public class LoginStudentCommandHandler(IPasswordService passwordService, IStude
             throw new EmailNotConfirmedException($"Email `{request.Email}` is not confirmed");
 
         if (student.PasswordHash == null)
-            throw new PasswordNotSet($"Password for user with email `{request.Email}` not set");
+            throw new PasswordNotSetException($"Password for user with email `{request.Email}` not set");
 
         if (!passwordService.VerifyHash(request.Password, student.PasswordHash))
             throw new InvalidPasswordException($"Password for user with email `{request.Email}` is invalid");

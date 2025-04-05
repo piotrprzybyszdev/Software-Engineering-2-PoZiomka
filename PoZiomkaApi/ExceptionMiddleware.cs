@@ -64,7 +64,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 }
             };
         }
-        catch (PasswordNotSet exception)
+        catch (PasswordNotSetException exception)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             problemDetails = new ProblemDetails()
