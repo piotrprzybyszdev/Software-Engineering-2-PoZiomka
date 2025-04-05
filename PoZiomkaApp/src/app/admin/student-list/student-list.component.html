@@ -61,16 +61,16 @@
                             </td>
 
                             @if (isStudentEditMode()[$index]) {
-                                <td></td>
+                                <td><button class="btn" [class]="'border-0'" (click)="onStudentEditCancel($index)" [disabled]="isLoading()[$index]"><i class="bi bi-x-lg"></i></button></td>
                                 <td>
                                     <app-loading-button [class]="'border-0'" (clicked)="onStudentSave($index)" [isLoading]="isLoading()[$index]">
                                         <i class="bi bi-save"></i>
                                     </app-loading-button>
                                 </td>
                             } @else {
-                                <td><button class="btn" [class]="'border-0'" (click)="onStudentEdit($index)" [disabled]="isLoading()[$index]"><i class="bi bi-pencil-square"></i></button></td>
+                                <td><button class="btn" [class]="'border-0'" (click)="onStudentEdit($index)" [disabled]="isAddingStudent() || isLoading()[$index]"><i class="bi bi-pencil-square"></i></button></td>
                                 <td>
-                                    <app-loading-button [class]="'border-0'" (clicked)="onStudentDelete($index)" [isLoading]="isLoading()[$index]">
+                                    <app-loading-button [class]="'border-0'" (clicked)="onStudentDelete($index)" [isDisabled]="isAddingStudent()" [isLoading]="isLoading()[$index]">
                                         <i class="bi bi-trash"></i>
                                     </app-loading-button>
                                 </td>
@@ -94,7 +94,7 @@
                             </td>
                         } @else {
                             <td colspan="8"></td>
-                            <td><button class="btn btn-primary rounded-circle m-2 py-1 px-2" (click)="onStudentAdd()"><i class="bi bi-plus"></i></button></td>
+                            <td><button class="btn btn-primary rounded-circle m-2 py-1 px-2" [disabled]="isEditingStudent()" (click)="onStudentAdd()"><i class="bi bi-plus"></i></button></td>
                         }
                     </tr>
                 </tbody>
