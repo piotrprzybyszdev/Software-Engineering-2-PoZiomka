@@ -1,17 +1,11 @@
 ﻿using FluentValidation;
 
-namespace PoZiomkaDomain.Student.Commands.CreateStudent;
+namespace PoZiomkaDomain.Student.Commands.UpdateStudent;
 
-public class CreateStudentCommandValidator : AbstractValidator<CreateStudentCommand>
+public class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentCommand>
 {
-    public CreateStudentCommandValidator()
+    public UpdateStudentCommandValidator()
     {
-        RuleFor(command => command.Email)
-            .NotEmpty()
-            .EmailAddress()
-            .MaximumLength(100)
-            .WithMessage("Student email cannot be empty or longer than 100 characters");
-
         RuleFor(command => command.FirstName).MaximumLength(100);
         RuleFor(command => command.LastName).MaximumLength(100);
         RuleFor(command => command.PhoneNumber).Length(9).Must(p => uint.TryParse(p, out _)).Unless(command => command.PhoneNumber is null).WithMessage("Student phone number must be 9 digits");
