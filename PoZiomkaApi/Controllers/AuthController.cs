@@ -14,7 +14,7 @@ public class AuthController(IMediator mediator) : ControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
     {
-        await mediator.Send(signupRequest.ToSignupStudentByUserCommand());
+        await mediator.Send(signupRequest.ToSignupStudent());
         return Ok();
     }
 

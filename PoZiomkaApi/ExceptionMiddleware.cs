@@ -28,17 +28,6 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Email is taken"
             };
         }
-        catch (EmailNotRegisteredException exception)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Detail = exception.Message,
-                Title = "Email not registered"
-            };
-        }
         catch (UnauthorizedException exception)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -61,17 +50,6 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Given token is invalid"
             };
         }
-        catch (ClaimNotFoundException exception)
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-
-            problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status401Unauthorized,
-                Detail = exception.Message,
-                Title = "Request is unauthorized because a claim could not be found"
-            };
-        }
         catch (ValidationException exception)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -86,17 +64,27 @@ public class ExceptionMiddleware(RequestDelegate next)
                 }
             };
         }
-        catch (InvalidCredentialsException exception)
+        catch (PasswordNotSetException exception)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             problemDetails = new ProblemDetails()
             {
                 Status = StatusCodes.Status401Unauthorized,
                 Detail = exception.Message,
-                Title = "Invalid email or password"
+                Title = "Password for this is not set"
             };
         }
-        catch (StudentNotFoundException exception)
+        catch (EmailNotConfirmedException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "Account can't be logged into because email is not confirmed"
+            };
+        }
+        catch (UserNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             problemDetails = new ProblemDetails()
@@ -136,7 +124,6 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Internal Server Error - something went wrong"
             };
         }
-
 
         context.Response.ContentType = "application/problem+json";
         await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));

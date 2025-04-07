@@ -1,4 +1,4 @@
-﻿using PoZiomkaDomain.Common;
+﻿using PoZiomkaDomain.Common.Interface;
 using System.Security.Claims;
 
 namespace PoZiomkaInfrastructure.Services;

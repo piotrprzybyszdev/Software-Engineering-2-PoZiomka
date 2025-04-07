@@ -3,25 +3,29 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StudentService } from '../../student/student.service';
 import { StudentModel } from '../../student/student.model';
+import { ToastrService } from 'ngx-toastr';
+import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LoadingButtonComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
   private studentService = inject(StudentService);
   private formBuilder = inject(FormBuilder);
+  private toastrService = inject(ToastrService);
+  private router = inject(Router);
 
+  isLoading = signal<boolean>(false);
   student: StudentModel | null = null;
   isEditingData = signal<boolean>(false);
-  isEditingPassword = signal<boolean>(false);
-  dataForm!: FormGroup;
-  passwordForm!: FormGroup;
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+  dataForm!: FormGroup;
 
   ngOnInit(): void {
     this.fetchProfile();
@@ -31,29 +35,27 @@ export class ProfileComponent implements OnInit {
   fetchProfile(): void {
     this.studentService.fetchLoggedInStudent().subscribe({
       next: (response) => {
-        this.student = response.palyload ?? null;
-        if (this.student) {
-          this.dataForm.patchValue(this.student);
+        if (response.success) {
+          this.student = response.payload!;
+          if (this.student) {
+            this.dataForm.patchValue(this.student);
+          }
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
         }
-      },
-      error: () => {
-        this.errorMessage.set('Błąd pobierania profilu użytkownika');
       }
     });
   }
 
   initForms(): void {
     this.dataForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      firstName: ['', [Validators.required, Validators.maxLength(30)]],
+      lastName: ['', [Validators.required, Validators.maxLength(30)]],
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       indexNumber: [''],
-      phoneNumber: ['']
-    });
-
-    this.passwordForm = this.formBuilder.group({
-      oldPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]]
+      phoneNumber: [''],
+      isPhoneNumberHidden: [false],
+      isIndexNumberHidden: [false]
     });
   }
 
@@ -64,44 +66,42 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  updateData(): void {
-    console.log("Próba aktualizacji danych...");
-
-    if (this.dataForm.invalid || !this.student) {
-        console.log("❌ Formularz niepoprawny lub brak studenta!");
-        return;
-    }
-    
-    const updatedStudent = { ...this.student, ...this.dataForm.value };
-    console.log('Próba aktualizacji:', updatedStudent);
-    this.studentService.updateStudent(updatedStudent).subscribe({
-      next: () => {
-        console.log('Aktualizacja zakończona sukcesem');
-        this.successMessage.set('Dane zostały zaktualizowane.');
-        this.isEditingData.set(false);
-        this.fetchProfile();
-      },
-      error: (err) => {
-        console.error('Błąd aktualizacji:', err);
-        this.errorMessage.set('Błąd podczas aktualizacji danych.');
+  deleteAccount(): void {
+    this.isLoading.set(true);
+    this.studentService.deleteStudent(this.student!.id).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Pomyślnie usunięto konto z systemu');
+          this.isLoading.set(false);
+          this.router.navigate(['/']);
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.detail);
+          this.isLoading.set(false);
+        }
       }
     });
   }
 
+  updateData(): void {
+    if (this.dataForm.invalid || !this.student) {
+      return;
+    }
 
-  updatePassword(): void {
-    if (this.passwordForm.invalid) return;
-    
-    this.studentService.resetPassword('dummy-token', this.passwordForm.value.newPassword).subscribe({
-      next: () => {
-        this.successMessage.set('Hasło zostało zmienione.');
-        this.isEditingPassword.set(false);
-      },
-      error: () => {
-        this.errorMessage.set('Błąd podczas zmiany hasła.');
+    const updatedStudent = { ...this.student, ...this.dataForm.getRawValue() };
+
+    this.isLoading.set(true);
+    this.studentService.updateStudent(updatedStudent).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Aktualizacja zakończona sukcesem');
+          this.isEditingData.set(false);
+          this.isLoading.set(false);
+          this.fetchProfile();
+        } else {
+          this.isLoading.set(false);
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
       }
     });
   }
 }
-
-

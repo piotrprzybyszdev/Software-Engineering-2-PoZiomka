@@ -2,7 +2,7 @@
 using Microsoft.Data.SqlClient;
 using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Admin.Dtos;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
 
@@ -17,7 +17,7 @@ public class AdminRepository(IDbConnection connection) : IAdminRepository
         try
         {
             var admin = await connection.QuerySingleOrDefaultAsync<AdminModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
-            return admin ?? throw new AdminNotFoundException("Admin not found");
+            return admin ?? throw new IdNotFoundException();
         }
         catch (SqlException exception)
         {

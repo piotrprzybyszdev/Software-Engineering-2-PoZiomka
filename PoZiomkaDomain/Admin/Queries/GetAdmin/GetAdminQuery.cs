@@ -4,4 +4,4 @@ using System.Security.Claims;
 
 namespace PoZiomkaDomain.Admin.Queries.GetAdmin;
 
-public record GetAdminQuery(int Id, ClaimsPrincipal User) : IRequest<AdminDisplay>;
+public record GetAdminQuery(ClaimsPrincipal User) : IRequest<AdminDisplay>;

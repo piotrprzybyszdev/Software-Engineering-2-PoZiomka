@@ -6,6 +6,7 @@ public static class Authentication
     {
         services.AddAuthentication().AddCookie(options =>
         {
+            options.Cookie.Name = "PoZiomkaCookie";
             options.Cookie.HttpOnly = true;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.SameSite = SameSiteMode.None;

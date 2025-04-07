@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace PoZiomkaDomain.Common;
+namespace PoZiomkaDomain.Common.Interface;
 
 public class NotATokenException : Exception;
 public class TokenExpiredException : Exception;

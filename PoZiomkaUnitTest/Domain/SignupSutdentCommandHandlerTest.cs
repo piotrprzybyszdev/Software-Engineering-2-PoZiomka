@@ -1,18 +1,18 @@
 ﻿using Moq;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.SignupStudent;
 using PoZiomkaDomain.Student.Dtos;
 
-namespace PoZiomkaTest.Domain;
+namespace PoZiomkaUnitTest.Domain;
 
-public class SignupSutdentCommandHandlerTest
+public class SignupStudentCommandHandlerTest
 {
     [Fact]
     public async Task StoresHash()
     {
-        SignupStudentCommand command = new("test@gmail.com", "passwd", false);
+        SignupStudentCommand command = new("test@gmail.com", "passwd");
         var hash = "hash";
 
         var emailService = new Mock<IEmailService>();
@@ -26,8 +26,8 @@ public class SignupSutdentCommandHandlerTest
         await handler.Handle(command, default);
 
         studentRepository.Verify(
-            m => m.CreateStudent(
-                It.Is<StudentCreate>(s => s.PasswordHash == hash), It.IsAny<CancellationToken?>()
+            m => m.RegisterStudent(
+                It.Is<StudentRegister>(s => s.PasswordHash == hash), It.IsAny<CancellationToken?>()
             ), Times.Once
         );
 
@@ -37,7 +37,7 @@ public class SignupSutdentCommandHandlerTest
     [Fact]
     public async Task ThrowsEmailTaken()
     {
-        SignupStudentCommand command = new("test@gmail.com", "passwd", false);
+        SignupStudentCommand command = new("test@gmail.com", "passwd");
         var hash = "hash";
 
         var emailService = new Mock<IEmailService>();
@@ -46,8 +46,8 @@ public class SignupSutdentCommandHandlerTest
 
         var studentRepository = new Mock<IStudentRepository>();
         studentRepository.Setup(
-            m => m.CreateStudent(
-                It.IsAny<StudentCreate>(), It.IsAny<CancellationToken?>())
+            m => m.RegisterStudent(
+                It.IsAny<StudentRegister>(), It.IsAny<CancellationToken?>())
             ).Throws<EmailNotUniqueException>();
 
         SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);
@@ -56,9 +56,9 @@ public class SignupSutdentCommandHandlerTest
     }
 
     [Fact]
-    public async Task SendsEmailIfConfirmedFalse()
+    public async Task SendsEmail()
     {
-        SignupStudentCommand command = new("test@gmail.com", "passwd", false);
+        SignupStudentCommand command = new("test@gmail.com", "passwd");
         var hash = "hash";
 
         var emailService = new Mock<IEmailService>();
@@ -73,27 +73,6 @@ public class SignupSutdentCommandHandlerTest
 
         emailService.Verify(
             m => m.SendEmailConfirmationEmail("test@gmail.com"), Times.Once
-        );
-    }
-
-    [Fact]
-    public async Task DoesntSendEmailIfConfirmedTrue()
-    {
-        SignupStudentCommand command = new("test@gmail.com", "passwd", true);
-        var hash = "hash";
-
-        var emailService = new Mock<IEmailService>();
-        var passwordService = new Mock<IPasswordService>();
-        passwordService.Setup(m => m.ComputeHash(It.IsAny<string>())).Returns(hash);
-
-        var studentRepository = new Mock<IStudentRepository>();
-
-        SignupStudentCommandHandler handler = new(passwordService.Object, studentRepository.Object, emailService.Object);
-
-        await handler.Handle(command, default);
-
-        emailService.Verify(
-            m => m.SendEmailConfirmationEmail("test@gmail.com"), Times.Never
         );
     }
 }

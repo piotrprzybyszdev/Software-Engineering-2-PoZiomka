@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
 using System.Security.Claims;
@@ -29,18 +30,18 @@ public class ResetPasswordCommandHandler(IJwtService jwtService, IPasswordServic
         }
 
         var emailClaim = claimsIdentity.FindFirst(ClaimTypes.Email)
-            ?? throw new ClaimNotFoundException("Email claim not found");
+            ?? throw new InvalidTokenException("Email claim not found in token");
 
         var email = emailClaim.Value;
         var passwordHash = passwordService.ComputeHash(request.Password);
 
         try
         {
-            await studentRepository.ResetPassword(new PasswordUpdate(email, passwordHash), cancellationToken);
+            await studentRepository.UpdatePassword(new PasswordUpdate(email, passwordHash), cancellationToken);
         }
-        catch (NoRowsEditedException)
+        catch (EmailNotFoundException)
         {
-            throw new StudentNotFoundException($"Can't reset password for student with email `{email}` the account doesn't exist");
+            throw new UserNotFoundException($"Can't reset password for student with email `{email}` the account doesn't exist");
         }
     }
 }

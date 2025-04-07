@@ -2,7 +2,7 @@
     <div id="secondary-card">
         <img class="w-100" src="images/poziomka_splash_blue.jpg" />
     </div>
-    <div id="primary-card" class="py-md-5 px-5 mx-md-4">
+    <div id="primary-card" class="py-2 py-md-5 px-5 mx-md-4">
         <div class="text-center mb-4">
             <h1 class="poziomka-logo-blue mt-1 pb-1">PoZiomka Admin</h1>
             <hr>
@@ -20,18 +20,18 @@
                 <label class="form-label" for="passwordTextField">Hasło</label>
             </div>
 
-            <div class="d-flex pe-3 mb-4">
-                <button class="btn btn-primary px-4 ms-auto" type="button" (click)="onLoginButtonClick()">Zaloguj się</button>
+            <div class="text-danger mt-3 mb-2" [ngClass]="error() === undefined ? 'invisible' : ''">
+                {{ error() ?? 'error placeholder' }}
             </div>
 
-            <div class="row mb-4 gx-3 pt-3">
+            <app-loading-button [class]="'btn-primary px-4 px-4 ms-auto'" [isLoading]="isLoading()" (clicked)="onLoginButtonClick()">
+                Zaloguj się
+            </app-loading-button>
+
+            <div class="row mb-4 gx-3 pt-2">
                 <div class="col"><hr></div>
                 <div class="col-auto"><h6 class="mb-0 mt-1">lub</h6></div>
                 <div class="col"><hr></div>
-            </div>
-
-            <div class="text-danger mt-3" [ngClass]="error() === undefined ? 'invisible' : ''">
-                {{ error() ?? 'error placeholder' }}
             </div>
 
             <div class="text-center">
