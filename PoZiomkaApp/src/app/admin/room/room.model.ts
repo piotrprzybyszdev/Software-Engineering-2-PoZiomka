@@ -1,3 +1,7 @@
+export enum RoomStatus {
+  Free, Taken, Full
+}
+
 export type RoomModel = {
   id: number,
   floor: number,

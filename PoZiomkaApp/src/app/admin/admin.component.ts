@@ -21,6 +21,10 @@ export class AdminComponent {
     this.router.navigate(['/admin/students']);
   }
 
+  onRoomListClick(): void {
+    this.router.navigate(['/admin/rooms']);
+  }
+
   logout(): void {
     this.authService.logOut().subscribe({
       next: _ => this.router.navigate(['/login'])
