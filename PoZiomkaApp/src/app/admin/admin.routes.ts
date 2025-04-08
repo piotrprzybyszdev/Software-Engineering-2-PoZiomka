@@ -1,8 +1,8 @@
 import { Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AdminProfileComponent } from "./profile/profile.component";
-import { StudentsListComponent } from "./student-list/student-list.component";
-import { RoomListComponent } from "./room-list/room-list.component";
+import { StudentsListComponent } from "./students/students.component";
+import { RoomListComponent } from "./rooms/rooms.component";
 
 export const routes: Routes = [
   {
@@ -23,12 +23,12 @@ export const routes: Routes = [
   },
   {
     path: 'students',
-    title: 'PoZiomka - Lista Studentów',
+    title: 'PoZiomka - Studenci',
     component: StudentsListComponent
   },
   {
     path: 'rooms',
-    title: 'PoZiomka - Lista Pokoi',
+    title: 'PoZiomka - Pokoje',
     component: RoomListComponent
   }
 ]

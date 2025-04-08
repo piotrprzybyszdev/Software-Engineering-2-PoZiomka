@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Room;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -22,7 +23,9 @@ public class RoomController(IMediator mediator) : ControllerBase
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> GetById(int id)
     {
-        return Ok(new RoomDisplay(1, 3, 311, 5, null, [1]));
+        return Ok(new RoomStudentDisplay(1, 3, 311, 5, null, [
+            new StudentDisplay(1, "student@example.com", "John", "Doe", "777888", "777888999", null, null, 1, true, true)
+        ]));
     }
 
     [HttpPost("create")]

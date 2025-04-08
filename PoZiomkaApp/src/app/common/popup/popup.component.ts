@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'app-popup',
@@ -7,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrl: './popup.component.css'
 })
 export class PopupComponent {
+  outsideClicked = output<void>();
 
+  onOutsideClick(): void {
+    this.outsideClicked.emit();
+  }
+
+  onInsideClick(event: Event): void {
+    event.stopPropagation();
+  }
 }

@@ -1,5 +1,5 @@
-<div class="position-fixed start-0 top-0 h-100 w-100 bg-dark bg-opacity-50 z-3">
-    <div class="position-absolute start-50 top-50 translate-middle card">
+<div class="position-fixed start-0 top-0 h-100 w-100 bg-dark bg-opacity-50 z-3" (click)="onOutsideClick()">
+    <div class="position-absolute start-50 top-50 container translate-middle card" (click)="onInsideClick($event)">
         <ng-content />
     </div>
 </div>

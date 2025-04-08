@@ -3,15 +3,15 @@ import { StudentService } from '../../student/student.service';
 import { StudentCreate, StudentModel } from '../../student/student.model'; 
 import { ToastrService } from 'ngx-toastr';
 import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-students-list',
   standalone: true,
   imports: [CommonModule, FormsModule, LoadingButtonComponent],
-  templateUrl: './student-list.component.html',
-  styleUrl: './student-list.component.css'
+  templateUrl: './students.component.html',
+  styleUrl: './students.component.css'
 })
 export class StudentsListComponent implements OnInit {
   private toastrService = inject(ToastrService);
