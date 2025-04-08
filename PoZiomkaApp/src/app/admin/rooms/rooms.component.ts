@@ -6,10 +6,12 @@ import { CommonModule } from '@angular/common';
 import { PopupComponent } from "../../common/popup/popup.component";
 import { StudentService } from '../../student/student.service';
 import { StudentModel } from '../../student/student.model';
+import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-room-list',
-  imports: [CommonModule, PopupComponent],
+  imports: [CommonModule, PopupComponent, LoadingButtonComponent, FormsModule],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css'
 })
@@ -34,7 +36,22 @@ export class RoomListComponent implements OnInit {
   private _selectedRoom = signal<RoomStudentModel | undefined>(undefined);
   selectedRoom = this._selectedRoom.asReadonly();
 
-  otherStudents = computed(() => this._students().filter(otherStudent => !this.selectedRoom()?.students.find(student => student.id === otherStudent.id)));
+  otherStudents = computed(() => this._students()
+    .filter(otherStudent => !this.selectedRoom()?.students.find(student => student.id === otherStudent.id))
+    .filter(otherStudent => otherStudent.email.startsWith(this.email()) &&
+    otherStudent.indexNumber?.startsWith(this.indexNumber()) &&
+    otherStudent.phoneNumber?.startsWith(this.phoneNumber()) &&
+    otherStudent.firstName?.startsWith(this.firstName()) &&
+    otherStudent.lastName?.startsWith(this.lastName()))
+  );
+  
+  isDeleteLoading = signal<boolean>(false);
+
+  firstName = signal<string>('');
+  lastName = signal<string>('');
+  email = signal<string>('');
+  indexNumber = signal<string>('');
+  phoneNumber = signal<string>('');
 
   getColorString(status: RoomStatus): string {
     switch (status) {
@@ -63,24 +80,7 @@ export class RoomListComponent implements OnInit {
   }
 
   constructor() {
-    effect(() => {
-      const id = this.selectedRoomId();
-
-      if (id === undefined) {
-        this._selectedRoom.set(undefined);
-        return;
-      }
-
-      this.roomService.getRoom(id).subscribe({
-        next: response => {
-          if (response.success) {
-            this._selectedRoom.set(response.payload!);
-          } else {
-            this.toastrService.error(response.error!.detail, response.error!.title);
-          }
-        }
-      });
-    });
+    effect(() => this.refreshSelectedRoom());
   }
 
   ngOnInit(): void {
@@ -118,25 +118,55 @@ export class RoomListComponent implements OnInit {
   }
 
   onRoomDeselect(): void {
+    if (this.isDeleteLoading()) {
+      return;
+    }
+
     this.selectedRoomId.set(undefined);
   }
 
   onRoomDelete(): void {
+    this.isDeleteLoading.set(true);
     this.roomService.deleteRoom(this.selectedRoom()!.id).subscribe({
       next: response => {
         if (response.success) {
           this.toastrService.success('Pomyślnie usunięto pokój');
+          this.isDeleteLoading.set(false);
           this.onRoomDeselect();
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
+          this.isDeleteLoading.set(false);
         }
       }
     });
   }
 
   onStudentRemove(studentId: number): void {
+    // when successful:
+    this.refreshSelectedRoom();
   }
 
   onStudentAdd(studentId: number): void {
+    // when successful:
+    this.refreshSelectedRoom();
+  }
+
+  private refreshSelectedRoom(): void {
+    const id = this.selectedRoomId();
+
+    if (id === undefined) {
+      this._selectedRoom.set(undefined);
+      return;
+    }
+
+    this.roomService.getRoom(id).subscribe({
+      next: response => {
+        if (response.success) {
+          this._selectedRoom.set(response.payload!);
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5  col d-flex flex-column">
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col d-flex flex-column">
     <div class="row d-flex flex-row justify-content-between">
         <h1 class="col">Lista Pokojów</h1>
         <div class="col col-auto align-self-end">
@@ -17,7 +17,7 @@
                 </h2>
                 <div [id]="`collapse${rooms[0]}`" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
                     <div class="accordion-body">
-                        <div class="mw-100 mh-100 px-2 mx-auto row align-items-start overflow-auto">
+                        <div class="px-2 mx-auto row align-items-start">
                             @for (room of rooms[1]; track room.id) {
                                 <button type="button" class="col col-auto m-3 card p-0 btn btn-light" (click)="onRoomClick(room)">
                                     <div class="card-header">
@@ -47,7 +47,7 @@
 
 @if (isAddingRoom()) {
     <app-popup (outsideClicked)="onAddRoomCancelClick()">
-        <div class="p-5">
+        <div class="p-5 container">
             <h4>Dodawanie pokoju</h4>
         </div>
     </app-popup>
@@ -55,12 +55,11 @@
 
 @if (selectedRoom() !== undefined) {
     <app-popup (outsideClicked)="onRoomDeselect()">
-        <div class="col p-5">
+        <div class="col p-5 overflow-auto" style="min-height: 90vh;">
             <div class="row">
                 <div class="col d-flex flex-column">
                     <h3>Pokój numer {{ selectedRoom()!.number }}</h3>
                     <h6>Piętro: {{ selectedRoom()!.floor }}, Zajęte Miejsca: {{ selectedRoom()!.students.length }}/{{ selectedRoom()!.capacity }}</h6>
-
                 </div>
                 <div class="row justify-content-between mt-3">
                     <div class="col-auto">
@@ -70,52 +69,72 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-danger" (click)="onRoomDelete()">Usuń pokój</button>
+                        <app-loading-button [class]="'btn-danger'" (clicked)="onRoomDelete()" [isLoading]="isDeleteLoading()">Usuń pokój</app-loading-button>
                     </div>
                 </div>
             </div>
             
             <hr class="mb-5">
-            <div class="table-responsive">
+            <div class="border mt-5 rounded-3 px-3 pt-4 pb-5">
                 @if (selectedRoom()!.students.length === 0) {
                     <h4>Do tego pokoju nie są przypisani żadni studenci</h4>
                 } @else {
                     <h4>Studenci w tym pokoju:</h4>
-                    <table class="table table-lg table-striped mt-3">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Imię</th>
-                                <th scope="col">Nazwisko</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Numer telefonu</th>
-                                <th scope="col">Numer indeksu</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (student of selectedRoom()!.students; track student.id) {
-                                <tr scope="row">
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ student.firstName ?? "-" }}</td>
-                                    <td>{{ student.lastName ?? "-" }}</td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ student.phoneNumber ?? "-" }}</td>
-                                    <td>{{ student.indexNumber ?? "-" }}</td>
-                                    <td><button class="btn btn-sm btn-danger mx-2 border-0" type="button" (click)="onStudentRemove(student.id)"><i class="bi bi-dash-lg"></i></button></td>
+
+                    <div class="table-responsive" style="max-height: 20vh;">
+                        <table class="table table-lg table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Imię</th>
+                                    <th scope="col">Nazwisko</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Numer telefonu</th>
+                                    <th scope="col">Numer indeksu</th>
+                                    <th scope="col"></th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (student of selectedRoom()!.students; track student.id) {
+                                    <tr scope="row">
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ student.firstName ?? "-" }}</td>
+                                        <td>{{ student.lastName ?? "-" }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.phoneNumber ?? "-" }}</td>
+                                        <td>{{ student.indexNumber ?? "-" }}</td>
+                                        <td><button class="btn btn-sm btn-danger mx-2 border-0" type="button" (click)="onStudentRemove(student.id)"><i class="bi bi-dash-lg"></i></button></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 }
             </div>
 
-            <div class="table-responsive mt-5">
-                @if (otherStudents().length === 0) {
-                    <h4>Nie ma żadnych studentów, których można przypisać do tego pokoju</h4>
-                } @else {
-                    <h4>Studenci możliwi do przypisania:</h4>
-                    <table class="table table-lg table-striped mt-3">
+            <div class="border mt-5 rounded-3 px-3 pt-4 pb-5">
+                <h4>Studenci do przypisania:</h4>
+
+                <form class="bg-secondary bg-opacity-25 row my-4 mx-0 py-2 rounded-3 border gx-lg-4 gx-2">
+                    <div class="col-md mb-md-0 mb-2">
+                        <input class="form-control" type="text" name="firstName" placeholder="Imię" [(ngModel)]="firstName" >
+                    </div>
+                    <div class="col-md mb-md-0 mb-2">
+                        <input class="form-control" type="text" name="lastName" placeholder="Nazwisko" [(ngModel)]="lastName" >
+                    </div>
+                    <div class="col-md mb-md-0 mb-2">
+                        <input class="form-control" type="text" name="email" placeholder="Email" [(ngModel)]="email" >
+                    </div>
+                    <div class="col-md mb-md-0 mb-2">
+                        <input class="form-control" type="text" name="indexNumber" placeholder="Numer indeksu" [(ngModel)]="indexNumber"/>
+                    </div>
+                    <div class="col-md">
+                        <input class="form-control" type="text" name="phoneNumber" placeholder="Numer telefonu" [(ngModel)]="phoneNumber"/>
+                    </div>
+                </form>
+
+                <div class="table-responsive" style="max-height: 30vh;">
+                    <table class="table table-lg table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -127,21 +146,21 @@
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @for (student of otherStudents(); track student.id) {
-                                <tr scope="row">
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ student.firstName ?? "-" }}</td>
-                                    <td>{{ student.lastName ?? "-" }}</td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ student.phoneNumber ?? "-" }}</td>
-                                    <td>{{ student.indexNumber ?? "-" }}</td>
-                                    <td><button class="btn btn-sm btn-success mx-2 border-0" type="button" (click)="onStudentAdd(student.id)"><i class="bi bi-plus-lg"></i></button></td>
-                                </tr>
-                            }
+                            <tbody>
+                                @for (student of otherStudents(); track student.id) {
+                                    <tr scope="row">
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ student.firstName ?? "-" }}</td>
+                                        <td>{{ student.lastName ?? "-" }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.phoneNumber ?? "-" }}</td>
+                                        <td>{{ student.indexNumber ?? "-" }}</td>
+                                        <td><button class="btn btn-sm btn-success mx-2 border-0" type="button" (click)="onStudentAdd(student.id)"><i class="bi bi-plus-lg"></i></button></td>
+                                    </tr>
+                                }
                         </tbody>
                     </table>
-                }
+                </div>
             </div>
         </div>
     </app-popup>
