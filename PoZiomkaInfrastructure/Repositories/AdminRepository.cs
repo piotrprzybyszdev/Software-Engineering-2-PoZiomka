@@ -8,7 +8,7 @@ using System.Data;
 
 namespace PoZiomkaInfrastructure.Repositories;
 
-public class AdminRepository(IDbConnection connection) : IAdminRepository
+public class AdminRepository(IDbConnection connection) : IApplicationRepository
 {
     public async Task<AdminModel> GetAdminById(int id, CancellationToken? cancellationToken)
     {

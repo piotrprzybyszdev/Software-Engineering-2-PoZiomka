@@ -64,7 +64,7 @@ public static class Infrastructure
         );
 
         services.AddScoped<IStudentRepository, StudentRepository>();
-        services.AddScoped<IAdminRepository, AdminRepository>();
+        services.AddScoped<IApplicationRepository, AdminRepository>();
         services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
 

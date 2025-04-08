@@ -5,7 +5,7 @@ using PoZiomkaDomain.Exceptions;
 
 namespace PoZiomkaDomain.Admin.Queries.GetAdmin;
 
-public class GetAdminQueryHandler(IAdminRepository adminRepository) : IRequestHandler<GetAdminQuery, AdminDisplay>
+public class GetAdminQueryHandler(IApplicationRepository adminRepository) : IRequestHandler<GetAdminQuery, AdminDisplay>
 {
     public async Task<AdminDisplay> Handle(GetAdminQuery request, CancellationToken cancellationToken)
     {
