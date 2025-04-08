@@ -6,6 +6,7 @@ using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Match;
+using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
 using PoZiomkaInfrastructure.Repositories;
@@ -64,6 +65,7 @@ public static class Infrastructure
 
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
+        services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
 
         if (bool.Parse(configuration["FileStorage:IsLocal"]!))

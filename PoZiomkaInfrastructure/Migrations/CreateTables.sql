@@ -19,3 +19,10 @@ CREATE TABLE Administrators(
 	Email varchar(100) UNIQUE NOT NULL,
 	PasswordHash varchar(60) NOT NULL
 );
+
+CREATE TABLE Rooms (
+	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+	[Floor] int NOT NULL,
+	Number int NOT NULL,
+	Capacity int NOT NULL
+)
