@@ -7,3 +7,10 @@ VALUES ('emil@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36
 
 INSERT INTO Administrators (Email, PasswordHash)
 VALUES ('admin@example.com', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S');
+
+INSERT INTO ApplicationType (Name, Description) VALUES
+('Scholarship', 'Application for scholarship programs'),
+('Exchange Program', 'Application for student exchange programs'),
+('Internship', 'Application for internship opportunities'),
+('Thesis Submission', 'Application for thesis submission and approval'),
+('Graduation Request', 'Application to request graduation approval');

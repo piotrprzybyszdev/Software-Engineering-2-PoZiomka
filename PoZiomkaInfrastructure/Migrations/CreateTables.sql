@@ -39,6 +39,6 @@ CREATE TABLE Application (
     ApplicationTypeId INT NOT NULL,
     FileGuid UNIQUEIDENTIFIER NOT NULL,
     Status INT NOT NULL, -- Enum: ApplicationStatus
-    FOREIGN KEY (StudentId) REFERENCES Student(Id),
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
     FOREIGN KEY (ApplicationTypeId) REFERENCES ApplicationType(Id)
 );

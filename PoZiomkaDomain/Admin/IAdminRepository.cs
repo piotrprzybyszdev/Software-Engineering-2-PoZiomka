@@ -2,7 +2,7 @@
 
 namespace PoZiomkaDomain.Admin;
 
-public interface IApplicationRepository
+public interface IAdminRepository
 {
     public Task<AdminModel> GetAdminByEmail(string email, CancellationToken? cancellationToken);
 

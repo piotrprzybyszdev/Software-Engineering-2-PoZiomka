@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace PoZiomkaDomain.Admin.Commands.LoginAdmin;
 
-public class LoginAdminCommandHandler(IPasswordService passwordService, IApplicationRepository adminRepository) : IRequestHandler<LoginAdminCommand, IEnumerable<Claim>>
+public class LoginAdminCommandHandler(IPasswordService passwordService, IAdminRepository adminRepository) : IRequestHandler<LoginAdminCommand, IEnumerable<Claim>>
 {
     public async Task<IEnumerable<Claim>> Handle(LoginAdminCommand request, CancellationToken cancellationToken)
     {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Application;
 using PoZiomkaDomain.Application.Dtos;
+using PoZiomkaDomain.Application.Queries.GetTypes;
 using PoZiomkaDomain.Common;
 using System.Net.Mime;
 
@@ -16,7 +17,8 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> GetTypes()
     {
-        return Ok(new List<ApplicationTypeModel>([new ApplicationTypeModel(1, "Test application type", "Test application type description")]));
+		var result = await mediator.Send(new GetTypesQuery());
+        return Ok(result);
     }
 
     [HttpGet("get")]
