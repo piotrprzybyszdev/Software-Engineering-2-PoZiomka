@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AdminProfileComponent } from "./profile/profile.component";
 import { StudentsListComponent } from "./student-list/student-list.component";
-import { RoomListComponent } from "./room/room-list/room-list.component";
+import { RoomListComponent } from "./room-list/room-list.component";
 
 export const routes: Routes = [
   {

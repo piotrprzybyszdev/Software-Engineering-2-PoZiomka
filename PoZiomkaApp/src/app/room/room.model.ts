@@ -1,5 +1,5 @@
 export enum RoomStatus {
-  Free, Taken, Full
+  Available, Reserved, Occupied, Full
 }
 
 export type RoomModel = {
@@ -8,7 +8,7 @@ export type RoomModel = {
   number: number,
   capacity: number,
   studentIds: number[],
-  isFull: boolean
+  status: RoomStatus
 }
 
 export type RoomCreate = {

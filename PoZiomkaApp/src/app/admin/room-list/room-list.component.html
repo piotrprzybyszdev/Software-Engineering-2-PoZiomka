@@ -1,0 +1,41 @@
+<div class="mh-100 w-100 container py-5 mx-auto col d-flex flex-column">
+    <h1>Lista Pokoi</h1>
+    <hr class="mb-2">
+    <div class="accordion" id="mainAccordion">
+        @for (rooms of roomsPerFloor(); track rooms[0]) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="`#collapse${rooms[0]}`"
+                        aria-expanded="false" [attr.aria-controls]="`collapse${rooms[0]}`">
+                        Piętro {{ rooms[0] }}
+                    </button>
+                </h2>
+                <div [id]="`collapse${rooms[0]}`" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+                    <div class="accordion-body">
+                        <div class="mw-100 mh-100 px-2 mx-auto row align-items-start overflow-auto">
+                            @for (room of rooms[1]; track room.id) {
+                            <div class="col col-auto m-3 card p-0 btn btn-light">
+                                <div class="card-header">
+                                    <h3><i class="me-3 bi bi-house"></i>{{room.number}}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        Piętro: {{ room.floor }}
+                                    </h4>
+                                    <h6 class="card-text">
+                                        Zajęte Miejsca: {{ room.studentIds.length }}/{{ room.capacity }}
+                                    </h6>
+                                </div>
+                                <div class="card-footer bg-opacity-25"
+                                [ngClass]="`bg-${getColorString(room.status)} text-${getColorString(room.status)} border-${getColorString(room.status)}`">
+                                    <h5 class="m-0">{{ getStatusString(room.status) }}</h5>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
