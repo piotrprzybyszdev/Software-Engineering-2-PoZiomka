@@ -30,7 +30,7 @@ CREATE TABLE Rooms (
 CREATE TABLE ApplicationType (
     Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
     Name NVARCHAR(255) NOT NULL,
-    Description NVARCHAR(MAX)
+    Description TEXT
 );
 
 CREATE TABLE Application (
