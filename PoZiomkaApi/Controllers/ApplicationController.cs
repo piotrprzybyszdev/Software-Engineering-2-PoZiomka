@@ -22,14 +22,12 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("get")]
-    [Authorize(Roles = Roles.Administrator)]
+    //[Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Get([FromQuery] GetRequest getRequest)
     {
-        return Ok(new List<ApplicationDisplay>([new ApplicationDisplay(
-            1, 3, new ApplicationTypeModel(1, "Test application type", "Test application type description"),
-            ApplicationStatus.Pending
-        )]));
-    }
+        var result = await mediator.Send(getRequest.ToQuery());
+		return Ok(result);
+	}
 
     [HttpGet("get-student")]
     [Authorize(Roles = Roles.Student)]

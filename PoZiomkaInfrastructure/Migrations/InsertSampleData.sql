@@ -14,3 +14,22 @@ INSERT INTO ApplicationType (Name, Description) VALUES
 ('Internship', 'Application for internship opportunities'),
 ('Thesis Submission', 'Application for thesis submission and approval'),
 ('Graduation Request', 'Application to request graduation approval');
+
+INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) VALUES
+(1, 1, NEWID(), 0),
+(1, 2, NEWID(), 1),
+(1, 3, NEWID(), 2),
+(1, 4, NEWID(), 0),
+(1, 5, NEWID(), 1),
+
+(2, 1, NEWID(), 0),
+(2, 2, NEWID(), 0),
+(2, 3, NEWID(), 1),
+(2, 4, NEWID(), 2),
+(2, 5, NEWID(), 0),
+
+(3, 1, NEWID(), 1),
+(3, 2, NEWID(), 2),
+(3, 3, NEWID(), 0),
+(3, 4, NEWID(), 1),
+(3, 5, NEWID(), 0);
