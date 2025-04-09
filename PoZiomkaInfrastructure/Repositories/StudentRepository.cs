@@ -71,7 +71,7 @@ VALUES (@email, @passwordHash, 0);
 
         try
         {
-            return await connection.QueryAsync<StudentModel>(new CommandDefinition(sqlQuery, cancellationToken: cancellationToken ?? default));
+            return await connection.QueryAsync<StudentModel>(new CommandDefinition(sqlQuery, new { roomId }, cancellationToken: cancellationToken ?? default));
         }
         catch (SqlException exception)
         {
