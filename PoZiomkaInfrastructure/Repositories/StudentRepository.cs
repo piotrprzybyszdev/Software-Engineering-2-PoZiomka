@@ -65,6 +65,20 @@ VALUES (@email, @passwordHash, 0);
         }
     }
 
+    public async Task<IEnumerable<StudentModel>> GetStudentsByRoomId(int roomId, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"SELECT * FROM Students WHERE RoomId = @roomId";
+
+        try
+        {
+            return await connection.QueryAsync<StudentModel>(new CommandDefinition(sqlQuery, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
+
     public async Task<IEnumerable<StudentModel>> GetAllStudents(CancellationToken? cancellationToken)
     {
         var sqlQuery = @"SELECT * FROM Students";
