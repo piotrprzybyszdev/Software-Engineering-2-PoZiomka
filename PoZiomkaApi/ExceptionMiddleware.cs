@@ -114,6 +114,26 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Room not empty"
             };
         }
+        catch (StudentAlreadyInRoomException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Student already assigned to a room"
+            };
+        }
+        catch (RoomFullException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Room is full"
+            };
+        }
         catch (DomainException exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;

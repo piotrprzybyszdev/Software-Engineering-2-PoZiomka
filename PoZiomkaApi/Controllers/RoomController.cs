@@ -44,7 +44,8 @@ public class RoomController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> AddStudent([FromBody] AddStudentRequest addStudentRequest)
     {
-        return NotFound();
+        await mediator.Send(addStudentRequest.ToAddStudentCommand());
+        return Ok();
     }
 
     [HttpPut("remove-student")]

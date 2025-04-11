@@ -21,7 +21,7 @@ public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentReposit
         {
             var student = await studentRepository.GetStudentById(loggedInUserId, cancellationToken);
             if (student == null)
-                throw new DomainException($"Student with id `{loggedInUserId}` not found");
+                throw new UserNotFoundException($"Student with id `{loggedInUserId}` not found");
             if (student.RoomId == request.Id)
                 isUserAuthorized = true;
         }
@@ -36,7 +36,7 @@ public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentReposit
         }
         catch
         {
-            throw new DomainException($"Room with id `{request.Id}` not found");
+            throw new RoomNotFoundException($"Room with id `{request.Id}` not found");
         }
 
         var students = await studentRepository.GetStudentsByRoomId(request.Id, cancellationToken);
