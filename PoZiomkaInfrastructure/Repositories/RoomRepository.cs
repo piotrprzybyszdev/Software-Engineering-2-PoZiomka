@@ -58,4 +58,18 @@ VALUES (@floor, @number, @capacity);
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
+
+    public async Task DeleteRoom(int id, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"DELETE FROM Rooms WHERE id = @id";
+        try
+        {
+            var rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
+            if (rowsAffected == 0) throw new IdNotFoundException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
 }

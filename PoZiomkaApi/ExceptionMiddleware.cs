@@ -94,6 +94,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Student not found"
             };
         }
+        catch (RoomNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Student not found"
+            };
+        }
         catch (DomainException exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
