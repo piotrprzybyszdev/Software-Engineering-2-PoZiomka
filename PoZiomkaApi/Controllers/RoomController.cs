@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Room;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaDomain.Room.Queries.GetAllRooms;
 using PoZiomkaDomain.Room.Queries.GetRoom;
 
 namespace PoZiomkaApi.Controllers;
@@ -16,7 +17,8 @@ public class RoomController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Get()
     {
-        return Ok(new List<RoomDisplay>([new RoomDisplay(1, 3, 311, 5, null, [1])]));
+        var command = new GetAllRoomsQuery();
+        return Ok(await mediator.Send(command));
     }
 
     [HttpGet("get/{id}")]

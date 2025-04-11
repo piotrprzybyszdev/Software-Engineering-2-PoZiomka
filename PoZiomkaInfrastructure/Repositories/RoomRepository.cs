@@ -44,4 +44,18 @@ VALUES (@floor, @number, @capacity);
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
+
+    public async Task<IEnumerable<RoomModel>> GetAllRooms(CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"SELECT * FROM Rooms";
+        try
+        {
+            var rooms = await connection.QueryAsync<RoomModel>(new CommandDefinition(sqlQuery, cancellationToken: cancellationToken ?? default));
+            return rooms;
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
 }
