@@ -19,10 +19,8 @@ public class GetStudentQueryHandler(IApplicationRepository applicationRepository
 
 		var types = await applicationRepository.GetTypes();
 		try
-		{
-			var result = await applicationRepository.GetAll(loggedInUserId);
-			var result2 = result.Select(x => x.ToDisplay(types.First(y=>y.Id == x.ApplicationTypeId)));
-			return result2;
+		{ 
+			return (await applicationRepository.GetAll(loggedInUserId)).Select(x => x.ToDisplay(types.First(y => y.Id == x.ApplicationTypeId)));
 		}
 		catch
 		{
