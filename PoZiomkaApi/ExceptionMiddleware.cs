@@ -101,7 +101,17 @@ public class ExceptionMiddleware(RequestDelegate next)
             {
                 Status = StatusCodes.Status404NotFound,
                 Detail = exception.Message,
-                Title = "Student not found"
+                Title = "Room not found"
+            };
+        }
+        catch (RoomNotEmptyException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Room not empty"
             };
         }
         catch (DomainException exception)
