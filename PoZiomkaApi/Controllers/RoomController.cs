@@ -52,7 +52,8 @@ public class RoomController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> RemoveStudent([FromBody] RemoveStudentRequest removeStudentRequest)
     {
-        return NotFound();
+        await mediator.Send(removeStudentRequest.ToRemoveStudentCommand());
+        return Ok();
     }
 
     [HttpDelete("delete/{id}")]

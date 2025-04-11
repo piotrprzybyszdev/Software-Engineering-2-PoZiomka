@@ -194,7 +194,7 @@ WHERE Email = @Email
         if (rowsAffected == 0) throw new EmailNotFoundException();
     }
 
-    public async Task UpdateRoom(int id, int roomId)
+    public async Task UpdateRoom(int id, int? roomId)
     {
         var sqlQuery = @"
 UPDATE Students
