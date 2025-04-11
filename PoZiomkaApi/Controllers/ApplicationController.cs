@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Application;
 using PoZiomkaDomain.Application.Dtos;
+using PoZiomkaDomain.Application.Queries.GetStudent;
 using PoZiomkaDomain.Application.Queries.GetTypes;
 using PoZiomkaDomain.Common;
 using System.Net.Mime;
@@ -22,7 +23,7 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("get")]
-    //[Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Get([FromQuery] GetRequest getRequest)
     {
         var result = await mediator.Send(getRequest.ToQuery());
@@ -33,11 +34,9 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> GetStudent()
     {
-        return Ok(new List<ApplicationDisplay>([new ApplicationDisplay(
-            1, 3, new ApplicationTypeModel(1, "Test application type", "Test application type description"),
-            ApplicationStatus.Pending
-        )]));
-    }
+		var result = await mediator.Send(new GetStudentQuery(User));
+		return Ok(result);
+	}
 
     [HttpPost("submit/{id}")]
     [Authorize(Roles = Roles.Student)]

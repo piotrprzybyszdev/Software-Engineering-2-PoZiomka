@@ -27,6 +27,32 @@ public class ApplicationRepository(IDbConnection connection) : IApplicationRepos
 		}
 	}
 
+	public Task<IEnumerable<ApplicationTypeModel>> GetApplicationType(int Id)
+	{
+		var sqlQuery = @"SELECT * FROM ApplicationType WHERE Id = @Id";
+		try
+		{
+			return connection.QueryAsync<ApplicationTypeModel>(sqlQuery, new { Id });
+		}
+		catch (SqlException exception)
+		{
+			throw new QueryExecutionException(exception.Message, exception.Number);
+		}
+	}
+
+	public Task<IEnumerable<ApplicationModel>> GetAll(int StudentId)
+	{
+		var sqlQuery = @"SELECT * FROM Application WHERE StudentId = @StudentId";
+		try
+		{
+			return connection.QueryAsync<ApplicationModel>(sqlQuery, new { StudentId });
+		}
+		catch (SqlException exception)
+		{
+			throw new QueryExecutionException(exception.Message, exception.Number);
+		}
+	}
+
 	public Task<IEnumerable<ApplicationModel>> GetAll(string? StudentEmail, string? StudentIndex, int? ApplicationTypeId, ApplicationStatus? ApplicationStatus)
 	{
 		var sqlQuery = @"SELECT * FROM Application WHERE 1=1";
