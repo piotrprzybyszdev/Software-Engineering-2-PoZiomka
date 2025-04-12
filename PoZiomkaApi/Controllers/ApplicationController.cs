@@ -48,6 +48,9 @@ public class ApplicationController(IMediator mediator) : ControllerBase
 	[Authorize(Roles = Roles.Student)]
 	public async Task<IActionResult> Submit(int id, IFormFile file)
 	{
+		if(file.ContentType != MediaTypeNames.Application.Pdf)
+			return BadRequest("File must be a PDF");
+
 		var command = new SubmitCommand(id, new NetworkFile(file), User);
 		await mediator.Send(command);
 		return Ok();
@@ -68,8 +71,8 @@ public class ApplicationController(IMediator mediator) : ControllerBase
 	{
 		var command = new DownloadCommand(id, User);
 		var result = await mediator.Send(command);
-		string fileName = $"file_{id}";
-		string contentType = "application/octet-stream";
+		string fileName = $"file_{id}.pdf";
+		string contentType = "application/pdf";
 
 		return File(result.Stream, contentType, fileName);
 	}

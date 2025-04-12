@@ -30,8 +30,8 @@ public class AuthController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
-	[HttpPost("login-test")]
-	public async Task<IActionResult> LoginTest()
+	[HttpPost("login-as-student-mockup")]
+	public async Task<IActionResult> LoginAsStudentMockup()
 	{
         LoginRequest loginRequest = new LoginRequest("student@example.com", "asdf");
 		IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginStudentCommand());
@@ -55,7 +55,21 @@ public class AuthController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
-    [HttpPost("logout")]
+	[HttpPost("admin-login-mockup")]
+    public async Task<IActionResult> LoginAsAdminMockup()
+    {
+        AdminLoginRequest loginRequest = new AdminLoginRequest("admin@example.com", "asdf");
+		IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginAdminCommand());
+
+		var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+
+		await HttpContext.SignInAsync(principal);
+
+		return Ok();
+	}
+
+
+	[HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
