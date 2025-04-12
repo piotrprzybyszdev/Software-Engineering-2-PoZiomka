@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Application;
+using PoZiomkaDomain.Application.Commands.Submit;
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Application.Queries.GetStudent;
 using PoZiomkaDomain.Application.Queries.GetTypes;
@@ -42,7 +43,9 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> Submit(int id, IFormFile file)
     {
-        return NotFound();
+		var command = new SubmitCommand(id, (PoZiomkaDomain.Application.IFile)file.OpenReadStream(),User);
+		await mediator.Send(command);
+		return Ok();
     }
 
     [HttpPut("resolve/{id}")]
