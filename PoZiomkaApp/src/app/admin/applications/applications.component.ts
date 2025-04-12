@@ -42,53 +42,54 @@ export class ApplicationListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadApplications();
-    this.loadStudents();
+    this.loadApplications(); 
     this.applicationService.getApplicationTypes().subscribe({
-        next: res => {
-          if (res.success) this.applicationTypes = res.payload!;
-        }
-      });
+      next: res => {
+        if (res.success) this.applicationTypes = res.payload!;
+      }
+    });
   }
+  
 
-  // Ładowanie wniosków z zastosowaniem filtrów
   loadApplications(): void {
     this.isLoading.set(true);
     const filters = this.filters(); 
   
     const params: any = {};
-    
+  
     if (filters.studentEmail) {
       params.studentEmail = filters.studentEmail;
     }
-    
+  
     if (filters.applicationType) {
       params.applicationType = filters.applicationType;
     }
-    
+  
     if (filters.applicationStatus !== undefined) {
       params.applicationStatus = filters.applicationStatus;
     }
-    
+
+  
     this.applicationService.getApplications(params).subscribe({
       next: res => {
         this.isLoading.set(false);
         if (res.success) {
-          this.applications.set(res.payload!);
+          this.applications.set(res.payload!);          
+          this.loadStudents();
         } else {
-          this.toastr.error(res.error!?.detail, res.error!?.title);
+          this.toastr.error(res.error?.detail, res.error?.title);
         }
       },
       error: () => this.isLoading.set(false)
     });
   }
   
+  
 
   loadStudents(): void {
     const applicationList = this.applications();
     const uniqueStudentIds = Array.from(new Set(applicationList.map(app => app.studentId)));
     const map = new Map<number, StudentModel>();
-  
     if (uniqueStudentIds.length === 0) {
       this.studentsMap.set(map); 
       return;
