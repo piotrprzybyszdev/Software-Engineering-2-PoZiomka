@@ -48,7 +48,7 @@
 
 
 @if (selectedApplication() !== undefined) {
-    <app-popup (outsideClicked)="onApplicationDeselect()" [size]="'lg'">
+    <app-popup (outsideClicked)="onHide()" (closeClicked)="onHide()" [size]="'lg'">
       <div class="col p-5 overflow-auto" style="min-height: 70vh;">
         <div class="row">
           <div class="col d-flex flex-column">

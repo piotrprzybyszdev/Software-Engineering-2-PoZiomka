@@ -104,7 +104,7 @@ export class ApplicationListComponent implements OnInit {
         if (res.success) {
           this.toastr.success(`Aplikacja ${status === ApplicationStatus.accepted ? 'zaakceptowana' : 'odrzucona'}`);
           this.loadApplications();
-          this.onApplicationDeselect();
+          this.onHide();
         } else {
           this.toastr.error(res.error!?.detail, res.error!?.title);
         }
@@ -123,7 +123,7 @@ export class ApplicationListComponent implements OnInit {
               .replace(/[^a-z0-9\-]/g, ''); // usuń inne znaki
   }
 
-  onApplicationDeselect(): void {
+  onHide(): void {
     this.selectedApplication.set(undefined);
     this.selectedApplicationId.set(undefined);
   }
