@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Application;
+using PoZiomkaDomain.Application;
+using PoZiomkaDomain.Application.Commands.Resolve;
 using PoZiomkaDomain.Application.Commands.Submit;
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Application.Queries.GetStudent;
@@ -52,8 +54,10 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Resolve(int id, ApplicationStatus status)
     {
-        return NotFound();
-    }
+		var command = new ResolveCommand(id, status);
+		await mediator.Send(command);
+		return Ok();
+	}
 
     [HttpGet("download/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
