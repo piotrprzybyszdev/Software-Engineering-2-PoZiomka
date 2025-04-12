@@ -4,6 +4,7 @@ import { ApplicationModel, applicationStatusToColorString, applicationStatusToSt
 import { ApplicationService } from '../../../application/application.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingButtonComponent } from "../../../common/loading-button/loading-button.component";
+import "../../../common/util"
 
 @Component({
   selector: 'app-application-list',
@@ -40,12 +41,6 @@ export class ApplicationListComponent {
     this.hide.emit();
   }
 
-  updateArr(arr: boolean[], index: number, value: boolean): boolean[] {
-    const narr = [...arr];
-    narr[index] = value;
-    return narr;
-  }
-
   onUploadFile(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = target.files?.item(0);
@@ -71,7 +66,7 @@ export class ApplicationListComponent {
   onDownloadFile(applicationIndex: number): void {
     const application = this.applications()[applicationIndex];
 
-    this.isDownloading.update(arr => this.updateArr(arr, applicationIndex, true));
+    this.isDownloading.update(arr => arr.updateClone(applicationIndex, true));
     this.applicationService.downloadApplicationFile(application.id).subscribe({
       next: response => {
         if (response.success) {
@@ -79,7 +74,7 @@ export class ApplicationListComponent {
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
-        this.isDownloading.update(arr => this.updateArr(arr, applicationIndex, false));
+        this.isDownloading.update(arr => arr.updateClone(applicationIndex, false));
       }
     });
   }
