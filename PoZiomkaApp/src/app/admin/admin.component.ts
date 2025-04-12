@@ -13,6 +13,10 @@ export class AdminComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  onApplicationListClick(): void {
+    this.router.navigate(['/admin/applications']);
+  }
+
   onProfileClick(): void {
     this.router.navigate(['/admin/profile']);
   }

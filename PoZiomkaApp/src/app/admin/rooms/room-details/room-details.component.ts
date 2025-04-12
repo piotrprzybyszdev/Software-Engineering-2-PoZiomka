@@ -77,15 +77,33 @@ export class RoomDetailsComponent {
   }
 
   onStudentRemove(studentId: number): void {
+    if (this.room() === undefined) return;
 
-    // on success
-    this.refreshRoomInfo();
+    this.roomService.removeStudentFromRoom(this.room()!.id, studentId).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Usunięto studenta z pokoju');
+          this.refreshRoomInfo(); 
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+      }
+    });
   }
 
   onStudentAdd(studentId: number): void {
+    if (this.room() === undefined) return;
 
-    // on success
-    this.refreshRoomInfo();
+    this.roomService.addStudentToRoom(this.room()!.id, studentId).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Dodano studenta do pokoju');
+          this.refreshRoomInfo(); 
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+      }
+    });
   }
 
   private refreshRoomInfo(): void {
@@ -100,3 +118,4 @@ export class RoomDetailsComponent {
     })
   }
 }
+

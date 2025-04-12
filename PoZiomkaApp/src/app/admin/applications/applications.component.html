@@ -1,0 +1,100 @@
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col d-flex flex-column">
+    <div class="row d-flex flex-row justify-content-between">
+        <h1 class="col">Lista Wniosków</h1>
+        <div class="col-4">
+            <select (change)="setSortOption($event)" class="form-select">
+                <option value="type">Sortuj po typie</option>
+                <option value="status">Sortuj po statusie</option>
+            </select>
+        </div>
+    </div>
+    <hr class="mb-2">
+
+    <!-- Grupa aplikacji według wybranego sortowania -->
+    <div class="accordion" id="applicationAccordion">
+        <div *ngFor="let group of groupedApplications()">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapse-' + groupKeySafe(group.key)"
+                        aria-expanded="false"
+                        [attr.aria-controls]="'collapse-' + groupKeySafe(group.key)">
+                    {{ group.key }}
+                </button>
+                </h2>
+                <div [id]="'collapse-' + groupKeySafe(group.key)" class="accordion-collapse collapse"
+     data-bs-parent="#applicationAccordion">
+                    <div class="accordion-body">
+                        <div *ngFor="let application of group.applications" class="card mb-3">
+                            <div class="card-header">
+                                <h5>Wniosek {{ application.id }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Typ: {{ application.applicationType.name }}</h6>
+                                <p class="card-text">Status: {{ applicationStatusText(application.applicationStatus) }}</p>
+                                <button class="btn btn-primary" (click)="onApplicationClick(application)">Szczegóły</button>
+                                <button class="btn btn-danger ms-2" (click)="onApplicationResolve(application, ApplicationStatus.rejected)">Odrzuć</button>
+                                <button class="btn btn-success ms-2" (click)="onApplicationResolve(application, ApplicationStatus.accepted)">Zaakceptuj</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@if (selectedApplication() !== undefined) {
+    <app-popup (outsideClicked)="onApplicationDeselect()" [size]="'lg'">
+      <div class="col p-5 overflow-auto" style="min-height: 70vh;">
+        <div class="row">
+          <div class="col d-flex flex-column">
+            <h3>Aplikacja #{{ selectedApplication()!.id }}</h3>
+            <h6>Typ: {{ selectedApplication()!.applicationType.name }}</h6>
+          </div>
+          <div class="row justify-content-between mt-3">
+            <div class="col-auto">
+              <div class="text-center rounded border py-1 px-3 bg-opacity-25"
+                [ngClass]="{
+                  'bg-secondary text-secondary border-secondary': selectedApplication()!.applicationStatus === ApplicationStatus.pending,
+                  'bg-success text-success border-success': selectedApplication()!.applicationStatus === ApplicationStatus.accepted,
+                  'bg-danger text-danger border-danger': selectedApplication()!.applicationStatus === ApplicationStatus.rejected
+                }">
+                <h5 class="m-0">
+                  {{ applicationStatusText(selectedApplication()!.applicationStatus) }}
+                </h5>
+              </div>
+            </div>
+            <div class="col-auto d-flex gap-2">
+              <button
+                class="btn btn-danger"
+                (click)="onApplicationResolve(selectedApplication()!, ApplicationStatus.rejected)">
+                Odrzuć
+              </button>
+              <button
+                class="btn btn-success"
+                (click)="onApplicationResolve(selectedApplication()!, ApplicationStatus.accepted)">
+                Zaakceptuj
+              </button>
+              <button class="btn btn-outline-primary" (click)="onDownloadFile()">Pobierz plik</button>
+            </div>
+          </div>
+        </div>
+  
+        <hr class="my-4">
+  
+        <div class="row mt-3">
+          <div class="col">
+            <h5>Dodatkowe dane aplikacji:</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>ID studenta:</strong> {{ selectedApplication()!.studentId }}</li>
+              <li class="list-group-item"><strong>Opis:</strong> Brak opisu</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </app-popup>
+  }
