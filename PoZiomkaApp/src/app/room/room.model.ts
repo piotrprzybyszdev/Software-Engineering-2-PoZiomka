@@ -24,7 +24,7 @@ export type RoomStudentModel = {
 }
 
 export type RoomCreate = {
-  id: number,
+  floor: number,
   number: number,
   capacity: number
 }
