@@ -8,6 +8,7 @@ import { Component, output } from '@angular/core';
 })
 export class PopupComponent {
   outsideClicked = output<void>();
+  closeClicked = output<void>();
 
   onOutsideClick(): void {
     this.outsideClicked.emit();
@@ -15,5 +16,9 @@ export class PopupComponent {
 
   onInsideClick(event: Event): void {
     event.stopPropagation();
+  }
+
+  onCloseClick(): void {
+    this.closeClicked.emit();
   }
 }

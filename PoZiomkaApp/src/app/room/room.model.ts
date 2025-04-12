@@ -28,3 +28,29 @@ export type RoomCreate = {
   number: number,
   capacity: number
 }
+
+export function getColorString(status: RoomStatus): string {
+  switch (status) {
+    case RoomStatus.Available:
+      return "success";
+    case RoomStatus.Reserved:
+      return "warning";
+    case RoomStatus.Occupied:
+      return "info";
+    case RoomStatus.Full:
+      return "danger";
+  }
+}
+
+export function getStatusString(status: RoomStatus): string {
+  switch (status) {
+    case RoomStatus.Available:
+      return "Dostępny";
+    case RoomStatus.Reserved:
+      return "Zarezerwowany";
+    case RoomStatus.Occupied:
+      return "Zajęty";
+    case RoomStatus.Full:
+      return "Pełny";
+  }
+}

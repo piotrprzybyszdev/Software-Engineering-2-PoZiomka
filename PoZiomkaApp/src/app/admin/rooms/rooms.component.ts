@@ -1,17 +1,18 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RoomService } from '../../room/room.service';
-import { RoomModel, RoomStatus, RoomStudentModel } from '../../room/room.model';
+import { getColorString, getStatusString, RoomModel, RoomStatus } from '../../room/room.model';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { PopupComponent } from "../../common/popup/popup.component";
 import { StudentService } from '../../student/student.service';
 import { StudentModel } from '../../student/student.model';
-import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
+import { RoomDetailsComponent } from './room-details/room-details.component';
+import { RoomAddComponent } from "./room-add/room-add.component";
 import { FormsModule } from '@angular/forms';
+import { EnumPipe } from "../../common/enum-pipe";
 
 @Component({
   selector: 'app-room-list',
-  imports: [CommonModule, PopupComponent, LoadingButtonComponent, FormsModule],
+  imports: [CommonModule, FormsModule, RoomDetailsComponent, RoomAddComponent, EnumPipe],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.css'
 })
@@ -21,78 +22,28 @@ export class RoomListComponent implements OnInit {
   private toastrService = inject(ToastrService);
 
   private _students = signal<StudentModel[]>([]);
+  students = this._students.asReadonly();
+
   private _rooms = signal<RoomModel[]>([]);
-  roomsPerFloor = computed(() => {
-    const map = new Map<number, RoomModel[]>();
-    for (const room of this._rooms()) {
-      const current = map.get(room.floor);
-      map.set(room.floor, [...current || [], room]);
-    }
-    return map;
-  });
+  rooms = computed(() => this._rooms()
+    .filter(room => room.number?.toString().startsWith(this.roomNumber()))
+    .filter(room => room.floor.toString().startsWith(this.roomFloor()))
+    .filter(room => this.roomStatus() === undefined || room.status === this.roomStatus())
+  );
 
   isAddingRoom = signal<boolean>(false);
   selectedRoomId = signal<number | undefined>(undefined);
-  private _selectedRoom = signal<RoomStudentModel | undefined>(undefined);
-  selectedRoom = this._selectedRoom.asReadonly();
 
-  otherStudents = computed(() => this._students()
-    .filter(otherStudent => !this.selectedRoom()?.students.find(student => student.id === otherStudent.id))
-    .filter(otherStudent => otherStudent.email.startsWith(this.email()) &&
-    otherStudent.indexNumber?.startsWith(this.indexNumber()) &&
-    otherStudent.phoneNumber?.startsWith(this.phoneNumber()) &&
-    otherStudent.firstName?.startsWith(this.firstName()) &&
-    otherStudent.lastName?.startsWith(this.lastName()))
-  );
-  
-  isDeleteLoading = signal<boolean>(false);
+  RoomStatus = RoomStatus;
+  getColorString = getColorString;
+  getStatusString = getStatusString;
 
-  firstName = signal<string>('');
-  lastName = signal<string>('');
-  email = signal<string>('');
-  indexNumber = signal<string>('');
-  phoneNumber = signal<string>('');
-
-  getColorString(status: RoomStatus): string {
-    switch (status) {
-      case RoomStatus.Available:
-        return "success";
-      case RoomStatus.Reserved:
-        return "warning";
-      case RoomStatus.Occupied:
-        return "info";
-      case RoomStatus.Full:
-        return "danger";
-    }
-  }
-
-  getStatusString(status: RoomStatus): string {
-    switch (status) {
-      case RoomStatus.Available:
-        return "Dostępny";
-      case RoomStatus.Reserved:
-        return "Zarezerwowany";
-      case RoomStatus.Occupied:
-        return "Zajęty";
-      case RoomStatus.Full:
-        return "Pełny";
-    }
-  }
-
-  constructor() {
-    effect(() => this.refreshSelectedRoom());
-  }
+  roomNumber = signal<string>('');
+  roomFloor = signal<string>('');
+  roomStatus = signal<RoomStatus | undefined>(undefined);
 
   ngOnInit(): void {
-    this.roomService.getRooms().subscribe({
-      next: response => {
-        if (response.success) {
-          this._rooms.set(response.payload!);
-        } else {
-          this.toastrService.error(response.error!.detail, response.error!.title);
-        }
-      }
-    });
+    this.refreshRooms();
 
     this.studentService.getAllStudents().subscribe({
       next: response => {
@@ -118,51 +69,15 @@ export class RoomListComponent implements OnInit {
   }
 
   onRoomDeselect(): void {
-    if (this.isDeleteLoading()) {
-      return;
-    }
-
     this.selectedRoomId.set(undefined);
+    this.refreshRooms();
   }
 
-  onRoomDelete(): void {
-    this.isDeleteLoading.set(true);
-    this.roomService.deleteRoom(this.selectedRoom()!.id).subscribe({
+  refreshRooms(): void {
+    this.roomService.getRooms().subscribe({
       next: response => {
         if (response.success) {
-          this.toastrService.success('Pomyślnie usunięto pokój');
-          this.isDeleteLoading.set(false);
-          this.onRoomDeselect();
-        } else {
-          this.toastrService.error(response.error!.detail, response.error!.title);
-          this.isDeleteLoading.set(false);
-        }
-      }
-    });
-  }
-
-  onStudentRemove(studentId: number): void {
-    // when successful:
-    this.refreshSelectedRoom();
-  }
-
-  onStudentAdd(studentId: number): void {
-    // when successful:
-    this.refreshSelectedRoom();
-  }
-
-  private refreshSelectedRoom(): void {
-    const id = this.selectedRoomId();
-
-    if (id === undefined) {
-      this._selectedRoom.set(undefined);
-      return;
-    }
-
-    this.roomService.getRoom(id).subscribe({
-      next: response => {
-        if (response.success) {
-          this._selectedRoom.set(response.payload!);
+          this._rooms.set(response.payload!);
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }

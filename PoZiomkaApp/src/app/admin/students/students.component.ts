@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-students-list',
+  selector: 'app-students',
   standalone: true,
   imports: [CommonModule, FormsModule, LoadingButtonComponent],
   templateUrl: './students.component.html',
