@@ -4,5 +4,6 @@ namespace PoZiomkaApi.Common;
 
 public class NetworkFile(IFormFile file) : IFile
 {
-    public Stream Stream => Stream.Null;
+    IFormFile formFile = file;
+	public Stream Stream => formFile.OpenReadStream();
 }

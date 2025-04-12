@@ -65,7 +65,8 @@ public static class Infrastructure
 
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
-        services.AddScoped<IRoomRepository, RoomRepository>();
+		services.AddScoped<IApplicationRepository, ApplicationRepository>();
+		services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
 
         if (bool.Parse(configuration["FileStorage:IsLocal"]!))
