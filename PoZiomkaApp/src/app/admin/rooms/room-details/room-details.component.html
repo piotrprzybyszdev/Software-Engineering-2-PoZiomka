@@ -1,4 +1,4 @@
-<app-popup (outsideClicked)="onHide()" (closeClicked)="onHide()">
+<app-popup (outsideClicked)="onHide()" (closeClicked)="onHide()" size="col-12">
     <div class="col p-5 overflow-auto" style="min-height: 90vh;">
         @if (room() !== undefined) {
             <div class="row">
@@ -8,9 +8,9 @@
                 </div>
                 <div class="row justify-content-between mt-3">
                     <div class="col-auto">
-                        <div class="text-center rounded border py-1 px-3 bg-opacity-25" [ngClass]="`bg-${getColorString(room()!.status)}
-                        text-${getColorString(room()!.status)} border-${getColorString(room()!.status)}`">
-                            <h5 class="m-0">{{ getStatusString(room()!.status) }}</h5>
+                        <div class="text-center rounded border py-1 px-3 bg-opacity-25" [ngClass]="`bg-${roomStatusToColorString(room()!.status)}
+                        text-${roomStatusToColorString(room()!.status)} border-${roomStatusToColorString(room()!.status)}`">
+                            <h5 class="m-0">{{ roomStatusToString(room()!.status) }}</h5>
                         </div>
                     </div>
                     <div class="col-auto">

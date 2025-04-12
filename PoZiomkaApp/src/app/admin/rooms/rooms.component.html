@@ -14,12 +14,14 @@
         <div class="col-md mb-md-0 mb-2">
             <input class="form-control" type="text" name="floor" placeholder="Piętro" [(ngModel)]="roomFloor" >
         </div>
-            <select class="col-md form-select mx-3" name="status" [(ngModel)]="roomStatus">
+        <div class="col-md">
+            <select class="form-select" name="status" [(ngModel)]="roomStatus">
                 <option [ngValue]="undefined">Każdy status</option>
                 @for (status of RoomStatus | enum; track $index) {
-                    <option [class]="`text-${getColorString(status)}`" [ngValue]="status">{{ getStatusString(status) }}</option>
+                    <option [class]="`text-${roomStatusToColorString(status)}`" [ngValue]="status">{{ roomStatusToString(status) }}</option>
                 }
             </select>
+        </div>
         </form>
         
     <div class="border rounded-3 px-3 pt-4 pb-5">
@@ -38,8 +40,8 @@
                         </h6>
                     </div>
                     <div class="card-footer bg-opacity-25"
-                    [ngClass]="`bg-${getColorString(room.status)} text-${getColorString(room.status)} border-${getColorString(room.status)}`">
-                        <h5 class="m-0">{{ getStatusString(room.status) }}</h5>
+                    [ngClass]="`bg-${roomStatusToColorString(room.status)} text-${roomStatusToColorString(room.status)} border-${roomStatusToColorString(room.status)}`">
+                        <h5 class="m-0">{{ roomStatusToString(room.status) }}</h5>
                     </div>
                 </button>
             } @empty {

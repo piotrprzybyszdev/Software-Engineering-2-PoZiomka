@@ -29,20 +29,7 @@ export type RoomCreate = {
   capacity: number
 }
 
-export function getColorString(status: RoomStatus): string {
-  switch (status) {
-    case RoomStatus.Available:
-      return "success";
-    case RoomStatus.Reserved:
-      return "warning";
-    case RoomStatus.Occupied:
-      return "info";
-    case RoomStatus.Full:
-      return "danger";
-  }
-}
-
-export function getStatusString(status: RoomStatus): string {
+export function roomStatusToString(status: RoomStatus): string {
   switch (status) {
     case RoomStatus.Available:
       return "Dostępny";
@@ -52,5 +39,18 @@ export function getStatusString(status: RoomStatus): string {
       return "Zajęty";
     case RoomStatus.Full:
       return "Pełny";
+  }
+}
+
+export function roomStatusToColorString(status: RoomStatus): string {
+  switch (status) {
+    case RoomStatus.Available:
+      return "success";
+    case RoomStatus.Reserved:
+      return "warning";
+    case RoomStatus.Occupied:
+      return "info";
+    case RoomStatus.Full:
+      return "danger";
   }
 }

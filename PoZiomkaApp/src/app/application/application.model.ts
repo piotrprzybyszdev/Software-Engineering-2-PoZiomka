@@ -29,3 +29,25 @@ export function saveFileToDisk(blob: Blob, fileName: string): void {
   link.click();
   link.remove();
 }
+
+export function applicationStatusToString(status: ApplicationStatus): string {
+  switch (status) {
+    case ApplicationStatus.accepted:
+      return "Zaakceptowany";
+    case ApplicationStatus.pending:
+      return "Nierozpatrzony";
+    case ApplicationStatus.rejected:
+      return "Odrzucony";
+  }
+}
+
+export function applicationStatusToColorString(status: ApplicationStatus): string {
+  switch (status) {
+    case ApplicationStatus.accepted:
+      return "success";
+    case ApplicationStatus.pending:
+      return "warning";
+    case ApplicationStatus.rejected:
+      return "danger";
+  }
+}

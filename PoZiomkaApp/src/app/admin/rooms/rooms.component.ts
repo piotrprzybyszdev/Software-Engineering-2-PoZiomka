@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RoomService } from '../../room/room.service';
-import { getColorString, getStatusString, RoomModel, RoomStatus } from '../../room/room.model';
+import { roomStatusToColorString, roomStatusToString, RoomModel, RoomStatus } from '../../room/room.model';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '../../student/student.service';
@@ -35,8 +35,8 @@ export class RoomListComponent implements OnInit {
   selectedRoomId = signal<number | undefined>(undefined);
 
   RoomStatus = RoomStatus;
-  getColorString = getColorString;
-  getStatusString = getStatusString;
+  roomStatusToString = roomStatusToString;
+  roomStatusToColorString = roomStatusToColorString;
 
   roomNumber = signal<string>('');
   roomFloor = signal<string>('');
