@@ -40,7 +40,13 @@
         <div class="col">
           <h5>Dodatkowe dane aplikacji:</h5>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>ID studenta:</strong> {{ selectedApplication.studentId }}</li>
+            <li class="list-group-item" *ngIf="selectedStudent() as student">
+                <strong>Dane studenta:</strong><br>
+                Imię i nazwisko: {{ student.firstName }} {{ student.lastName }}<br>
+                Email: {{ student.email }}<br>
+                Numer indeksu: {{ student.indexNumber || 'Brak' }}<br>
+                Telefon: {{ student.phoneNumber || 'Brak' }}
+            </li>              
             <li class="list-group-item"><strong>Opis:</strong> Brak opisu</li>
           </ul>
         </div>
