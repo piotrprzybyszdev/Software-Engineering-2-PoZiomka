@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <app-loading-button [class]="'btn-danger'" (clicked)="onRoomDelete()" [isLoading]="isDeleteLoading()">Usuń pokój</app-loading-button>
+                        <app-loading-button [class]="'btn-danger'" (clicked)="onRoomDelete()" [isLoading]="isDeleteLoading()" [isDisabled]="(room()!.students.length > 0) || isAddingOrRemoving() ">Usuń pokój</app-loading-button>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,11 @@
                                         <td>{{ student.email }}</td>
                                         <td>{{ student.phoneNumber ?? "-" }}</td>
                                         <td>{{ student.indexNumber ?? "-" }}</td>
-                                        <td><button class="btn btn-sm btn-danger mx-2 border-0" type="button" (click)="onStudentRemove(student.id)"><i class="bi bi-dash-lg"></i></button></td>
+                                        <td>
+                                            <app-loading-button [class]="'btn-sm btn-danger mx-2 border-0'" (clicked)="onStudentRemove($index)" [isLoading]="isRemoving()[$index]">
+                                                <i class="bi bi-dash-lg"></i>
+                                            </app-loading-button>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -100,7 +104,11 @@
                                         <td>{{ student.email }}</td>
                                         <td>{{ student.phoneNumber ?? "-" }}</td>
                                         <td>{{ student.indexNumber ?? "-" }}</td>
-                                        <td><button class="btn btn-sm btn-success mx-2 border-0" type="button" (click)="onStudentAdd(student.id)"><i class="bi bi-plus-lg"></i></button></td>
+                                        <td>
+                                            <app-loading-button [class]="'btn-sm btn-success mx-2 border-0'" (clicked)="onStudentAdd($index)" [isLoading]="isAdding()[$index]" [isDisabled]="room()?.capacity == room()?.students?.length">
+                                                <i class="bi bi-plus-lg"></i>
+                                            </app-loading-button>
+                                        </td>
                                     </tr>
                                 }
                         </tbody>
