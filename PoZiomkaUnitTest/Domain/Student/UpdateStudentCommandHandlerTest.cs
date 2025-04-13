@@ -51,9 +51,9 @@ public class UpdateStudentCommandHandlerTest
     public async Task UserCanNotEditAnotherUser()
     {
         var user = new ClaimsPrincipal(
-            new ClaimsIdentity([
+             new ClaimsIdentity(new Claim[] {
                 new(ClaimTypes.Role, Roles.Student),
-                new(ClaimTypes.NameIdentifier, "2") ]));
+                new(ClaimTypes.NameIdentifier, "2") }));
         var command = new UpdateStudentCommand(user, 1, "John", "Doe", "123456789", "123456", false, false);
 
         // check if does not throw exceptions
