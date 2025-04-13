@@ -9,11 +9,12 @@ import { StudentService } from '../../student/student.service';
 import { FormsModule } from '@angular/forms';
 import { ApplicationDetailsComponent } from './application-details/application-details.component';
 import { EnumPipe } from "../../common/enum-pipe";
+import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ApplicationDetailsComponent, EnumPipe],
+  imports: [CommonModule, FormsModule, ApplicationDetailsComponent, EnumPipe, LoadingButtonComponent],
   templateUrl: './applications.component.html',
 })
 export class ApplicationListComponent implements OnInit {
@@ -25,9 +26,8 @@ export class ApplicationListComponent implements OnInit {
   applicationStatusColor = applicationStatusToColorString;
 
   applicationTypes: ApplicationTypeModel[] = [];
-  isLoading = signal(false);
+  isLoading = signal<boolean>(false);
   
-  studentsMap = signal<Map<number, StudentModel>>(new Map());
   filters = signal<ApplicationSearchParams>({
     studentEmail: undefined,
     studentIndex: undefined,
@@ -35,9 +35,6 @@ export class ApplicationListComponent implements OnInit {
     applicationStatus: undefined,
   });
   
-
-  sortOption = signal<'type' | 'status'>('type');
-
   constructor(
     private applicationService: ApplicationService,
     private toastr: ToastrService,
@@ -52,46 +49,22 @@ export class ApplicationListComponent implements OnInit {
     });
   }
   
-
   loadApplications(): void {
     this.isLoading.set(true);
-    console.log('Sending filters to backend:', this.filters());
-  
+    
+    const params = this.filters();
+
+    Object.keys(params).forEach(key => (params as any)[key] === undefined ? delete (params as any)[key] : {});
     this.applicationService.getApplications(this.filters()).subscribe({
       next: res => {
-        this.isLoading.set(false);
         if (res.success) {
           this.applications.set(res.payload!);
         } else {
-          this.toastr.error(res.error?.detail, res.error?.title);
+          this.toastr.error(res.error!.detail, res.error!.title);
         }
-      },
-      error: () => this.isLoading.set(false)
-    });
-  }
-  
-  
-  
-  groupedApplications() {
-    const sortedApplications = this.applications().sort((a, b) => {
-      if (this.sortOption() === 'type') {
-        return a.applicationType.name.localeCompare(b.applicationType.name);
-      } else {
-        return a.applicationStatus - b.applicationStatus;
+        this.isLoading.set(false);
       }
     });
-
-    const groups: { [key: string]: ApplicationModel[] } = {};
-
-    sortedApplications.forEach(app => {
-      const key = this.sortOption() === 'type' ? app.applicationType.name : this.applicationStatusText(app.applicationStatus);
-      if (!groups[key]) {
-        groups[key] = [];
-      }
-      groups[key].push(app);
-    });
-
-    return Object.keys(groups).map(key => ({ key, applications: groups[key] }));
   }
 
   onApplicationClick(app: ApplicationModel): void {
@@ -99,16 +72,10 @@ export class ApplicationListComponent implements OnInit {
     this.selectedApplication.set(app);
   }
 
-  setSortOption(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.sortOption.set(target.value as 'type' | 'status');
-  }
-
   onHide(): void {
     this.selectedApplication.set(undefined);
     this.selectedApplicationId.set(undefined);
   }
-
 
   get studentEmail() {
     return this.filters().studentEmail ?? '';
@@ -120,9 +87,6 @@ export class ApplicationListComponent implements OnInit {
     });
   }
   
-  get applicationTypeId() {
-    return this.filters().applicationTypeId;
-  }
   set applicationTypeId(value: number | undefined) {
     this.filters.set({
       ...this.filters(),
@@ -130,9 +94,6 @@ export class ApplicationListComponent implements OnInit {
     });
   }
   
-  get applicationStatus() {
-    return this.filters().applicationStatus;
-  }
   set applicationStatus(value: ApplicationStatus | undefined) {
     this.filters.set({
       ...this.filters(),
@@ -148,7 +109,5 @@ export class ApplicationListComponent implements OnInit {
       ...this.filters(),
       studentIndex: value?.trim() || undefined,
     });
-  }  
-  
-  
+  }   
 }

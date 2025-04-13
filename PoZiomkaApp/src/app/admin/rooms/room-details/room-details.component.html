@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <app-loading-button [class]="'btn-danger'" (clicked)="onRoomDelete()" [isLoading]="isDeleteLoading()" [isDisabled]="(room()!.students.length > 0) || isAddingOrRemoving() ">Usuń pokój</app-loading-button>
+                        <app-loading-button [class]="'btn-danger'" (clicked)="onRoomDelete()" [isLoading]="isDeleteLoading()" [isDisabled]="(room()!.students.length > 0) || isAddingOrRemoving()">Usuń pokój</app-loading-button>
                     </div>
                 </div>
             </div>
@@ -116,7 +116,13 @@
                 </div>
             </div>
         } @else {
-            <!-- loading... -->
+            <div class="position-absolute start-50 top-50 translate-middle">
+                <h4>
+                    <div class="spinner-border" role="status" style="width: 5rem; height: 5rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </h4>
+            </div>
         }
     </div>
 </app-popup>
