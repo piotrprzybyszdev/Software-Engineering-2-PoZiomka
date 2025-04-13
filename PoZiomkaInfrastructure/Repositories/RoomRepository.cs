@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaInfrastructure.Constants;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
 
@@ -20,6 +21,11 @@ VALUES (@floor, @number, @capacity);
         try
         {
             await connection.ExecuteAsync(new CommandDefinition(sqlQuery, roomCreate, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        when (exception.Number == ErrorNumbers.UniqueConstraintViolation)
+        {
+            throw new RoomNumberNotUniqueException();
         }
         catch (SqlException exception)
         {

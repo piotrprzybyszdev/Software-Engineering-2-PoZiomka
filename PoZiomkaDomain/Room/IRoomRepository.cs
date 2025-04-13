@@ -2,6 +2,8 @@
 
 namespace PoZiomkaDomain.Room;
 
+public class RoomNumberNotUniqueException : Exception;
+
 public interface IRoomRepository
 {
     public Task CreateRoom(RoomCreate roomCreate, CancellationToken? cancellationToken);
