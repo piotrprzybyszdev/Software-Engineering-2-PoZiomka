@@ -1,5 +1,5 @@
-<div class="position-fixed start-0 top-0 h-100 w-100 bg-dark bg-opacity-50 z-3" (click)="onOutsideClick()">
-    <div class="position-absolute start-50 top-50 translate-middle container card" [ngClass]="size()" (click)="onInsideClick($event)">
+<div class="position-fixed start-0 top-0 h-100 w-100 bg-dark bg-opacity-50 z-3" (mousedown)="onOutsideClick()">
+    <div class="position-absolute start-50 top-50 translate-middle container card" [ngClass]="size()" (mousedown)="onInsideClick($event)">
         <button class="btn m-md-3 m-1 position-absolute border-0 end-0 top-0" (click)="onCloseClick()">
             <h4 class="m-0"><i class="bi bi-x-lg"></i></h4>
         </button>
