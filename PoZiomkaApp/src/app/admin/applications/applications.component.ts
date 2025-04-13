@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApplicationModel, ApplicationStatus, ApplicationTypeModel, applicationStatusToString} from '../../application/application.model';
+import { ApplicationModel, ApplicationStatus, ApplicationTypeModel, applicationStatusToColorString, applicationStatusToString} from '../../application/application.model';
 import { ApplicationService } from '../../application/application.service';
 import { ToastrService } from 'ngx-toastr';
 import { signal } from '@angular/core';
@@ -8,11 +8,12 @@ import { StudentModel } from '../../student/student.model';
 import { StudentService } from '../../student/student.service';
 import { FormsModule } from '@angular/forms';
 import { ApplicationDetailsComponent } from './application-details/application-details.component';
+import { EnumPipe } from "../../common/enum-pipe";
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ApplicationDetailsComponent],
+  imports: [CommonModule, FormsModule, ApplicationDetailsComponent, EnumPipe],
   templateUrl: './applications.component.html',
 })
 export class ApplicationListComponent implements OnInit {
@@ -21,6 +22,7 @@ export class ApplicationListComponent implements OnInit {
   selectedApplicationId = signal<number | undefined>(undefined);
   selectedApplication = signal<ApplicationModel | undefined>(undefined);
   applicationStatusText = applicationStatusToString;
+  applicationStatusColor = applicationStatusToColorString;
 
   applicationTypes: ApplicationTypeModel[] = [];
   isLoading = signal(false);
@@ -31,8 +33,6 @@ export class ApplicationListComponent implements OnInit {
     applicationType: '',
     applicationStatus: undefined as ApplicationStatus | undefined,
   });
-
-
 
   sortOption = signal<'type' | 'status'>('type');
 

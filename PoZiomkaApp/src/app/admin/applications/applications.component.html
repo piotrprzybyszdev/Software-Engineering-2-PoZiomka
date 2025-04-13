@@ -10,15 +10,20 @@
       <input class="form-control" type="text" name="studentEmail" placeholder="Email studenta" [(ngModel)]="studentEmail" >
     </div>
     <div class="col-md mb-md-0 mb-2">
-      <input class="form-control" type="text" name="applicationType" placeholder="Typ aplikacji" [(ngModel)]="applicationType" >
-    </div>
+    <select class="form-select" name="applicationType" [(ngModel)]="applicationType">
+      <option [ngValue]="undefined">Każdy typ</option>
+      @for (applicationType of applicationTypes; track $index) {
+          <option [ngValue]="applicationType">{{ applicationType.name }}</option>
+      }
+    </select>
+  </div>
     <div class="col-md">
-      <select class="form-select" name="status" [(ngModel)]="applicationStatus" (change)="loadApplications()">
+      <select class="form-select" name="status" [(ngModel)]="applicationStatus">
         <option [ngValue]="undefined">Każdy status</option>
-        <option [ngValue]="ApplicationStatus.pending">Oczekujące</option>
-        <option [ngValue]="ApplicationStatus.accepted">Zaakceptowane</option>
-        <option [ngValue]="ApplicationStatus.rejected">Odrzucone</option>
-      </select>
+        @for (status of ApplicationStatus | enum; track $index) {
+            <option [class]="`text-${applicationStatusColor(status)}`" [ngValue]="status">{{ applicationStatusText(status) }}</option>
+        }
+    </select>
     </div>
   </form>
 
@@ -27,7 +32,7 @@
       <div *ngFor="let application of filteredApplications()">
         <button type="button" class="col col-auto m-3 card p-0 btn btn-light" (click)="onApplicationClick(application)">
           <div class="card-header">
-            <h3><i class="me-3 bi bi-file-earmark"></i>{{ application.id }}</h3>
+            <h3><i class="me-3 bi bi-file-earmark"></i>Wniosek #{{ application.id }}</h3>
           </div>
           <div class="card-body">
             <h4 class="card-title">
@@ -38,7 +43,7 @@
             </p>
           </div>
           <div class="card-footer bg-opacity-25"
-               [ngClass]="`bg-${application.applicationStatus} text-${application.applicationStatus} border-${application.applicationStatus}`">
+               [ngClass]="`bg-${applicationStatusColor(application.applicationStatus)} text-${applicationStatusColor(application.applicationStatus)} border-${applicationStatusColor(application.applicationStatus)}`">
             <h5 class="m-0">{{ applicationStatusText(application.applicationStatus) }}</h5>
           </div>
         </button>
