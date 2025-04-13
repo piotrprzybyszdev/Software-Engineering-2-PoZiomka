@@ -1,4 +1,4 @@
-<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col d-flex flex-column">
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col">
   <div class="row d-flex flex-row justify-content-between">
     <h1 class="col">Lista Wniosków</h1>
   </div>
@@ -11,7 +11,7 @@
     </div>
     <div class="col-md mb-md-0 mb-2">
     <select class="form-select" name="applicationType" [(ngModel)]="applicationType">
-      <option [ngValue]="undefined">Każdy typ</option>
+      <option [ngValue]="''">Każdy typ</option>
       @for (applicationType of applicationTypes; track $index) {
           <option [ngValue]="applicationType">{{ applicationType.name }}</option>
       }
@@ -29,7 +29,7 @@
 
   <div class="border rounded-3 px-3 pt-4 pb-5">
     <div class="px-2 mx-auto row align-items-start">
-      <div *ngFor="let application of filteredApplications()">
+      @for (application of filteredApplications(); track $index) {
         <button type="button" class="col col-auto m-3 card p-0 btn btn-light" (click)="onApplicationClick(application)">
           <div class="card-header">
             <h3><i class="me-3 bi bi-file-earmark"></i>Wniosek #{{ application.id }}</h3>
@@ -38,20 +38,17 @@
             <h4 class="card-title">
               Typ: {{ application.applicationType.name }}
             </h4>
-            <p class="card-text">
-              Status: {{ applicationStatusText(application.applicationStatus) }}
-            </p>
           </div>
           <div class="card-footer bg-opacity-25"
                [ngClass]="`bg-${applicationStatusColor(application.applicationStatus)} text-${applicationStatusColor(application.applicationStatus)} border-${applicationStatusColor(application.applicationStatus)}`">
             <h5 class="m-0">{{ applicationStatusText(application.applicationStatus) }}</h5>
           </div>
         </button>
+      }
       </div>
       <div *ngIf="filteredApplications().length === 0">
         <h3>Brak wniosków odpowiadających zastosowanym filtrom</h3>
       </div>
-    </div>
   </div>
 </div>
 

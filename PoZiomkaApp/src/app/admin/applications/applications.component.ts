@@ -75,7 +75,7 @@ export class ApplicationListComponent implements OnInit {
       next: res => {
         this.isLoading.set(false);
         if (res.success) {
-          this.applications.set(res.payload!);          
+          this.applications.set(res.payload!);
           this.loadStudents();
         } else {
           this.toastr.error(res.error?.detail, res.error?.title);
