@@ -7,18 +7,21 @@
   <!-- Formularz filtrów -->
   <form class="col-xl-8 bg-secondary bg-opacity-25 row mb-3 mx-0 py-2 rounded-3 border gx-lg-4 gx-2">
     <div class="col-md mb-md-0 mb-2">
-      <input class="form-control" type="text" name="studentEmail" placeholder="Email studenta" [(ngModel)]="studentEmail" >
+      <input class="form-control" type="text" name="studentEmail" placeholder="Email studenta" [(ngModel)]="studentEmail" (ngModelChange)="loadApplications()">
     </div>
     <div class="col-md mb-md-0 mb-2">
-    <select class="form-select" name="applicationType" [(ngModel)]="applicationType">
-      <option [ngValue]="''">Każdy typ</option>
+      <input class="form-control" type="text" name="studentIndex" placeholder="Indeks studenta" [(ngModel)]="studentIndex" (ngModelChange)="loadApplications()">
+    </div>    
+    <div class="col-md mb-md-0 mb-2">
+    <select class="form-select" name="applicationTypeId" [(ngModel)]="applicationTypeId" (ngModelChange)="loadApplications()">
+      <option [ngValue]="undefined">Każdy typ</option>
       @for (applicationType of applicationTypes; track $index) {
-          <option [ngValue]="applicationType">{{ applicationType.name }}</option>
+          <option [ngValue]="applicationType.id">{{ applicationType.name }}</option>
       }
     </select>
   </div>
     <div class="col-md">
-      <select class="form-select" name="status" [(ngModel)]="applicationStatus">
+      <select class="form-select" name="status" [(ngModel)]="applicationStatus" (ngModelChange)="loadApplications()">
         <option [ngValue]="undefined">Każdy status</option>
         @for (status of ApplicationStatus | enum; track $index) {
             <option [class]="`text-${applicationStatusColor(status)}`" [ngValue]="status">{{ applicationStatusText(status) }}</option>
@@ -29,7 +32,7 @@
 
   <div class="border rounded-3 px-3 pt-4 pb-5">
     <div class="px-2 mx-auto row align-items-start">
-      @for (application of filteredApplications(); track $index) {
+      @for (application of applications(); track $index) {
         <button type="button" class="col col-auto m-3 card p-0 btn btn-light" (click)="onApplicationClick(application)">
           <div class="card-header">
             <h3><i class="me-3 bi bi-file-earmark"></i>Wniosek #{{ application.id }}</h3>
@@ -46,7 +49,7 @@
         </button>
       }
       </div>
-      <div *ngIf="filteredApplications().length === 0">
+      <div *ngIf="applications().length === 0">
         <h3>Brak wniosków odpowiadających zastosowanym filtrom</h3>
       </div>
   </div>

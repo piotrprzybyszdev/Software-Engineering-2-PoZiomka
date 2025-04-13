@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApplicationModel, ApplicationStatus, ApplicationTypeModel, applicationStatusToColorString, applicationStatusToString} from '../../application/application.model';
+import { ApplicationModel, ApplicationStatus, ApplicationSearchParams, ApplicationTypeModel, applicationStatusToColorString, applicationStatusToString} from '../../application/application.model';
 import { ApplicationService } from '../../application/application.service';
 import { ToastrService } from 'ngx-toastr';
 import { signal } from '@angular/core';
@@ -28,18 +28,19 @@ export class ApplicationListComponent implements OnInit {
   isLoading = signal(false);
   
   studentsMap = signal<Map<number, StudentModel>>(new Map());
-  filters = signal({
-    studentEmail: '',
-    applicationType: '',
-    applicationStatus: undefined as ApplicationStatus | undefined,
+  filters = signal<ApplicationSearchParams>({
+    studentEmail: undefined,
+    studentIndex: undefined,
+    applicationTypeId: undefined,
+    applicationStatus: undefined,
   });
+  
 
   sortOption = signal<'type' | 'status'>('type');
 
   constructor(
     private applicationService: ApplicationService,
     private toastr: ToastrService,
-    private studentService: StudentService
   ) {}
 
   ngOnInit(): void {
@@ -54,29 +55,13 @@ export class ApplicationListComponent implements OnInit {
 
   loadApplications(): void {
     this.isLoading.set(true);
-    const filters = this.filters(); 
+    console.log('Sending filters to backend:', this.filters());
   
-    const params: any = {};
-  
-    if (filters.studentEmail) {
-      params.studentEmail = filters.studentEmail;
-    }
-  
-    if (filters.applicationType) {
-      params.applicationType = filters.applicationType;
-    }
-  
-    if (filters.applicationStatus !== undefined) {
-      params.applicationStatus = filters.applicationStatus;
-    }
-
-  
-    this.applicationService.getApplications(params).subscribe({
+    this.applicationService.getApplications(this.filters()).subscribe({
       next: res => {
         this.isLoading.set(false);
         if (res.success) {
           this.applications.set(res.payload!);
-          this.loadStudents();
         } else {
           this.toastr.error(res.error?.detail, res.error?.title);
         }
@@ -86,69 +71,9 @@ export class ApplicationListComponent implements OnInit {
   }
   
   
-
-  loadStudents(): void {
-    const applicationList = this.applications();
-    const uniqueStudentIds = Array.from(new Set(applicationList.map(app => app.studentId)));
-    const map = new Map<number, StudentModel>();
-    if (uniqueStudentIds.length === 0) {
-      this.studentsMap.set(map); 
-      return;
-    } 
-  
-    let loadedCount = 0;
-  
-    uniqueStudentIds.forEach(id => {
-      this.studentService.getStudent(id).subscribe({
-        next: res => {
-          loadedCount++;  
-          if (res.success && res.payload) {
-            map.set(id, res.payload);
-          } 
-  
-          if (loadedCount === uniqueStudentIds.length) {
-            this.studentsMap.set(map);
-          }
-        },
-        error: () => {
-          loadedCount++;
-          if (loadedCount === uniqueStudentIds.length) {
-            this.studentsMap.set(map);
-          }
-          this.toastr.error(`Błąd podczas pobierania studenta o ID ${id}`);
-        }
-      });
-    });
-  }
-  
-  
-
-  filteredApplications() {
-    //this.loadStudents();
-    return this.applications().filter(application => {
-      const filters = this.filters();
-      let matches = true;
-
-  
-      const student = this.studentsMap().get(application.studentId);
-
-      if (filters.studentEmail && (!student || !student.email.toLowerCase().includes(filters.studentEmail.toLowerCase()))) {
-        matches = false;
-      }
-
-      if (filters.applicationType && !application.applicationType.name.toLowerCase().includes(filters.applicationType.toLowerCase())) {
-        matches = false;
-      }
-  
-      if (filters.applicationStatus !== undefined && application.applicationStatus !== filters.applicationStatus) {
-        matches = false;
-      }
-      return matches;
-    });
-  }
   
   groupedApplications() {
-    const sortedApplications = this.filteredApplications().sort((a, b) => {
+    const sortedApplications = this.applications().sort((a, b) => {
       if (this.sortOption() === 'type') {
         return a.applicationType.name.localeCompare(b.applicationType.name);
       } else {
@@ -186,22 +111,22 @@ export class ApplicationListComponent implements OnInit {
 
 
   get studentEmail() {
-    return this.filters().studentEmail;
+    return this.filters().studentEmail ?? '';
   }
   set studentEmail(value: string) {
     this.filters.set({
       ...this.filters(),
-      studentEmail: value,
+      studentEmail: value?.trim() || undefined,
     });
   }
   
-  get applicationType() {
-    return this.filters().applicationType;
+  get applicationTypeId() {
+    return this.filters().applicationTypeId;
   }
-  set applicationType(value: string) {
+  set applicationTypeId(value: number | undefined) {
     this.filters.set({
       ...this.filters(),
-      applicationType: value,
+      applicationTypeId: value,
     });
   }
   
@@ -211,8 +136,19 @@ export class ApplicationListComponent implements OnInit {
   set applicationStatus(value: ApplicationStatus | undefined) {
     this.filters.set({
       ...this.filters(),
-      applicationStatus: value as ApplicationStatus,
+      applicationStatus: value,
     });
   }
+
+  get studentIndex() {
+    return this.filters().studentIndex ?? '';
+  }
+  set studentIndex(value: string) {
+    this.filters.set({
+      ...this.filters(),
+      studentIndex: value?.trim() || undefined,
+    });
+  }  
+  
   
 }
