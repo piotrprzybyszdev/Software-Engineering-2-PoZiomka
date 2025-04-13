@@ -13,6 +13,7 @@ using PoZiomkaInfrastructure.Repositories;
 using PoZiomkaInfrastructure.Services;
 using System.Data;
 using System.Reflection;
+using PoZiomkaInfrastructure.Migrations;
 
 namespace PoZiomkaInfrastructure;
 
@@ -72,5 +73,12 @@ public static class Infrastructure
         services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
             configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
         );
+    }
+
+    public static void RunStartupTasks(IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+        var fileStorage = scope.ServiceProvider.GetRequiredService<IFileStorage>();
+        InsertSampleDataImpl.InsertSampleDataMethod(fileStorage);
     }
 }
