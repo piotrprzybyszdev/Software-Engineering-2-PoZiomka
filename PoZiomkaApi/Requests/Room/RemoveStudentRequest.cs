@@ -1,3 +1,8 @@
-﻿namespace PoZiomkaApi.Requests.Room;
+﻿using PoZiomkaDomain.Room.Commands.RemoveStudent;
 
-public record RemoveStudentRequest(int Id, int StudentId);
+namespace PoZiomkaApi.Requests.Room;
+
+public record RemoveStudentRequest(int Id, int StudentId)
+{
+    public RemoveStudentCommand ToRemoveStudentCommand() => new(Id, StudentId);
+}

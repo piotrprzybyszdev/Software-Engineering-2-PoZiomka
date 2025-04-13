@@ -6,8 +6,10 @@ using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Match;
+using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
+using PoZiomkaInfrastructure.Migrations;
 using PoZiomkaInfrastructure.Repositories;
 using PoZiomkaInfrastructure.Services;
 using System.Data;
@@ -30,6 +32,9 @@ public static class Infrastructure
             .SqlDatabase(connectionString)
             .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), name =>
             {
+                if (name.EndsWith("SampleApplication.pdf"))
+                    return false;
+
                 if (name.EndsWith("InsertSampleData.sql"))
                     return bool.Parse(configuration["DB:InsertSampleData"]!);
                 return true;
@@ -64,15 +69,22 @@ public static class Infrastructure
 
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
+        services.AddScoped<IApplicationRepository, ApplicationRepository>();
+        services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
 
-        if (bool.Parse(configuration["FileStorage:IsLocal"]!))
-            services.AddScoped<IFileStorage>(_ => new LocalFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
-                configuration["FileStorage:RootDirectory"]!, configuration["FileStorage:ApplicationsDirectory"]!
-            ));
-        else
-            services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
-                configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
-            );
+        services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
+            configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
+        );
+    }
+
+    public static void RunStartupTasks(IConfiguration configuration, IServiceProvider services)
+    {
+        if (bool.Parse(configuration["FileStorage:InsertSampleData"]!) == false)
+            return;
+
+        using var scope = services.CreateScope();
+        var fileStorage = scope.ServiceProvider.GetRequiredService<IFileStorage>();
+        InsertSampleDataImpl.InsertSampleDataMethod(fileStorage);
     }
 }

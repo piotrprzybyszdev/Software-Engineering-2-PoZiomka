@@ -1,16 +1,42 @@
-﻿using PoZiomkaDomain.Application;
+﻿using Azure.Storage.Blobs;
+using PoZiomkaDomain.Application;
+using PoZiomkaInfrastructure.Common;
 
 namespace PoZiomkaInfrastructure.Services;
 
-public class AzureFileStorage(int maxSize, string connectionString, string containerName) : IFileStorage
+public class AzureFileStorage : IFileStorage
 {
-    public Task<IFile> GetFileByGuid(Guid guid)
+    private readonly BlobContainerClient _containerClient;
+    private readonly int _maxSize;
+
+    public AzureFileStorage(int maxSize, string connectionString, string containerName)
     {
-        throw new NotImplementedException();
+        _maxSize = maxSize;
+        _containerClient = new BlobContainerClient(connectionString, containerName);
+        _containerClient.CreateIfNotExists();
     }
 
-    public Task UploadFile(Guid guid, IFile file)
+    public async Task UploadFile(Guid guid, IFile file)
     {
-        throw new NotImplementedException();
+        if (file.Stream.Length > _maxSize)
+        {
+            throw new FileTooLargeException((int)file.Stream.Length, _maxSize);
+        }
+
+        var blobClient = _containerClient.GetBlobClient(guid.ToString());
+
+        await blobClient.UploadAsync(file.Stream);
+    }
+
+    public async Task<IFile> GetFileByGuid(Guid guid)
+    {
+        var blobClient = _containerClient.GetBlobClient(guid.ToString());
+
+        if (!await blobClient.ExistsAsync())
+        {
+            throw new PoZiomkaDomain.Application.FileNotFoundException(guid);
+        }
+
+        return new BlobFile(await blobClient.OpenReadAsync());
     }
 }

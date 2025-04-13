@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Student.Commands.RequestPasswordReset;
 
@@ -15,7 +15,7 @@ public class RequestPasswordResetCommandHandler(IStudentRepository studentReposi
         }
         catch (EmailNotFoundException)
         {
-            throw new UserNotFoundException($"Student with email {request.Email} doesn't exist");
+            throw new StudentNotFoundException($"Student with email {request.Email} doesn't exist");
         }
 
         await emailService.SendPasswordResetEmail(request.Email);

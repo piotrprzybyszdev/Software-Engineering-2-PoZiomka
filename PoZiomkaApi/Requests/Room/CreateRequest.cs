@@ -1,3 +1,8 @@
-﻿namespace PoZiomkaApi.Requests.Room;
+﻿using PoZiomkaDomain.Room.Commands.CreateRoom;
 
-public record CreateRequest(int Floor, int Number, int Capacity);
+namespace PoZiomkaApi.Requests.Room;
+
+public record CreateRequest(int Floor, int Number, int Capacity)
+{
+    public CreateRoomCommand ToCreateRoomCommand() => new(Floor, Number, Capacity);
+}

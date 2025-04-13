@@ -2,6 +2,7 @@ using PoZiomkaApi;
 using PoZiomkaDomain;
 using PoZiomkaInfrastructure;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 Infrastructure.Initalize(builder.Configuration);
@@ -13,9 +14,12 @@ Cors.Configure(builder.Configuration, builder.Services);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddCustomSwagger();
 
 var app = builder.Build();
+
+Infrastructure.RunStartupTasks(builder.Configuration, app.Services);
 
 app.UsePathBase("/api");
 

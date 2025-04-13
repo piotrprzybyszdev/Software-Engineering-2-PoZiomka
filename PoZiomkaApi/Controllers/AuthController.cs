@@ -42,6 +42,7 @@ public class AuthController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

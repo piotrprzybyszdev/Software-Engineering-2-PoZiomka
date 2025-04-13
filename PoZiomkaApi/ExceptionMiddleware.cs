@@ -1,6 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using PoZiomkaDomain.Admin.Exceptions;
+using PoZiomkaDomain.Application.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Room.Exceptions;
+using PoZiomkaDomain.Student.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Text.Json;
 
@@ -84,7 +89,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Account can't be logged into because email is not confirmed"
             };
         }
-        catch (UserNotFoundException exception)
+        catch (StudentNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             problemDetails = new ProblemDetails()
@@ -92,6 +97,117 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status404NotFound,
                 Detail = exception.Message,
                 Title = "Student not found"
+            };
+        }
+        catch (AdminNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Admin not found"
+            };
+        }
+        catch (RoomNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Room not found"
+            };
+        }
+        catch (ApplicationTypeNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Application type not found"
+            };
+        }
+        catch (ApplicationNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Application not found"
+            };
+        }
+        catch (ApplicationOwnershipException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Application can't be accessed"
+            };
+        }
+        catch (InvalidFileException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Provided file was rejected"
+            };
+        }
+        catch (RoomNotEmptyException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Room not empty"
+            };
+        }
+        catch (StudentAlreadyInRoomException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Student already assigned to a room"
+            };
+        }
+        catch (RoomFullException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Room is full"
+            };
+        }
+        catch (StudentNotAssignedToRoomException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Student not assigned to this room"
+            };
+        }
+        catch (RoomNumberTakenException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Room number is taken"
             };
         }
         catch (DomainException exception)
