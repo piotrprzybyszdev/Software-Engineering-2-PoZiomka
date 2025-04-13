@@ -3,15 +3,17 @@ import { StudentService } from '../../student/student.service';
 import { StudentCreate, StudentModel } from '../../student/student.model'; 
 import { ToastrService } from 'ngx-toastr';
 import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RoomDetailsComponent } from '../rooms/room-details/room-details.component';
+import "../../common/util";
 
 @Component({
-  selector: 'app-students-list',
+  selector: 'app-students',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingButtonComponent],
-  templateUrl: './student-list.component.html',
-  styleUrl: './student-list.component.css'
+  imports: [CommonModule, FormsModule, LoadingButtonComponent, RoomDetailsComponent],
+  templateUrl: './students.component.html',
+  styleUrl: './students.component.css'
 })
 export class StudentsListComponent implements OnInit {
   private toastrService = inject(ToastrService);
@@ -27,6 +29,8 @@ export class StudentsListComponent implements OnInit {
 
   studentCreate = signal<StudentCreate>({ email: "" });
   isEditingStudent = computed(() => !this.isStudentEditMode().every(b => b === false));
+
+  selectedRoomId = signal<number | undefined>(undefined);
 
   ngOnInit(): void {
     this.fetchStudents();
@@ -47,38 +51,32 @@ export class StudentsListComponent implements OnInit {
     });
   }
 
-  updateArr(arr: boolean[], index: number, value: boolean): boolean[] {
-    const narr = [...arr];
-    narr[index] = value;
-    return narr;
-  }
-
   onStudentEdit(studentIndex: number): void {
-    this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, true));
+    this.isStudentEditMode.update(arr => arr.updateClone(studentIndex, true));
   }
 
   onStudentEditCancel(studentIndex: number): void {
     this.students[studentIndex] = structuredClone(this.uneditedStudents[studentIndex]);
-    this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, false));
+    this.isStudentEditMode.update(arr => arr.updateClone(studentIndex, false));
   }
 
   onStudentSave(studentIndex: number): void {
-    this.isLoading.update(arr => this.updateArr(arr, studentIndex, true));
+    this.isLoading.update(arr => arr.updateClone(studentIndex, true));
     this.studentService.updateStudent(this.students[studentIndex]).subscribe({
       next: response => {
         if (response.success) {
           this.toastrService.success('Dane studenta zostały pomyślnie zapisane');
-          this.isStudentEditMode.update(arr => this.updateArr(arr, studentIndex, false));
+          this.isStudentEditMode.update(arr => arr.updateClone(studentIndex, false));
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
-        this.isLoading.update(arr => this.updateArr(arr, studentIndex, false));
+        this.isLoading.update(arr => arr.updateClone(studentIndex, false));
       }
     });
   }
   
   onStudentDelete(studentIndex: number): void {
-    this.isLoading.update(arr => this.updateArr(arr, studentIndex, true));
+    this.isLoading.update(arr => arr.updateClone(studentIndex, true));
     this.studentService.deleteStudent(this.students[studentIndex].id).subscribe({
       next: response => {
         if (response.success) {
@@ -86,7 +84,7 @@ export class StudentsListComponent implements OnInit {
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
-        this.isLoading.update(arr => this.updateArr(arr, studentIndex, false));
+        this.isLoading.update(arr => arr.updateClone(studentIndex, false));
         this.fetchStudents();
       }
     });
@@ -115,5 +113,13 @@ export class StudentsListComponent implements OnInit {
         this.fetchStudents();
       }
     });
+  }
+
+  onShowRoom(roomId: number): void {
+    this.selectedRoomId.set(roomId);
+  }
+
+  onCloseRoomPopup(): void {
+    this.selectedRoomId.set(undefined);
   }
 }

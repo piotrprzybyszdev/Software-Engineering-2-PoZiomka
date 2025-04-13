@@ -1,0 +1,23 @@
+<app-popup (outsideClicked)="onHide()" (closeClicked)="onHide()" [size]="'col-lg-6'">
+    <div class="p-5 container">
+        <h4>Dodawanie pokoju</h4>
+        <form (ngSubmit)="onAddRoomConfirmClick()" class="mt-4">
+            <div class="mb-3">
+                <label class="form-label">Piętro</label>
+                <input class="form-control" type="number" [(ngModel)]="newRoomFloor" name="roomFloor" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Numer pokoju</label>
+                <input class="form-control" type="number" [(ngModel)]="newRoomNumber" name="roomNumber" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pojemność</label>
+                <input class="form-control" type="number" [(ngModel)]="newRoomCapacity" name="roomCapacity" required min="1" />
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary me-2" (click)="onHide()">Anuluj</button>
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </div>
+        </form>
+    </div>
+</app-popup>

@@ -13,6 +13,10 @@ export class StudentComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  onApplicationsClick(): void {
+    this.router.navigate(['/student/applications']);
+  }
+
   onProfileClick(): void {
     this.router.navigate(['/student/profile']);
   }

@@ -13,7 +13,16 @@ export type ApiResponse<T> = {
   payload?: T
 }
 
-export function pipeApiResponse<T>(observable: Observable<T>): Observable<ApiResponse<T>> {
+export function toQueryString(data: any): string {
+  const keys = Object.keys(data);
+  if (keys.length === 0) {
+    return '';
+  }
+
+  return '?' + keys.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
+}
+
+export function pipeApiResponse<T>(observable: Observable<T>, redirectIfUnauthorized: boolean = true): Observable<ApiResponse<T>> {
   return observable.pipe(map(response => {
     return {
       success: true,
@@ -21,6 +30,10 @@ export function pipeApiResponse<T>(observable: Observable<T>): Observable<ApiRes
     }
   }), catchError(error => {
     if (error instanceof HttpErrorResponse) {
+      if (error.status === 401 && redirectIfUnauthorized) {
+        window.location.replace('/');
+      }
+
       return of({
         success: false,
         error: error.error as ApiError

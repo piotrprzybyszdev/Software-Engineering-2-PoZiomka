@@ -16,6 +16,6 @@ export class AdminService {
   fetchLoggedInAdmin(): Observable<ApiResponse<AdminModel | null>> {
     return pipeApiResponse(this.httpClient.get<AdminModel | null>('/api/admin/get-logged-in').pipe(tap({
       next: admin => this._loggedInAdmin.set(admin)
-    })));
+    })), false);
   }
 }

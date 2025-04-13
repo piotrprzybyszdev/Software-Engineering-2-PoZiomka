@@ -16,7 +16,7 @@ namespace PoZiomkaApi.Controllers;
 public class StudentController(IMediator mediator) : Controller
 {
     [HttpPut("confirm")]
-    public async Task<IActionResult> Confirm([FromBody] ConfirmRequest confirmRequest)
+    public async Task<IActionResult> Confirm(ConfirmRequest confirmRequest)
     {
         await mediator.Send(confirmRequest.ToConfirmStudentCommand());
         return Ok();
@@ -78,14 +78,14 @@ public class StudentController(IMediator mediator) : Controller
     }
 
     [HttpPost("request-password-reset")]
-    public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetRequest requestPasswordResetRequest)
+    public async Task<IActionResult> RequestPasswordReset(RequestPasswordResetRequest requestPasswordResetRequest)
     {
         await mediator.Send(requestPasswordResetRequest.ToRequestPasswordResetCommand());
         return Ok();
     }
 
     [HttpPut("password-reset")]
-    public async Task<IActionResult> PasswordReset([FromBody] PasswordResetRequest passwordResetRequest)
+    public async Task<IActionResult> PasswordReset(PasswordResetRequest passwordResetRequest)
     {
         await mediator.Send(passwordResetRequest.ToResetPasswordCommand());
         return Ok();

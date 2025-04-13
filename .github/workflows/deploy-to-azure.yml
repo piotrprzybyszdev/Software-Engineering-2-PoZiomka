@@ -55,11 +55,12 @@ jobs:
         with:
           files: './package/appsettings.json'
         env:
-          DB.Connection-String: ${{ secrets.APPSETTINGS_DB_CONNECTION_STRING }}
+          DB.ConnectionString: ${{ secrets.APPSETTINGS_DB_CONNECTION_STRING }}
           Email.Sender: ${{ secrets.APPSETTINGS_EMAIL_SENDER }}
           Email.Password: ${{ secrets.APPSETTINGS_EMAIL_PASSWORD }}
           Jwt.Key: ${{ secrets.APPSETTINGS_JWT_KEY }}
           App.Url: ${{ vars.APP_URL }}
+          FileStorage.ConnectionString: ${{ secrets.APPSETTINGS_FILE_STORAGE_CONNECTION_STRING }}
 
       - name: Login to Azure
         uses: azure/login@v2
