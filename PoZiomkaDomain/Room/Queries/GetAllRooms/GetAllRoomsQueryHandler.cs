@@ -4,20 +4,20 @@ using PoZiomkaDomain.Student;
 
 namespace PoZiomkaDomain.Room.Queries.GetAllRooms;
 
-public class GetAllRoomsQueryHandler(IRoomRepository roomRepository, IStudentRepository studentRepository) : IRequestHandler<GetAllRoomsQuery, IEnumerable<RoomStudentDisplay>>
+public class GetAllRoomsQueryHandler(IRoomRepository roomRepository, IStudentRepository studentRepository) : IRequestHandler<GetAllRoomsQuery, IEnumerable<RoomDisplay>>
 {
-    public async Task<IEnumerable<RoomStudentDisplay>> Handle(GetAllRoomsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RoomDisplay>> Handle(GetAllRoomsQuery request, CancellationToken cancellationToken)
     {
         var rooms = await roomRepository.GetAllRooms(cancellationToken);
 
-        List<RoomStudentDisplay> list = [];
+        List<RoomDisplay> list = [];
 
         foreach (var room in rooms)
         {
             var students = await studentRepository.GetStudentsByRoomId(room.Id, cancellationToken);
-            var roomStudentDisplay = new RoomStudentDisplay(room.Id, room.Floor, room.Number, room.Capacity,
-                null, students.Select(x => x.ToStudentDisplay(false)));
-            list.Add(roomStudentDisplay);
+            var roomDisplay = new RoomDisplay(room.Id, room.Floor, room.Number, room.Capacity,
+                null, students.Select(x => x.Id));
+            list.Add(roomDisplay);
         }
 
         return list;
