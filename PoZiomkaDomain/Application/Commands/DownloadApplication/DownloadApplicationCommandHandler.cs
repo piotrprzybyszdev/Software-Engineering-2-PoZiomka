@@ -12,7 +12,7 @@ public class DownloadApplicationCommandHandler(IApplicationRepository applicatio
     {
         int loggedUserId = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
 
-        ApplicationModel application;
+        ApplicationModel? application;
 
         application = await applicationRepository.Get(request.Id);
         if (application == null)

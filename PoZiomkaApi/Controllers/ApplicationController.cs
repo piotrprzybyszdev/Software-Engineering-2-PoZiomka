@@ -70,6 +70,6 @@ public class ApplicationController(IMediator mediator) : ControllerBase
         var command = new DownloadApplicationCommand(id, User);
         var result = await mediator.Send(command);
 
-        return File(result.Stream, MediaTypeNames.Application.Octet);
+        return File(result.Stream, MediaTypeNames.Application.Pdf, $"Application-{id}.pdf");
     }
 }

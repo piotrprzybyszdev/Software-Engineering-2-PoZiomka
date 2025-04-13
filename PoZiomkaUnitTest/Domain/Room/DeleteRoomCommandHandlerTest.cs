@@ -1,13 +1,11 @@
 ﻿using Moq;
-using PoZiomkaDomain.Room.Commands.AddStudent;
-using PoZiomkaDomain.Room.Commands.AddStudentToRoom;
+using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Room;
+using PoZiomkaDomain.Room.Commands.DeleteRoom;
 using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Room.Exceptions;
-using PoZiomkaDomain.Room;
-using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.Student;
-using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Room.Commands.DeleteRoom;
+using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaUnitTest.Domain.Room;
 public class DeleteRoomCommandHandlerTest
@@ -80,7 +78,7 @@ public class DeleteRoomCommandHandlerTest
 
         var studentRepository = new Mock<IStudentRepository>();
         studentRepository.Setup(x => x.GetStudentsByRoomId(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<StudentModel> {  });
+            .ReturnsAsync(new List<StudentModel> { });
 
 
         var roomRepository = new Mock<IRoomRepository>();

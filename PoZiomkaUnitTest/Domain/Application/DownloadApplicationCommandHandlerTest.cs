@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Moq;
+﻿using Moq;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Application.Commands.DownloadApplication;
 using PoZiomkaDomain.Application.Dtos;
@@ -17,8 +16,7 @@ public class DownloadApplicationCommandHandlerTest
         var command = new DownloadApplicationCommand(1, new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, "1")])));
 
         var applicationRepository = new Mock<IApplicationRepository>();
-        applicationRepository.Setup(x => x.Get(1))
-            .ReturnsAsync((ApplicationModel)null);
+        applicationRepository.Setup(x => x.Get(1)).ReturnsAsync((ApplicationModel?)null);
 
         var fileStorage = new Mock<IFileStorage>();
 
@@ -117,7 +115,7 @@ public class DownloadApplicationCommandHandlerTest
         var result = await handler.Handle(command, default);
 
         fileStorage.Verify(x => x.GetFileByGuid(guid), Times.Once);
-        
+
         Assert.Equal(file.Object, result);
     }
 }

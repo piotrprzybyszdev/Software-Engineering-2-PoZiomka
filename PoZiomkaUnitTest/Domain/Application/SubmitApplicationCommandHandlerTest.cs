@@ -1,12 +1,9 @@
-﻿using Azure.Core;
-using Moq;
+﻿using Moq;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Application.Commands.SubmitApplication;
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Application.Exceptions;
 using PoZiomkaDomain.Common.Exceptions;
-using System;
-using System.IO;
 using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Application;

@@ -9,11 +9,11 @@ using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
+using PoZiomkaInfrastructure.Migrations;
 using PoZiomkaInfrastructure.Repositories;
 using PoZiomkaInfrastructure.Services;
 using System.Data;
 using System.Reflection;
-using PoZiomkaInfrastructure.Migrations;
 
 namespace PoZiomkaInfrastructure;
 
@@ -32,6 +32,9 @@ public static class Infrastructure
             .SqlDatabase(connectionString)
             .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), name =>
             {
+                if (name.EndsWith("SampleApplication.pdf"))
+                    return false;
+
                 if (name.EndsWith("InsertSampleData.sql"))
                     return bool.Parse(configuration["DB:InsertSampleData"]!);
                 return true;
@@ -75,8 +78,11 @@ public static class Infrastructure
         );
     }
 
-    public static void RunStartupTasks(IServiceProvider services)
+    public static void RunStartupTasks(IConfiguration configuration, IServiceProvider services)
     {
+        if (bool.Parse(configuration["FileStorage:InsertSampleData"]!) == false)
+            return;
+
         using var scope = services.CreateScope();
         var fileStorage = scope.ServiceProvider.GetRequiredService<IFileStorage>();
         InsertSampleDataImpl.InsertSampleDataMethod(fileStorage);

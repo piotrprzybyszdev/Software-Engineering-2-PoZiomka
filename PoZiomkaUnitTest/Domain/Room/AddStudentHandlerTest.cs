@@ -124,8 +124,8 @@ public class AddStudentHandlerTest
         var studentRepository = new Mock<IStudentRepository>();
         studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(studentModel);
-        studentRepository.Setup(x=> x.GetStudentsByRoomId(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<StudentModel> {studentModel, studentModel, studentModel}); 
+        studentRepository.Setup(x => x.GetStudentsByRoomId(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<StudentModel> { studentModel, studentModel, studentModel });
 
 
         var roomRepository = new Mock<IRoomRepository>();

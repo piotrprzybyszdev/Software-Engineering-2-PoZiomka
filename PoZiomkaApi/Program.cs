@@ -1,8 +1,6 @@
 using PoZiomkaApi;
 using PoZiomkaDomain;
-using PoZiomkaDomain.Application;
 using PoZiomkaInfrastructure;
-using PoZiomkaInfrastructure.Migrations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +19,7 @@ builder.Services.AddCustomSwagger();
 
 var app = builder.Build();
 
-Infrastructure.RunStartupTasks(app.Services);
+Infrastructure.RunStartupTasks(builder.Configuration, app.Services);
 
 app.UsePathBase("/api");
 

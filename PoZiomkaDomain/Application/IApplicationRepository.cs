@@ -9,5 +9,5 @@ public interface IApplicationRepository
     public Task<IEnumerable<ApplicationDisplay>> GetAllStudentsApplications(int StudentId);
     public Task Submit(int StudentId, int ApplicationTypeId, Guid FileGuid, ApplicationStatus status);
     public Task Update(int applicationId, ApplicationStatus status);
-    public Task<ApplicationModel> Get(int applicationId);
+    public Task<ApplicationModel?> Get(int applicationId);
 }

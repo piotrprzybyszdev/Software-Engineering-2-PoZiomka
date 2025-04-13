@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
-using PoZiomkaDomain.Application;
+﻿using PoZiomkaDomain.Application;
 using PoZiomkaInfrastructure.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace PoZiomkaInfrastructure.Migrations;
 
@@ -13,8 +8,8 @@ public class InsertSampleDataImpl
 {
     public async static void InsertSampleDataMethod(IFileStorage fileStorage)
     {
-        List<string> guids = new List<string>
-        {
+        List<string> guids =
+        [
             "b6f4cfe3-fc21-45fc-95b5-3dd29ea4de4f",
             "c1186e5b-e8e1-4b5b-8ae3-1e0bc4464b97",
             "fb72b7be-0d92-402c-85de-43a8b66becc5",
@@ -30,21 +25,20 @@ public class InsertSampleDataImpl
             "cf82c9b4-64db-4d0b-8d9d-9ef832e9a574",
             "ae41fadd-93c9-48a7-bdd3-7dd2fd70f845",
             "3f373a47-93dc-4f07-b438-18835d27aeb1"
-        };
+        ];
 
-        foreach(var guidString in guids)
+        foreach (var guidString in guids)
         {
             Guid guid = Guid.Parse(guidString);
-            string filePath = $"Sample_pdf_files/wniosek.pdf";
 
-            using FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("PoZiomkaInfrastructure.SampleFiles.SampleApplication.pdf")!;
             IFile file = new BlobFile(stream);
 
             try
             {
-                await fileStorage.GetFileByGuid(guid);
+                await fileStorage.UploadFile(guid, file);
             }
-            catch 
+            catch
             {
                 // ignore uploading file if it already exists
             }

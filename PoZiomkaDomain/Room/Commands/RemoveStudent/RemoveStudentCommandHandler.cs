@@ -7,7 +7,7 @@ using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Room.Commands.RemoveStudent;
 
-public class RemoveStudentCommandHandler(IRoomRepository roomRepository, IStudentRepository studentRepository) : IRequestHandler<RemoveStudentCommand>
+public class RemoveStudentCommandHandler(IStudentRepository studentRepository) : IRequestHandler<RemoveStudentCommand>
 {
     public async Task Handle(RemoveStudentCommand request, CancellationToken cancellationToken)
     {

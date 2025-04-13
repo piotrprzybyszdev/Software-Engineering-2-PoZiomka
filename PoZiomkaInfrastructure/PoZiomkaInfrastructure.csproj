@@ -16,6 +16,9 @@
     <EmbeddedResource Include="Migrations\CreateTables.sql" />
     <EmbeddedResource Include="Migrations\InsertConstantData.sql" />
     <EmbeddedResource Include="Migrations\InsertSampleData.sql" />
+    <EmbeddedResource Include="SampleFiles\SampleApplication.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

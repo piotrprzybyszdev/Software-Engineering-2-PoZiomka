@@ -35,7 +35,7 @@ public class AddStudentCommandHandler(IRoomRepository roomRepository, IStudentRe
         }
         catch (IdNotFoundException e)
         {
-            throw new RoomNotFoundException($"Room with id `{request.Id}` not found; "+ e.Message);
+            throw new RoomNotFoundException($"Room with id `{request.Id}` not found; " + e.Message);
         }
 
         var students = await studentRepository.GetStudentsByRoomId(request.Id, cancellationToken);

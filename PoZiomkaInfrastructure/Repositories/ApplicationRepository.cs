@@ -11,12 +11,12 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class ApplicationRepository(IDbConnection connection) : IApplicationRepository
 {
-    public Task<ApplicationModel> Get(int applicationId)
+    public Task<ApplicationModel?> Get(int applicationId)
     {
         var sqlQuery = @"SELECT * FROM Application WHERE Id = @Id";
         try
         {
-            return connection.QuerySingleAsync<ApplicationModel>(sqlQuery, new { Id = applicationId });
+            return connection.QuerySingleOrDefaultAsync<ApplicationModel>(sqlQuery, new { Id = applicationId });
         }
         catch (SqlException exception)
         {
