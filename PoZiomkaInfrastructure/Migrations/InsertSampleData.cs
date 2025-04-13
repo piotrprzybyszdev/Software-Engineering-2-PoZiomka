@@ -8,12 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PoZiomkaInfrastructure.Migrations;
-public interface IInsertSampleData
-{
-    public void InsertSampleDataMethod();
-}
 
-public class InsertSampleDataImpl /*: IInsertSampleData*/
+public class InsertSampleDataImpl
 {
     public async static void InsertSampleDataMethod(IFileStorage fileStorage)
     {
@@ -42,9 +38,16 @@ public class InsertSampleDataImpl /*: IInsertSampleData*/
             string filePath = $"Sample_pdf_files/wniosek.pdf";
 
             using FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            IFile file = new NetworkFile(stream);
+            IFile file = new BlobFile(stream);
 
-            await fileStorage.UploadFile(guid, file);
+            try
+            {
+                await fileStorage.GetFileByGuid(guid);
+            }
+            catch 
+            {
+                // ignore uploading file if it already exists
+            }
         }
     }
 }
