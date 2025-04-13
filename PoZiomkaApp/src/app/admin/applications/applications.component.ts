@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ApplicationModel, ApplicationStatus, ApplicationTypeModel } from '../../application/application.model';
+import { ApplicationModel, ApplicationStatus, ApplicationTypeModel, applicationStatusToString} from '../../application/application.model';
 import { ApplicationService } from '../../application/application.service';
-import { PopupComponent } from "../../common/popup/popup.component";
 import { ToastrService } from 'ngx-toastr';
 import { signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudentModel } from '../../student/student.model';
 import { StudentService } from '../../student/student.service';
 import { FormsModule } from '@angular/forms';
+import { ApplicationDetailsComponent } from './application-details/application-details.component';
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [CommonModule, PopupComponent, FormsModule],
+  imports: [CommonModule, FormsModule, ApplicationDetailsComponent],
   templateUrl: './applications.component.html',
 })
 export class ApplicationListComponent implements OnInit {
@@ -20,6 +20,7 @@ export class ApplicationListComponent implements OnInit {
   applications = signal<ApplicationModel[]>([]);
   selectedApplicationId = signal<number | undefined>(undefined);
   selectedApplication = signal<ApplicationModel | undefined>(undefined);
+  applicationStatusText = applicationStatusToString;
 
   applicationTypes: ApplicationTypeModel[] = [];
   isLoading = signal(false);
@@ -93,7 +94,7 @@ export class ApplicationListComponent implements OnInit {
     if (uniqueStudentIds.length === 0) {
       this.studentsMap.set(map); 
       return;
-    }
+    } 
   
     let loadedCount = 0;
   
@@ -146,8 +147,6 @@ export class ApplicationListComponent implements OnInit {
     });
   }
   
-
-  // Funkcja grupująca aplikacje na podstawie wybranego parametru (typ lub status)
   groupedApplications() {
     const sortedApplications = this.filteredApplications().sort((a, b) => {
       if (this.sortOption() === 'type') {
@@ -170,73 +169,20 @@ export class ApplicationListComponent implements OnInit {
     return Object.keys(groups).map(key => ({ key, applications: groups[key] }));
   }
 
-  // Obsługuje kliknięcie aplikacji
   onApplicationClick(app: ApplicationModel): void {
     this.selectedApplicationId.set(app.id);
     this.selectedApplication.set(app);
   }
 
-  // Zwraca nazwę statusu aplikacji
-  applicationStatusText(status: ApplicationStatus): string {
-    switch (status) {
-      case ApplicationStatus.pending: return 'Oczekująca';
-      case ApplicationStatus.accepted: return 'Zaakceptowana';
-      case ApplicationStatus.rejected: return 'Odrzucona';
-      default: return 'Nieznany';
-    }
-  }
-
-  // Ustawia opcję sortowania
   setSortOption(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.sortOption.set(target.value as 'type' | 'status');
-  }
-
-  // Rozwiązuje aplikację (akceptuje lub odrzuca)
-  onApplicationResolve(app: ApplicationModel, status: ApplicationStatus): void {
-    this.applicationService.resolveApplication(app.id, status).subscribe({
-      next: res => {
-        if (res.success) {
-          this.toastr.success(`Aplikacja ${status === ApplicationStatus.accepted ? 'zaakceptowana' : 'odrzucona'}`);
-          this.loadApplications();
-          this.loadStudents();
-          this.onHide();
-        } else {
-          this.toastr.error(res.error!?.detail, res.error!?.title);
-        }
-      }
-    });
   }
 
   onHide(): void {
     this.selectedApplication.set(undefined);
     this.selectedApplicationId.set(undefined);
   }
-
-  onDownloadFile(): void {
-    const app = this.selectedApplication();
-    if (!app) return;
-
-    this.applicationService.downloadApplicationFile(app.id).subscribe({
-      next: res => {
-        if (res.success && res.payload) {
-          const blob = new Blob([res.payload], { type: 'application/pdf' });
-          const url = window.URL.createObjectURL(blob);
-
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `aplikacja_${app.id}.pdf`;
-          a.click();
-
-          window.URL.revokeObjectURL(url);
-        } else {
-          this.toastr.error(res.error?.detail || 'Błąd pobierania pliku');
-        }
-      },
-      error: () => this.toastr.error('Wystąpił błąd przy pobieraniu pliku')
-    });
-  }
-
 
 
   get studentEmail() {
