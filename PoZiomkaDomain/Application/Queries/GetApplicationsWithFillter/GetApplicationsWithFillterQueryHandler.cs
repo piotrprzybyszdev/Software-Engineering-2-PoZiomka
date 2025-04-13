@@ -5,9 +5,9 @@ using PoZiomkaDomain.Exceptions;
 
 namespace PoZiomkaDomain.Application.Queries.GetApplicationsWithFillter;
 public class GetApplicationsWithFillterQueryHandler(IApplicationRepository applicationRepository) :
-    IRequestHandler<GetApplicationsWithFillterQuery, IEnumerable<ApplicationModel>>
+    IRequestHandler<GetApplicationsWithFillterQuery, IEnumerable<ApplicationDisplay>>
 {
-    public async Task<IEnumerable<ApplicationModel>> Handle(GetApplicationsWithFillterQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ApplicationDisplay>> Handle(GetApplicationsWithFillterQuery request, CancellationToken cancellationToken)
     {
         return await applicationRepository.GetAll(
                 request.StudentEmail, request.StudentIndex,

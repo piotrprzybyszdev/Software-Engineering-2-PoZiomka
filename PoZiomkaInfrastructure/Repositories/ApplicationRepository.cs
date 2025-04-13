@@ -53,9 +53,20 @@ WHERE a.StudentId = @StudentId";
         return connection.QueryAsync<ApplicationDisplay>(sqlQuery, new { StudentId });
     }
 
-    public Task<IEnumerable<ApplicationModel>> GetAll(string? StudentEmail, string? StudentIndex, int? ApplicationTypeId, ApplicationStatus? ApplicationStatus)
+    public Task<IEnumerable<ApplicationDisplay>> GetAll(string? StudentEmail, string? StudentIndex, int? ApplicationTypeId, ApplicationStatus? ApplicationStatus)
     {
-        var sqlQuery = @"SELECT * FROM Application WHERE 1=1";
+        var sqlQuery = @"
+SELECT 
+    a.Id, 
+    a.StudentId, 
+    at.Id AS ApplicationTypeId, 
+    at.Name AS ApplicationTypeName,
+    at.Description AS ApplicationTypeDescription,
+    a.Status AS ApplicationStatus
+FROM Application a
+JOIN ApplicationType at ON a.ApplicationTypeId = at.Id
+WHERE 1=1";
+
         if (StudentEmail != null)
             sqlQuery += " AND StudentId IN (SELECT Id FROM Students WHERE Email = @StudentEmail)";
         if (StudentIndex != null)
@@ -66,7 +77,7 @@ WHERE a.StudentId = @StudentId";
             sqlQuery += " AND Status = @ApplicationStatus";
         try
         {
-            return connection.QueryAsync<ApplicationModel>(sqlQuery, new { StudentEmail, StudentIndex, ApplicationTypeId, ApplicationStatus });
+            return connection.QueryAsync<ApplicationDisplay>(sqlQuery, new { StudentEmail, StudentIndex, ApplicationTypeId, ApplicationStatus });
         }
         catch (SqlException exception)
         {
