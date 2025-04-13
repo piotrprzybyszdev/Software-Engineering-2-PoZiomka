@@ -13,7 +13,8 @@ Cors.Configure(builder.Configuration, builder.Services);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddCustomSwagger();
 
 var app = builder.Build();
 
