@@ -1,0 +1,69 @@
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col">
+  <div class="row d-flex flex-row justify-content-between">
+    <h1 class="col">Lista Wniosków</h1>
+  </div>
+  <hr class="mb-5">
+
+  <!-- Formularz filtrów -->
+  <form class="col-xl-10 bg-secondary bg-opacity-25 row mb-3 mx-0 py-2 rounded-3 border gx-lg-4 gx-2">
+    <div class="col-md mb-md-0 mb-2">
+      <input class="form-control" type="text" name="studentEmail" placeholder="Email studenta" [(ngModel)]="studentEmail">
+    </div>
+    <div class="col-md mb-md-0 mb-2">
+      <input class="form-control" type="text" name="studentIndex" placeholder="Indeks studenta" [(ngModel)]="studentIndex">
+    </div>    
+    <div class="col-md mb-md-0 mb-2">
+    <select class="form-select" name="applicationTypeId" [(ngModel)]="applicationTypeId">
+      <option [ngValue]="undefined">Każdy typ</option>
+      @for (applicationType of applicationTypes; track $index) {
+          <option [ngValue]="applicationType.id">{{ applicationType.name }}</option>
+      }
+    </select>
+  </div>
+    <div class="col-md mb-md-0 mb-2">
+      <select class="form-select" name="status" [(ngModel)]="applicationStatus">
+        <option [ngValue]="undefined">Każdy status</option>
+        @for (status of ApplicationStatus | enum; track $index) {
+            <option [class]="`text-${applicationStatusColor(status)}`" [ngValue]="status">{{ applicationStatusText(status) }}</option>
+        }
+    </select>
+    </div>
+    <div class="col-md-auto">
+      <app-loading-button [isLoading]="isLoading()" [class]="'ms-3 btn-primary'" (clicked)="loadApplications()">
+        Szukaj
+      </app-loading-button>
+    </div>
+  </form>
+
+  <div class="border rounded-3 px-3 pt-4 pb-5">
+    <div class="px-2 mx-auto row justify-content-center">
+      @for (application of applications(); track $index) {
+        <button type="button" class="col col-3 m-3 card p-0 btn btn-light" (click)="onApplicationClick(application)">
+          <div class="card-header">
+            <h3><i class="me-3 bi bi-file-earmark"></i>Wniosek #{{ application.id }}</h3>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">
+              Typ: {{ application.applicationType.name }}
+            </h4>
+          </div>
+          <div class="card-footer bg-opacity-25"
+               [ngClass]="`bg-${applicationStatusColor(application.applicationStatus)} text-${applicationStatusColor(application.applicationStatus)} border-${applicationStatusColor(application.applicationStatus)}`">
+            <h5 class="m-0">{{ applicationStatusText(application.applicationStatus) }}</h5>
+          </div>
+        </button>
+      }
+      </div>
+      <div *ngIf="applications().length === 0">
+        <h3>Brak wniosków odpowiadających zastosowanym filtrom</h3>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+@if (selectedApplication() !== undefined) {
+  <app-application-details (hide)="onHide()" [selectedApplication]="selectedApplication()!"/>
+  }

@@ -6,4 +6,4 @@ public record RoomStudentDisplay(int Id, int Floor, int Number, int Capacity, in
 {
     public RoomStatus Status => ReservationId is not null ? RoomStatus.Reserved :
         !Students.Any() ? RoomStatus.Available : Students.Count() == Capacity ? RoomStatus.Full : RoomStatus.Occupied;
-};
+}
