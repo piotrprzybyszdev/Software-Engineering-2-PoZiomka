@@ -1,16 +1,14 @@
+using PoZiomkaDomain.Common.Exceptions;
+
 namespace PoZiomkaDomain.Application.Exceptions;
 
-public class ApplicationOwnershipException : Exception
+public class ApplicationOwnershipException : DomainException
 {
-    public ApplicationOwnershipException()
+    public ApplicationOwnershipException(string message) : base(message)
     {
     }
 
-    public ApplicationOwnershipException(string? message) : base(message)
-    {
-    }
-
-    public ApplicationOwnershipException(string? message, Exception? innerException) : base(message, innerException)
+    public ApplicationOwnershipException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }
