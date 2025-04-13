@@ -1,16 +1,14 @@
-﻿namespace PoZiomkaDomain.Application.Exceptions;
+﻿using PoZiomkaDomain.Common.Exceptions;
 
-public class ApplicationNotFoundException : Exception
+namespace PoZiomkaDomain.Application.Exceptions;
+
+public class ApplicationNotFoundException : DomainException
 {
-    public ApplicationNotFoundException()
+    public ApplicationNotFoundException(string message) : base(message)
     {
     }
 
-    public ApplicationNotFoundException(string? message) : base(message)
-    {
-    }
-
-    public ApplicationNotFoundException(string? message, Exception? innerException) : base(message, innerException)
+    public ApplicationNotFoundException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }

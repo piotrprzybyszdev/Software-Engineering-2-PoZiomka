@@ -1,4 +1,4 @@
-﻿namespace PoZiomkaDomain.Application.Exceptions;
+namespace PoZiomkaDomain.Application.Exceptions;
 
 public class ApplicationOwnershipException : Exception
 {
