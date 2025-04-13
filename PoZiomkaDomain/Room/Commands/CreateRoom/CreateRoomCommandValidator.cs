@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using PoZiomkaDomain.Student.Commands.CreateStudent;
 
 namespace PoZiomkaDomain.Room.Commands.CreateRoom;
 

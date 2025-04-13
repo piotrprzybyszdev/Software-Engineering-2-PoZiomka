@@ -1,13 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Room.Dtos;
-using PoZiomkaDomain.Student.Dtos;
-using PoZiomkaDomain.Student;
-using PoZiomkaInfrastructure.Constants;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
-using PoZiomkaDomain.Common.Exceptions;
 
 namespace PoZiomkaInfrastructure.Repositories;
 

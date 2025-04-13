@@ -30,20 +30,20 @@ public class AuthController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
-	[HttpPost("login-as-student-mockup")]
-	public async Task<IActionResult> LoginAsStudentMockup()
-	{
+    [HttpPost("login-as-student-mockup")]
+    public async Task<IActionResult> LoginAsStudentMockup()
+    {
         LoginRequest loginRequest = new LoginRequest("student@example.com", "asdf");
-		IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginStudentCommand());
+        IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginStudentCommand());
 
-		var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
 
-		await HttpContext.SignInAsync(principal);
+        await HttpContext.SignInAsync(principal);
 
-		return Ok();
-	}
+        return Ok();
+    }
 
-	[HttpPost("admin-login")]
+    [HttpPost("admin-login")]
     public async Task<IActionResult> AdminLogin(AdminLoginRequest loginRequest)
     {
         IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginAdminCommand());
@@ -55,21 +55,21 @@ public class AuthController(IMediator mediator) : ControllerBase
         return Ok();
     }
 
-	[HttpPost("admin-login-mockup")]
+    [HttpPost("admin-login-mockup")]
     public async Task<IActionResult> LoginAsAdminMockup()
     {
         AdminLoginRequest loginRequest = new AdminLoginRequest("admin@example.com", "asdf");
-		IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginAdminCommand());
+        IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginAdminCommand());
 
-		var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
 
-		await HttpContext.SignInAsync(principal);
+        await HttpContext.SignInAsync(principal);
 
-		return Ok();
-	}
+        return Ok();
+    }
 
 
-	[HttpPost("logout")]
+    [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
