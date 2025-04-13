@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+      blobstorage:
+        image: mcr.microsoft.com/azure-storage/azurite:latest
+        ports:
+          - 10000:10000
+        command:
+          azurite-blob --blobHost 0.0.0.0 -l /data/blob
+
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
         env:
