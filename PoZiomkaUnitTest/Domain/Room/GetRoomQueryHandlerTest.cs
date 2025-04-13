@@ -115,7 +115,7 @@ public class GetRoomQueryHandlerTest
 
         var room = await handler.Handle(roomQuery, new CancellationToken());
 
-        Assert.Equal(room.Students.First().PhoneNumber, null);
+        Assert.Null(room.Students.First().PhoneNumber);
     }
     [Fact]
     public async Task StudentInRoomHaveAccess()

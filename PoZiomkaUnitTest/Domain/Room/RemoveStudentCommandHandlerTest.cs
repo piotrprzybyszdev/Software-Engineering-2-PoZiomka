@@ -22,11 +22,8 @@ public class RemoveStudentCommandHandlerTest
         studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new IdNotFoundException());
 
-
-        var roomRepository = new Mock<IRoomRepository>();
-
         RemoveStudentCommand studentCommand = new RemoveStudentCommand(1, 1);
-        RemoveStudentCommandHandler handler = new(roomRepository.Object, studentRepository.Object);
+        RemoveStudentCommandHandler handler = new(studentRepository.Object);
 
         await Assert.ThrowsAsync<StudentNotFoundException>(async () =>
                    await handler.Handle(studentCommand, new CancellationToken()));
@@ -61,10 +58,8 @@ public class RemoveStudentCommandHandlerTest
         studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(studentModel);
 
-        var roomRepository = new Mock<IRoomRepository>();
-
         RemoveStudentCommand studentCommand = new RemoveStudentCommand(102, 1);
-        RemoveStudentCommandHandler handler = new(roomRepository.Object, studentRepository.Object);
+        RemoveStudentCommandHandler handler = new(studentRepository.Object);
 
         await Assert.ThrowsAsync<StudentNotAssignedToRoomException>(async () =>
                    await handler.Handle(studentCommand, new CancellationToken()));
@@ -92,10 +87,8 @@ public class RemoveStudentCommandHandlerTest
         studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(studentModel);
 
-        var roomRepository = new Mock<IRoomRepository>();
-
         RemoveStudentCommand studentCommand = new RemoveStudentCommand(101, 1);
-        RemoveStudentCommandHandler handler = new(roomRepository.Object, studentRepository.Object);
+        RemoveStudentCommandHandler handler = new(studentRepository.Object);
 
         await handler.Handle(studentCommand, new CancellationToken());
         Assert.True(true);
