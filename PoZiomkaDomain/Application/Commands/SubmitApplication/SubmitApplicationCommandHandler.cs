@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using PoZiomkaDomain.Application.Dtos;
+using PoZiomkaDomain.Application.Exceptions;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 
@@ -12,7 +14,22 @@ public class SubmitApplicationCommandHandler(IApplicationRepository applicationR
 
         Guid guid = Guid.NewGuid();
 
-        await fileStorage.UploadFile(guid, request.File);
-        await applicationRepository.Submit(loggedUserId, request.Id, guid, Dtos.ApplicationStatus.Pending);
+        try
+        {
+            await fileStorage.UploadFile(guid, request.File);
+        }
+        catch (FileTooLargeException e)
+        {
+            throw new InvalidFileException($"File of size `{e.Size}` is too large max size is `{e.MaxSize}`");
+        }
+
+        try
+        {
+            await applicationRepository.Submit(loggedUserId, request.Id, guid, ApplicationStatus.Pending);
+        }
+        catch (IdNotFoundException)
+        {
+            throw new ApplicationTypeNotFoundException($"Appliation type with id `{request.Id}` not found");
+        }
     }
 }

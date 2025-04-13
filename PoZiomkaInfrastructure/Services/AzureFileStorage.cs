@@ -1,5 +1,4 @@
 ﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using PoZiomkaDomain.Application;
 using PoZiomkaInfrastructure.Common;
 
@@ -21,20 +20,12 @@ public class AzureFileStorage : IFileStorage
     {
         if (file.Stream.Length > _maxSize)
         {
-            throw new InvalidOperationException($"File exceeds maximum allowed size of {_maxSize} bytes.");
+            throw new FileTooLargeException((int)file.Stream.Length, _maxSize);
         }
 
         var blobClient = _containerClient.GetBlobClient(guid.ToString());
 
-        var blobHttpHeaders = new BlobHttpHeaders
-        {
-            ContentType = "application/pdf"
-        };
-
-        await blobClient.UploadAsync(file.Stream, new BlobUploadOptions
-        {
-            HttpHeaders = blobHttpHeaders
-        });
+        await blobClient.UploadAsync(file.Stream);
     }
 
     public async Task<IFile> GetFileByGuid(Guid guid)
@@ -43,11 +34,9 @@ public class AzureFileStorage : IFileStorage
 
         if (!await blobClient.ExistsAsync())
         {
-            throw new FileNotFoundException($"Blob {guid} not found.");
+            throw new PoZiomkaDomain.Application.FileNotFoundException(guid);
         }
 
-        var download = await blobClient.DownloadAsync();
-
-        return new NetworkFile(download.Value.Content);
+        return new BlobFile(await blobClient.OpenReadAsync());
     }
 }

@@ -119,6 +119,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Room not found"
             };
         }
+        catch (ApplicationTypeNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Application type not found"
+            };
+        }
         catch (ApplicationNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -129,7 +139,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Application not found"
             };
         }
-        catch (ApplicationAccessException exception)
+        catch (ApplicationOwnershipException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             problemDetails = new ProblemDetails()
@@ -137,6 +147,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status404NotFound,
                 Detail = exception.Message,
                 Title = "Application can't be accessed"
+            };
+        }
+        catch (InvalidFileException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = exception.Message,
+                Title = "Provided file was rejected"
             };
         }
         catch (RoomNotEmptyException exception)

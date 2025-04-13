@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaInfrastructure.Constants;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
 
@@ -16,19 +17,6 @@ public class ApplicationRepository(IDbConnection connection) : IApplicationRepos
         try
         {
             return connection.QuerySingleAsync<ApplicationModel>(sqlQuery, new { Id = applicationId });
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-    }
-
-    public Task<IEnumerable<ApplicationTypeModel>> GetApplicationType(int Id)
-    {
-        var sqlQuery = @"SELECT * FROM ApplicationType WHERE Id = @Id";
-        try
-        {
-            return connection.QueryAsync<ApplicationTypeModel>(sqlQuery, new { Id });
         }
         catch (SqlException exception)
         {
@@ -100,11 +88,16 @@ WHERE 1=1";
 
     public async Task Submit(int StudentId, int ApplicationTypeId, Guid FileGuid, ApplicationStatus status)
     {
-        var sqlQuery = @"INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) 
+        var sqlQuery = @"INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status)
 						VALUES (@StudentId, @ApplicationTypeId, @FileGuid, @Status)";
         try
         {
             await connection.ExecuteAsync(sqlQuery, new { StudentId, ApplicationTypeId, FileGuid, Status = status });
+        }
+        catch (SqlException exception)
+        when (exception.Number == ErrorNumbers.ForeignKeyViolation)
+        {
+            throw new IdNotFoundException();
         }
         catch (SqlException exception)
         {

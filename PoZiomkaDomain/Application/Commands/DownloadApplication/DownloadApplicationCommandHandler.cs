@@ -25,6 +25,14 @@ public class DownloadApplicationCommandHandler(IApplicationRepository applicatio
             throw new ApplicationOwnershipException($"Logged in user cannot access application with id `{request.Id}`");
         }
 
-        return await fileStorage.GetFileByGuid(application.FileGuid);
+        try
+        {
+
+            return await fileStorage.GetFileByGuid(application.FileGuid);
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new DomainException($"Application with id `{request.Id}` exists but the corresponding file with id `{e.Guid}` doesnt");
+        }
     }
 }
