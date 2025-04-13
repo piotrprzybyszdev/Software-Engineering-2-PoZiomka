@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Admin.Dtos;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using System.Security.Claims;
 
@@ -17,13 +19,11 @@ public class LoginAdminCommandHandler(IPasswordService passwordService, IAdminRe
         }
         catch (EmailNotFoundException e)
         {
-            throw new InvalidCredentialsException($"Admin with email {request.Email} not registered", e);
+            throw new UserNotFoundException($"Admin with email {request.Email} not registered", e);
         }
 
         if (!passwordService.VerifyHash(request.Password, Admin.PasswordHash))
-        {
-            throw new InvalidCredentialsException("Invalid password");
-        }
+            throw new InvalidPasswordException($"Password for user with email {request.Email} is invalid");
 
         IEnumerable<Claim> claims = [
             new(ClaimTypes.NameIdentifier, Admin.Id.ToString()),

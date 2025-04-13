@@ -1,15 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, SelectControlValueAccessor, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
 import { AdminService } from '../../admin/admin.service';
+import { LoadingButtonComponent } from '../../common/loading-button/loading-button.component';
 
 @Component({
   selector: 'app-admin-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent],
+  imports: [ReactiveFormsModule, CommonModule, CenteredCardComponent, LoadingButtonComponent],
   templateUrl: './admin-login.component.html',
   styleUrl: './admin-login.component.css'
 })
@@ -21,6 +22,7 @@ export class AdminLoginComponent {
 
   CardConfiguration = CardConfiguration;
   
+  isLoading = signal<boolean>(false);
   isSubmitted = signal<boolean>(false);
   error = signal<string | undefined>(undefined);
 
@@ -45,6 +47,7 @@ export class AdminLoginComponent {
       return;
     }
 
+    this.isLoading.set(true);
     this.authService.adminLogIn(this.loginForm.value.email!, this.loginForm.value.password!)
       .subscribe({
         next: response => { 
@@ -54,12 +57,14 @@ export class AdminLoginComponent {
                 if (response.success) {
                   this.router.navigate(['/admin/dashboard']); 
                 } else {
-                  this.error.set(response.error?.detail);
+                  this.isLoading.set(false);
+                  this.error.set(response.error!.detail);
                 }
               }
             })
           } else {
-            this.error.set(response.error?.detail);
+            this.isLoading.set(false);
+            this.error.set(response.error!.detail);
           }
         }
     });

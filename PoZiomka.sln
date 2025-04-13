@@ -7,13 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaApi", "PoZiomkaApi\
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "PoZiomkaApp", "PoZiomkaApp\PoZiomkaApp.esproj", "{95CE506A-7F91-4BCE-B707-0242266EE32D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaTest", "PoZiomkaTest\PoZiomkaTest.csproj", "{8ADCD66F-F178-488F-AB15-FD95232C9C88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaUnitTest", "PoZiomkaUnitTest\PoZiomkaUnitTest.csproj", "{8ADCD66F-F178-488F-AB15-FD95232C9C88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaDomain", "PoZiomkaDomain\PoZiomkaDomain.csproj", "{09EADF0F-4A08-4E4F-8AB4-2A06EDC2387A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoZiomkaInfrastructure", "PoZiomkaInfrastructure\PoZiomkaInfrastructure.csproj", "{1F71EDB4-8ACF-4D44-992E-1167562D9F93}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{473238F2-903D-43A8-8079-53D7EB9766EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoZiomkaIntegrationTest", "PoZiomkaIntegrationTest\PoZiomkaIntegrationTest.csproj", "{2271DA28-2D91-4FAE-8328-42120F5B221F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{473238F2-903D-43A8-8079-53D7EB9766EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473238F2-903D-43A8-8079-53D7EB9766EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473238F2-903D-43A8-8079-53D7EB9766EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2271DA28-2D91-4FAE-8328-42120F5B221F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2271DA28-2D91-4FAE-8328-42120F5B221F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2271DA28-2D91-4FAE-8328-42120F5B221F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2271DA28-2D91-4FAE-8328-42120F5B221F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

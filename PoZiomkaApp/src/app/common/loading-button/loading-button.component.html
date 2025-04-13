@@ -1,0 +1,10 @@
+<button type="button" (click)="onClick()" class="btn position-relative" [ngClass]="class()" [disabled]="isDisabled() || isLoading()">
+    <div [ngClass]="isLoading() ? 'invisible' : ''">
+        <ng-content />
+    </div>
+    <div class="position-absolute start-50 top-50 translate-middle d-flex flex-column">
+        <div class="spinner-border" role="status" [hidden]="!isLoading()">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</button>

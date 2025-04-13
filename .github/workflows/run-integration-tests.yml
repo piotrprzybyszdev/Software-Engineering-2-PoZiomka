@@ -1,0 +1,45 @@
+name: CI - Integration Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Integration-Tests:
+    name: Run Integration Tests for .Net
+    runs-on: ubuntu-latest
+
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          MSSQL_SA_PASSWORD: Pass@word
+          ACCEPT_EULA: Y
+        ports:
+          - 1433:1433
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore ./PoZiomka.sln
+
+      - name: Build the solution
+        run: dotnet build ./PoZiomka.sln --configuration Release --no-restore
+
+      - name: Run integration tests
+        run: dotnet test ./PoZiomkaIntegrationTest/PoZiomkaIntegrationTest.csproj --configuration Release --no-build --logger "trx;LogFileName=IntegrationTestResults.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: ./PoZiomkaIntegrationTest/TestResults/IntegrationTestResults.trx

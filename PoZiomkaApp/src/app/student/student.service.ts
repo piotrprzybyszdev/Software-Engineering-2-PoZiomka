@@ -10,7 +10,7 @@ import { HttpClient } from "@angular/common/http";
 export class StudentService {
   private httpClient = inject(HttpClient);
   private _loggedInStudent = signal<StudentModel | null>(null);
-
+  
   loggedInStudent = this._loggedInStudent.asReadonly();
 
   fetchLoggedInStudent(): Observable<ApiResponse<StudentModel | null>> {

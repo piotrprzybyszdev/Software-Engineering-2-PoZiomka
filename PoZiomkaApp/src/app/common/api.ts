@@ -10,7 +10,16 @@ export type ApiError = {
 export type ApiResponse<T> = {
   success: boolean,
   error?: ApiError,
-  palyload?: T
+  payload?: T
+}
+
+export function toQueryString(data: any): string {
+  const keys = Object.keys(data);
+  if (keys.length === 0) {
+    return '';
+  }
+
+  return '?' + keys.map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
 }
 
 export function toQueryString(data: any): string {
@@ -26,7 +35,7 @@ export function pipeApiResponse<T>(observable: Observable<T>): Observable<ApiRes
   return observable.pipe(map(response => {
     return {
       success: true,
-      palyload: response
+      payload: response
     }
   }), catchError(error => {
     if (error instanceof HttpErrorResponse) {

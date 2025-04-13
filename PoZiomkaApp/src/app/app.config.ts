@@ -3,6 +3,8 @@ import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from "@angul
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { routingInterceptorProvider } from "./routing-interceptor";
 import { routes } from "./app.routes";
+import { provideAnimations } from "@angular/platform-browser/animations";
+import { provideToastr } from "ngx-toastr"
 import { registerLocaleData } from "@angular/common";
 import localePL from "@angular/common/locales/pl";
 
@@ -13,6 +15,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
+    provideToastr({
+      closeButton: true
+    }),
     routingInterceptorProvider,
     { provide: LOCALE_ID, useValue: 'pl-PL' }
   ]

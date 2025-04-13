@@ -12,14 +12,14 @@ namespace PoZiomkaApi.Controllers;
 public class AuthController(IMediator mediator) : ControllerBase
 {
     [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest signupRequest)
+    public async Task<IActionResult> Signup(SignupRequest signupRequest)
     {
-        await mediator.Send(signupRequest.ToSignupStudentByUserCommand());
+        await mediator.Send(signupRequest.ToSignupStudent());
         return Ok();
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+    public async Task<IActionResult> Login(LoginRequest loginRequest)
     {
         IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginStudentCommand());
 
@@ -31,7 +31,7 @@ public class AuthController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost("admin-login")]
-    public async Task<IActionResult> AdminLogin([FromBody] AdminLoginRequest loginRequest)
+    public async Task<IActionResult> AdminLogin(AdminLoginRequest loginRequest)
     {
         IEnumerable<Claim> claims = await mediator.Send(loginRequest.ToLoginAdminCommand());
 

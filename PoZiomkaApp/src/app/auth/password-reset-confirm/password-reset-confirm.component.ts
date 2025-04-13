@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from '../../student/student.service';
 import { CardConfiguration, CenteredCardComponent } from "../../common/centered-card/centered-card.component";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reset-password-confirm',
@@ -17,6 +18,7 @@ export class ResetPasswordConfirmComponent {
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private toastrService = inject(ToastrService);
 
   CardConfiguration = CardConfiguration;
 
@@ -37,12 +39,13 @@ export class ResetPasswordConfirmComponent {
 
     this.studentService.resetPassword(this.token!, this.resetForm.value.password!)
       .subscribe({
-        next: () => {
-          this.successMessage.set('Hasło zostało zmienione. Możesz się teraz zalogować.');
-          setTimeout(() => this.router.navigate(['/login']), 3000);
-        },
-        error: () => {
-          this.errorMessage.set('Nie udało się zresetować hasła.');
+        next: response => {
+          if (response.success) {
+            this.toastrService.success('Hasło zostało zmienione. Możesz się teraz zalogować.');
+          } else {
+            this.toastrService.error(response.error!.detail, response.error!.title);
+          }
+          this.router.navigate(['/login']);
         }
       });
   }

@@ -11,12 +11,12 @@ export class ApplicationService {
   private httpClient = inject(HttpClient);
 
   getApplicationTypes(): Observable<ApiResponse<ApplicationTypeModel[]>> {
-    return pipeApiResponse(this.httpClient.get<ApplicationTypeModel[]>('/api/aplication/get-types'));
+    return pipeApiResponse(this.httpClient.get<ApplicationTypeModel[]>('/api/application/get-types'));
   }
 
   getApplications(params: ApplicationSearchParams): Observable<ApiResponse<ApplicationModel[]>> {
     return pipeApiResponse(this.httpClient.get<ApplicationModel[]>(
-        `/api/aplication/get${toQueryString(params)}`
+        `/api/application/get${toQueryString(params)}`
     ));
   }
 
@@ -28,7 +28,7 @@ export class ApplicationService {
     const formData = new FormData();
     formData.append("file", file);
 
-    return pipeApiResponse(this.httpClient.post<void>(`/api/aplication/submit/${id}`, formData));
+    return pipeApiResponse(this.httpClient.post<void>(`/api/application/submit/${id}`, formData));
   }
 
   resolveApplication(id: number, status: ApplicationStatus): Observable<ApiResponse<void>> {

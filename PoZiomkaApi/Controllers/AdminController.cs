@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PoZiomkaApi.Utils;
 using PoZiomkaDomain.Admin.Queries.GetAdmin;
 using PoZiomkaDomain.Common;
 
@@ -15,9 +14,7 @@ public class AdminController(IMediator mediator) : Controller
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> GetLoggedIn()
     {
-        var loggedInUserId = User.GetUserId();
-
-        GetAdminQuery getAdmin = new(loggedInUserId, User);
+        GetAdminQuery getAdmin = new(User);
         return Ok(await mediator.Send(getAdmin));
     }
 }

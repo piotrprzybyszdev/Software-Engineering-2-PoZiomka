@@ -3,7 +3,8 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoZiomkaDomain.Admin;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Application;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
 using PoZiomkaInfrastructure.Exceptions;
@@ -18,13 +19,21 @@ public static class Infrastructure
 {
     public static void Initalize(IConfiguration configuration)
     {
-        var connectionString = configuration["DB:Connection-String"];
+        var connectionString = configuration["DB:ConnectionString"];
+
+        if (bool.Parse(configuration["DB:Drop"]!))
+            DropDatabase.For.SqlDatabase(connectionString);
 
         EnsureDatabase.For.SqlDatabase(connectionString);
 
         var upgrader = DeployChanges.To
             .SqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly(), name =>
+            {
+                if (name.EndsWith("InsertSampleData.sql"))
+                    return bool.Parse(configuration["DB:InsertSampleData"]!);
+                return true;
+            })
             .LogToConsole()
             .Build();
 
@@ -36,7 +45,7 @@ public static class Infrastructure
 
     public static void Configure(IConfiguration configuration, IServiceCollection services)
     {
-        var connectionString = configuration["DB:Connection-String"];
+        var connectionString = configuration["DB:ConnectionString"];
 
         services.AddScoped<IDbConnection>(_ => new SqlConnection(connectionString));
 
@@ -56,5 +65,14 @@ public static class Infrastructure
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
+
+        if (bool.Parse(configuration["FileStorage:IsLocal"]!))
+            services.AddScoped<IFileStorage>(_ => new LocalFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
+                configuration["FileStorage:RootDirectory"]!, configuration["FileStorage:ApplicationsDirectory"]!
+            ));
+        else
+            services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
+                configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
+            );
     }
 }

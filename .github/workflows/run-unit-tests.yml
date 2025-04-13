@@ -26,11 +26,11 @@ jobs:
         run: dotnet build ./PoZiomka.sln --configuration Release --no-restore
 
       - name: Run unit tests
-        run: dotnet test ./PoZiomkaTest/PoZiomkaTest.csproj --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
+        run: dotnet test ./PoZiomkaUnitTest/PoZiomkaUnitTest.csproj --configuration Release --no-build --logger "trx;LogFileName=UnitTestResults.trx"
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: TestResults
-          path: ./PoZiomkaTest/TestResults/TestResults.trx
+          path: ./PoZiomkaUnitTest/TestResults/UnitTestResults.trx

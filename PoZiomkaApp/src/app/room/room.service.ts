@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { ApiResponse, pipeApiResponse } from "../common/api";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { RoomCreate, RoomModel } from "./room.model";
+import { RoomCreate, RoomModel, RoomStudentModel } from "./room.model";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,8 @@ export class RoomService {
     return pipeApiResponse(this.httpClient.get<RoomModel[]>('/api/room/get'));
   }
 
-  getRoom(id: number): Observable<ApiResponse<RoomModel>> {
-    return pipeApiResponse(this.httpClient.get<RoomModel>(`/api/room/get/${id}`));
+  getRoom(id: number): Observable<ApiResponse<RoomStudentModel>> {
+    return pipeApiResponse(this.httpClient.get<RoomStudentModel>(`/api/room/get/${id}`));
   }
 
   createRoom(roomCreate: RoomCreate): Observable<ApiResponse<void>> {

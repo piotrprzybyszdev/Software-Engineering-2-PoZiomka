@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
 
@@ -9,18 +9,17 @@ public class SignupStudentCommandHandler(IPasswordService passwordService, IStud
 {
     public async Task Handle(SignupStudentCommand request, CancellationToken cancellationToken)
     {
-        StudentCreate studentCreate = new(request.Email, passwordService.ComputeHash(request.Password), request.IsConfirmed);
+        StudentRegister studentRegister = new(request.Email, passwordService.ComputeHash(request.Password));
 
         try
         {
-            await studentRepository.CreateStudent(studentCreate, cancellationToken);
+            await studentRepository.RegisterStudent(studentRegister, cancellationToken);
         }
         catch (EmailNotUniqueException)
         {
             throw new EmailTakenException($"User with email `{request.Email}` already exists");
         }
 
-        if (!request.IsConfirmed)
-            await emailService.SendEmailConfirmationEmail(request.Email);
+        await emailService.SendEmailConfirmationEmail(request.Email);
     }
 }
