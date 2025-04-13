@@ -69,13 +69,8 @@ public static class Infrastructure
 		services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IJudgeService, JudgeService>();
 
-        if (bool.Parse(configuration["FileStorage:IsLocal"]!))
-            services.AddScoped<IFileStorage>(_ => new LocalFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
-                configuration["FileStorage:RootDirectory"]!, configuration["FileStorage:ApplicationsDirectory"]!
-            ));
-        else
-            services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
-                configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
-            );
+        services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
+            configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
+        );
     }
 }
