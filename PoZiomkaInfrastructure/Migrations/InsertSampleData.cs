@@ -38,9 +38,9 @@ public class InsertSampleDataImpl
             {
                 await fileStorage.UploadFile(guid, file);
             }
-            catch
+            catch (Exception e)
             {
-                // ignore uploading file if it already exists
+                Console.WriteLine(e.Message);
             }
         }
     }
