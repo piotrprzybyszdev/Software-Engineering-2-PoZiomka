@@ -7,7 +7,7 @@ using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.Student.Queries.GetStudent;
 using System.Security.Claims;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class GetStudentQueryHandlerTest
 {
@@ -48,7 +48,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Administrator),
                 new(ClaimTypes.NameIdentifier, "99") })));
 
-        await handler.Handle(query, new System.Threading.CancellationToken());
+        await handler.Handle(query, new CancellationToken());
 
         // check if does not throw exceptions
         Assert.True(true);
@@ -64,7 +64,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "1") })));
 
-        await handler.Handle(query, new System.Threading.CancellationToken());
+        await handler.Handle(query, new CancellationToken());
 
         // check if does not throw exceptions
         Assert.True(true);
@@ -83,7 +83,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "1") })));
 
-        await handler.Handle(query, new System.Threading.CancellationToken());
+        await handler.Handle(query, new CancellationToken());
 
         // check if does not throw exceptions
         Assert.True(true);
@@ -103,7 +103,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.NameIdentifier, "1") })));
 
         await Assert.ThrowsAsync<UnauthorizedException>(async () =>
-                    await handler.Handle(query, new System.Threading.CancellationToken()));
+                    await handler.Handle(query, new CancellationToken()));
     }
     [Fact]
     public async Task AdminGetsHiddenInfo()
@@ -116,7 +116,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Administrator),
                 new(ClaimTypes.NameIdentifier, "99") })));
 
-        var result = await handler.Handle(query, new System.Threading.CancellationToken());
+        var result = await handler.Handle(query, new CancellationToken());
 
         Assert.True(model.IsPhoneNumberHidden);
         Assert.Equal(result.PhoneNumber, model.PhoneNumber);
@@ -132,7 +132,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "1") })));
 
-        var result = await handler.Handle(query, new System.Threading.CancellationToken());
+        var result = await handler.Handle(query, new CancellationToken());
 
         Assert.True(model.IsPhoneNumberHidden);
         Assert.Equal(result.PhoneNumber, model.PhoneNumber);
@@ -151,7 +151,7 @@ public class GetStudentQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "1") })));
 
-        var result = await handler.Handle(query, new System.Threading.CancellationToken());
+        var result = await handler.Handle(query, new CancellationToken());
 
         Assert.True(model.IsPhoneNumberHidden);
         Assert.Null(result.PhoneNumber);
@@ -170,6 +170,6 @@ public class GetStudentQueryHandlerTest
         new(ClaimTypes.NameIdentifier, "99") })));
 
         await Assert.ThrowsAsync<UserNotFoundException>(async () =>
-                    await handler.Handle(query, new System.Threading.CancellationToken()));
+                    await handler.Handle(query, new CancellationToken()));
     }
 }

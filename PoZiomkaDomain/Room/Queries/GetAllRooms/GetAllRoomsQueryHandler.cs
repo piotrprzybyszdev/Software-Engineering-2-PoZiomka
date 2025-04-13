@@ -14,9 +14,9 @@ public class GetAllRoomsQueryHandler(IRoomRepository roomRepository, IStudentRep
 
         foreach (var room in rooms)
         {
-            var students = await studentRepository.GetStudentsByRoomId(room.Id, cancellationToken);
+            var students = await studentRepository.GetStudentIdsByRoomId(room.Id, cancellationToken);
             var roomDisplay = new RoomDisplay(room.Id, room.Floor, room.Number, room.Capacity,
-                null, students.Select(x => x.Id));
+                null, students);
             list.Add(roomDisplay);
         }
 

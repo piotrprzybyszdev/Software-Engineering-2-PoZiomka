@@ -7,7 +7,7 @@ using PoZiomkaDomain.Student.Commands.UpdateStudent;
 using PoZiomkaDomain.Student.Dtos;
 using System.Security.Claims;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class UpdateStudentCommandHandlerTest
 {
@@ -28,7 +28,7 @@ public class UpdateStudentCommandHandlerTest
                 new(ClaimTypes.NameIdentifier, "99") }));
         var command = new UpdateStudentCommand(admin, 1, "John", "Doe", "123456789", "123456", false, false);
 
-        await handler.Handle(command, new System.Threading.CancellationToken());
+        await handler.Handle(command, new CancellationToken());
 
         // check if does not throw exceptions
         Assert.True(true);
@@ -42,7 +42,7 @@ public class UpdateStudentCommandHandlerTest
                 new(ClaimTypes.NameIdentifier, "1") }));
         var command = new UpdateStudentCommand(user, 1, "John", "Doe", "123456789", "123456", false, false);
 
-        await handler.Handle(command, new System.Threading.CancellationToken());
+        await handler.Handle(command, new CancellationToken());
 
         // check if does not throw exceptions
         Assert.True(true);
@@ -58,7 +58,7 @@ public class UpdateStudentCommandHandlerTest
 
         // check if does not throw exceptions
         await Assert.ThrowsAsync<UnauthorizedException>(async () =>
-            await handler.Handle(command, new System.Threading.CancellationToken()));
+            await handler.Handle(command, new CancellationToken()));
     }
     [Fact]
     public async Task ThrowExceptionIfUserIdNotExists()

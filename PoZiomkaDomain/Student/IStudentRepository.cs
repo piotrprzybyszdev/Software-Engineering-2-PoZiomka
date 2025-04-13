@@ -10,6 +10,7 @@ public interface IStudentRepository
     public Task<StudentModel> GetStudentById(int id, CancellationToken? cancellationToken);
     public Task<StudentModel> GetStudentByEmail(string email, CancellationToken? cancellationToken);
     public Task<IEnumerable<StudentModel>> GetStudentsByRoomId(int roomId, CancellationToken? cancellationToken);
+    public Task<IEnumerable<int>> GetStudentIdsByRoomId(int roomId, CancellationToken? cancellationToken);
     public Task<IEnumerable<StudentModel>> GetAllStudents(CancellationToken? cancellationToken);
     public Task CreateStudent(StudentCreate studentCreate, CancellationToken? cancellationToken);
     public Task UpdateStudent(StudentUpdate studentEdit, CancellationToken? cancellationToken);

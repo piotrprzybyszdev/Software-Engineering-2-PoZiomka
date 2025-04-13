@@ -23,7 +23,7 @@ CREATE TABLE Administrators(
 CREATE TABLE Rooms (
 	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
 	[Floor] int NOT NULL,
-	Number int NOT NULL,
+	Number int UNIQUE NOT NULL,
 	Capacity int NOT NULL
 )
 

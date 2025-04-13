@@ -7,7 +7,7 @@ using PoZiomkaDomain.Student.Commands.ConfirmStudent;
 using PoZiomkaDomain.Student.Dtos;
 using System.Security.Claims;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class ConfirmStudentCommandHandlerTest
 {

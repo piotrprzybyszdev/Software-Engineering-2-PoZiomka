@@ -5,7 +5,7 @@ using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.SignupStudent;
 using PoZiomkaDomain.Student.Dtos;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class SignupStudentCommandHandlerTest
 {
