@@ -1,16 +1,14 @@
-﻿namespace PoZiomkaDomain.Application.Exceptions;
+﻿using PoZiomkaDomain.Common.Exceptions;
 
-public class ApplicationAccessException : Exception
+namespace PoZiomkaDomain.Application.Exceptions;
+
+public class ApplicationAccessException : DomainException
 {
-    public ApplicationAccessException()
+    public ApplicationAccessException(string message) : base(message)
     {
     }
 
-    public ApplicationAccessException(string? message) : base(message)
-    {
-    }
-
-    public ApplicationAccessException(string? message, Exception? innerException) : base(message, innerException)
+    public ApplicationAccessException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }
