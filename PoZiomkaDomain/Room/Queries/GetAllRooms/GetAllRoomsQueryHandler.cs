@@ -19,7 +19,6 @@ public class GetAllRoomsQueryHandler(IRoomRepository roomRepository, IStudentRep
                 null, students);
             list.Add(roomDisplay);
         }
-
         return list;
     }
 }
