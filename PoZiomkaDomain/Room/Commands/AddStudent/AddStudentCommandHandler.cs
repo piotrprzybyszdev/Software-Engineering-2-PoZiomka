@@ -33,7 +33,7 @@ public class AddStudentCommandHandler(IRoomRepository roomRepository, IStudentRe
         {
             room = await roomRepository.GetRoomById(request.Id, cancellationToken);
         }
-        catch(IdNotFoundException e)
+        catch (IdNotFoundException e)
         {
             throw new RoomNotFoundException($"Room with id `{request.Id}` not found; "+ e.Message);
         }
