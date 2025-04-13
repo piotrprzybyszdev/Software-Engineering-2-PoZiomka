@@ -5,6 +5,7 @@ using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.ConfirmStudent;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Student;
@@ -119,7 +120,7 @@ public class ConfirmStudentCommandHandlerTest
 
         var handler = new ConfirmStudentCommandHandler(studentRepository.Object, jwtService.Object);
 
-        await Assert.ThrowsAsync<UserNotFoundException>(
+        await Assert.ThrowsAsync<StudentNotFoundException>(
             () => handler.Handle(command, default)
         );
     }

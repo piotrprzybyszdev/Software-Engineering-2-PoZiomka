@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student;
 
 namespace PoZiomkaDomain.Room.Commands.DeleteRoom;
@@ -11,7 +11,7 @@ public class DeleteRoomCommandHandler(IRoomRepository roomRepository, IStudentRe
     {
         var students = await studentRepository.GetStudentsByRoomId(request.Id, cancellationToken);
 
-        if (students.Count() > 0)
+        if (students.Any())
         {
             throw new RoomNotEmptyException("Trying to delete non-empty room");
         }

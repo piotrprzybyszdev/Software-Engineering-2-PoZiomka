@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Room.Commands.RemoveStudent;
 
@@ -17,7 +18,7 @@ public class RemoveStudentCommandHandler(IRoomRepository roomRepository, IStuden
         }
         catch (IdNotFoundException e)
         {
-            throw new UserNotFoundException("Student not found", e);
+            throw new StudentNotFoundException("Student not found", e);
         }
 
         if (student.RoomId != request.Id)

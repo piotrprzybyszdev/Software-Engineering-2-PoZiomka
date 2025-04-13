@@ -1,9 +1,9 @@
 ﻿using Moq;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.DeleteStudent;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Student;
@@ -43,7 +43,7 @@ public class DeleteStudentCommandHandlerTest
 
         DeleteStudentCommandHandler handler = new(studentRepository.Object);
 
-        await Assert.ThrowsAsync<UserNotFoundException>(
+        await Assert.ThrowsAsync<StudentNotFoundException>(
             () => handler.Handle(command, default)
         );
     }

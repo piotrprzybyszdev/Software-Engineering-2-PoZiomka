@@ -3,6 +3,7 @@ using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaDomain.Student.Commands.ConfirmStudent;
@@ -42,7 +43,7 @@ public class ConfirmStudentCommandHandler(IStudentRepository studentRepository, 
         }
         catch (EmailNotFoundException e)
         {
-            throw new UserNotFoundException($"User with email `{email}` not registered", e);
+            throw new StudentNotFoundException($"User with email `{email}` not registered", e);
         }
     }
 }

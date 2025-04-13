@@ -1,10 +1,10 @@
 ﻿using Moq;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.UpdateStudent;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Student;
@@ -74,7 +74,7 @@ public class UpdateStudentCommandHandlerTest
         var command = new UpdateStudentCommand(admin, 1, "John", "Doe", "123456789", "123456", false, false);
 
         // check if does not throw exceptions
-        await Assert.ThrowsAsync<UserNotFoundException>(async () =>
+        await Assert.ThrowsAsync<StudentNotFoundException>(async () =>
             await handler.Handle(command, new CancellationToken()));
     }
 }

@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Room.Queries.GetRoom;
 
@@ -19,7 +21,7 @@ public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentReposit
         {
             var student = await studentRepository.GetStudentById(loggedInUserId, cancellationToken);
             if (student == null)
-                throw new UserNotFoundException($"Student with id `{loggedInUserId}` not found");
+                throw new StudentNotFoundException($"Student with id `{loggedInUserId}` not found");
             if (student.RoomId == request.Id)
                 isUserAuthorized = true;
         }

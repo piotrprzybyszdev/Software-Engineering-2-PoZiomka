@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 
 namespace PoZiomkaDomain.Application.Queries.GetStudent;
 public class GetStudentQueryHandler(IApplicationRepository applicationRepository) :

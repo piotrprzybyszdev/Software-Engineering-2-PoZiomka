@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Application.Dtos;
-using PoZiomkaDomain.Exceptions;
 
 namespace PoZiomkaDomain.Application.Queries.GetTypes;
 public class GetTypesQueryHandler(IApplicationRepository applicationRepository) :

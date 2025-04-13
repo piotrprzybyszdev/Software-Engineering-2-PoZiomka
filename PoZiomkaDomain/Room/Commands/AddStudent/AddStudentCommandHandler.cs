@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Room.Commands.AddStudentToRoom;
 using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Room.Commands.AddStudent;
 
@@ -19,7 +20,7 @@ public class AddStudentCommandHandler(IRoomRepository roomRepository, IStudentRe
         }
         catch (IdNotFoundException e)
         {
-            throw new UserNotFoundException("Student not found", e);
+            throw new StudentNotFoundException("Student not found", e);
         }
 
         if (student.RoomId is not null)
