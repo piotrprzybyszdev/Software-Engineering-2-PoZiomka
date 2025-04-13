@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Common;
 using PoZiomkaApi.Requests.Application;
-using PoZiomkaDomain.Application.Commands.Download;
-using PoZiomkaDomain.Application.Commands.Resolve;
-using PoZiomkaDomain.Application.Commands.Submit;
+using PoZiomkaDomain.Application.Commands.DownloadApplication;
+using PoZiomkaDomain.Application.Commands.ResolveApplication;
+using PoZiomkaDomain.Application.Commands.SubmitApplication;
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Application.Queries.GetStudent;
 using PoZiomkaDomain.Application.Queries.GetTypes;
@@ -49,7 +49,7 @@ public class ApplicationController(IMediator mediator) : ControllerBase
         if (file.ContentType != MediaTypeNames.Application.Pdf)
             return BadRequest("File must be a PDF");
 
-        var command = new SubmitCommand(id, new NetworkFile(file), User);
+        var command = new SubmitApplicationCommand(id, new NetworkFile(file), User);
         await mediator.Send(command);
         return Ok();
     }
@@ -58,7 +58,7 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Resolve(int id, ApplicationStatus status)
     {
-        var command = new ResolveCommand(id, status);
+        var command = new ResolveApplicationCommand(id, status);
         await mediator.Send(command);
         return Ok();
     }
@@ -67,11 +67,9 @@ public class ApplicationController(IMediator mediator) : ControllerBase
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> Get(int id)
     {
-        var command = new DownloadCommand(id, User);
+        var command = new DownloadApplicationCommand(id, User);
         var result = await mediator.Send(command);
-        string fileName = $"file_{id}.pdf";
-        string contentType = "application/pdf";
 
-        return File(result.Stream, contentType, fileName);
+        return File(result.Stream, MediaTypeNames.Application.Pdf);
     }
 }

@@ -1,9 +1,10 @@
 ﻿using Moq;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using PoZiomkaDomain.Student.Queries.GetStudent;
 using System.Security.Claims;
 
@@ -162,14 +163,14 @@ public class GetStudentQueryHandlerTest
     {
         mockStudentRepository.Setup(x =>
             x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .Throws(new UserNotFoundException("Student not found"));
+            .Throws(new StudentNotFoundException("Student not found"));
         GetStudentQuery query = new(1, new ClaimsPrincipal(
                         new ClaimsIdentity(new Claim[]
                         {
         new(ClaimTypes.Role, Roles.Administrator),
         new(ClaimTypes.NameIdentifier, "99") })));
 
-        await Assert.ThrowsAsync<UserNotFoundException>(async () =>
+        await Assert.ThrowsAsync<StudentNotFoundException>(async () =>
                     await handler.Handle(query, new CancellationToken()));
     }
 }

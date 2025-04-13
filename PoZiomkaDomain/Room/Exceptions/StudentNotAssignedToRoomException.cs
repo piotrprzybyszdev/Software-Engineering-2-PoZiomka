@@ -1,4 +1,6 @@
-﻿namespace PoZiomkaDomain.Exceptions;
+﻿using PoZiomkaDomain.Common.Exceptions;
+
+namespace PoZiomkaDomain.Room.Exceptions;
 
 public class StudentNotAssignedToRoomException : DomainException
 {

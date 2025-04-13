@@ -6,6 +6,7 @@ using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.LoginStudent;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Student;
@@ -68,7 +69,7 @@ public class LoginStudentCommandHandlerTest
 
         var handler = new LoginStudentCommandHandler(passwordService.Object, studentRepository.Object);
 
-        await Assert.ThrowsAsync<UserNotFoundException>(
+        await Assert.ThrowsAsync<StudentNotFoundException>(
             () => handler.Handle(command, default)
         );
     }

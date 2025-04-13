@@ -1,7 +1,6 @@
 ﻿
 using MediatR;
 using PoZiomkaDomain.Application.Dtos;
-using PoZiomkaDomain.Exceptions;
 
 namespace PoZiomkaDomain.Application.Queries.GetApplicationsWithFillter;
 public class GetApplicationsWithFillterQueryHandler(IApplicationRepository applicationRepository) :

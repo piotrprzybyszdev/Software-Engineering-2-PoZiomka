@@ -1,6 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using PoZiomkaDomain.Admin.Exceptions;
+using PoZiomkaDomain.Application.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Room.Exceptions;
+using PoZiomkaDomain.Student.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Text.Json;
 
@@ -84,7 +89,7 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Title = "Account can't be logged into because email is not confirmed"
             };
         }
-        catch (UserNotFoundException exception)
+        catch (StudentNotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             problemDetails = new ProblemDetails()
@@ -92,6 +97,16 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status404NotFound,
                 Detail = exception.Message,
                 Title = "Student not found"
+            };
+        }
+        catch (AdminNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Admin not found"
             };
         }
         catch (RoomNotFoundException exception)
@@ -102,6 +117,26 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status404NotFound,
                 Detail = exception.Message,
                 Title = "Room not found"
+            };
+        }
+        catch (ApplicationNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Application not found"
+            };
+        }
+        catch (ApplicationAccessException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Application can't be accessed"
             };
         }
         catch (RoomNotEmptyException exception)

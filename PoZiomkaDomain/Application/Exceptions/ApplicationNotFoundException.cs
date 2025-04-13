@@ -1,8 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿namespace PoZiomkaDomain.Application.Exceptions;
 
-namespace PoZiomkaDomain.Exceptions;
-
-public class ApplicationNotFoundException: Exception
+public class ApplicationNotFoundException : Exception
 {
     public ApplicationNotFoundException()
     {

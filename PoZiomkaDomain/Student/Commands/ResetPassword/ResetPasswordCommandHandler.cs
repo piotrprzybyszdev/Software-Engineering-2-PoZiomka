@@ -3,6 +3,7 @@ using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaDomain.Student.Commands.ResetPassword;
@@ -41,7 +42,7 @@ public class ResetPasswordCommandHandler(IJwtService jwtService, IPasswordServic
         }
         catch (EmailNotFoundException)
         {
-            throw new UserNotFoundException($"Can't reset password for student with email `{email}` the account doesn't exist");
+            throw new StudentNotFoundException($"Can't reset password for student with email `{email}` the account doesn't exist");
         }
     }
 }

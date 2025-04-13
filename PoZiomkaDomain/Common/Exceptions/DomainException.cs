@@ -1,4 +1,4 @@
-﻿namespace PoZiomkaDomain.Exceptions;
+﻿namespace PoZiomkaDomain.Common.Exceptions;
 
 public class DomainException : Exception
 {
