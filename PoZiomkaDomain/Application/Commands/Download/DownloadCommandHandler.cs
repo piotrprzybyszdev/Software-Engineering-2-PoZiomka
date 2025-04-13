@@ -11,17 +11,11 @@ public class DownloadCommandHandler(IApplicationRepository applicationRepository
         int loggedUserId = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
 
         ApplicationModel application;
-        try
+
+        application = await applicationRepository.Get(request.Id);
+        if (application == null)
         {
-            application = await applicationRepository.Get(request.Id);
-            if (application == null)
-            {
-                throw new DomainException("Application not found");
-            }
-        }
-        catch
-        {
-            throw new DomainException("Error in downloading file");
+            throw new DomainException("Application not found");
         }
 
         if (loggedUserId != application.StudentId)
