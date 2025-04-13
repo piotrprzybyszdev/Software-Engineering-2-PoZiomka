@@ -4,7 +4,7 @@ using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.CreateStudent;
 using PoZiomkaDomain.Student.Dtos;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class CreateStudentCommandHandlerTest
 {

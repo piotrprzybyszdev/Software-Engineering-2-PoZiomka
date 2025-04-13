@@ -3,9 +3,9 @@ using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.Student.Queries.GetAllStudents;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
-public class GetAllStudnetQueryHandlerTest
+public class GetAllStudentsQueryHandlerTest
 {
     [Fact]
     public async Task CheckConverting()

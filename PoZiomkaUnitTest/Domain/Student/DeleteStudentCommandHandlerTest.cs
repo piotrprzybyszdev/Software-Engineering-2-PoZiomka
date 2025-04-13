@@ -6,7 +6,7 @@ using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Commands.DeleteStudent;
 using System.Security.Claims;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class DeleteStudentCommandHandlerTest
 {

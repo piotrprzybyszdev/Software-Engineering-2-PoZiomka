@@ -8,7 +8,7 @@ using PoZiomkaDomain.Student.Commands.LoginStudent;
 using PoZiomkaDomain.Student.Dtos;
 using System.Security.Claims;
 
-namespace PoZiomkaUnitTest.Domain;
+namespace PoZiomkaUnitTest.Domain.Student;
 
 public class LoginStudentCommandHandlerTest
 {
