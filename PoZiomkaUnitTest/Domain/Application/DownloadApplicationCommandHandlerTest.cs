@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Application;
 
-public class DownloadCommandHandlerTest
+public class DownloadApplicationCommandHandlerTest
 {
     [Fact]
     public async Task OnNullApplication_ThrowsException()
