@@ -2,50 +2,38 @@
 using PoZiomkaDomain.Application.Dtos;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoZiomkaDomain.Application.Commands.Download;
 public class DownloadCommandHandler(IApplicationRepository applicationRepository, IFileStorage fileStorage) : IRequestHandler<DownloadCommand, IFile>
 {
-	public async Task<IFile> Handle(DownloadCommand request, CancellationToken cancellationToken)
-	{
-		int loggedUserId = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
+    public async Task<IFile> Handle(DownloadCommand request, CancellationToken cancellationToken)
+    {
+        int loggedUserId = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
 
-		ApplicationModel application;
-		try
-		{
-			application = await applicationRepository.Get(request.Id);
-			if (application == null)
-			{
-				throw new DomainException("Application not found");
-			}
-		}
-		catch
-		{
-			throw new DomainException("Error in downloading file");
-		}
+        ApplicationModel application;
 
-		if(loggedUserId != application.StudentId)
-		{
-			throw new DomainException("You are not allowed to download this file");
-		}
+        application = await applicationRepository.Get(request.Id);
+        if (application == null)
+        {
+            throw new DomainException("Application not found");
+        }
+
+        if (loggedUserId != application.StudentId)
+        {
+            throw new DomainException("You are not allowed to download this file");
+        }
 
 
-		IFile file;
-		try
-		{
-			file = await fileStorage.GetFileByGuid(application.FileGuid);
-		}
-		catch
-		{
-			throw new DomainException("Error in downloading file");
-		}
+        IFile file;
+        try
+        {
+            file = await fileStorage.GetFileByGuid(application.FileGuid);
+        }
+        catch
+        {
+            throw new DomainException("Error in downloading file");
+        }
 
-		return file;
-	}
+        return file;
+    }
 }

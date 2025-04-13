@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
-using PoZiomkaDomain.Room.Commands.AddStudentToRoom;
-using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 

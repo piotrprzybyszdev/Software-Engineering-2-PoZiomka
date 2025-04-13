@@ -1,21 +1,19 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Exceptions;
-using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Student;
-using System.Threading;
 
 namespace PoZiomkaDomain.Room.Queries.GetRoom;
 
-public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentRepository studentRepository): IRequestHandler<GetRoomQuery, RoomStudentDisplay>
+public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentRepository studentRepository) : IRequestHandler<GetRoomQuery, RoomStudentDisplay>
 {
     public async Task<RoomStudentDisplay> Handle(GetRoomQuery request, CancellationToken cancellationToken)
     {
         int loggedInUserId = request.User.GetUserId() ?? throw new DomainException("Id of the user isn't known");
 
         bool isUserAuthorized = false;
-        
+
         if (request.User.IsInRole(Roles.Administrator)) isUserAuthorized = true;
         else if (request.User.IsInRole(Roles.Student))
         {

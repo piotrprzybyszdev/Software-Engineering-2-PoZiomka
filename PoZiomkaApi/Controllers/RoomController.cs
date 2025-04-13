@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Room;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Room.Commands.DeleteRoom;
-using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Room.Queries.GetAllRooms;
 using PoZiomkaDomain.Room.Queries.GetRoom;
 

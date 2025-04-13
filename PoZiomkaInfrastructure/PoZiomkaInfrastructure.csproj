@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <None Remove="Migrations\CreateTables.sql" />
+    <None Remove="Migrations\InsertConstantData.sql" />
     <None Remove="Migrations\InsertSampleData.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Migrations\CreateTables.sql" />
+    <EmbeddedResource Include="Migrations\InsertConstantData.sql" />
     <EmbeddedResource Include="Migrations\InsertSampleData.sql" />
   </ItemGroup>
 
