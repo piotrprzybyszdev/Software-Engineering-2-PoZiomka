@@ -22,8 +22,8 @@ INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) VALUES
 (2, 1, 'cad3a4c7-baf9-4f35-91c4-4f84e03f1e79', 0),
 (2, 2, 'ed53c9d4-0cb7-4aa6-9b4d-9f029c775d71', 0),
 (2, 3, '41caa1aa-9ae8-4c94-8875-9871c08b81b2', 1),
-(2, 4, '04fa14e2-83c4-4f1c-9f62-2ac03e24e195', 2),
-(2, 5, '3cdd89e6-308e-4422-9475-431a87e75a3d', 0),
+(2, 1, '04fa14e2-83c4-4f1c-9f62-2ac03e24e195', 2),
+(2, 1, '3cdd89e6-308e-4422-9475-431a87e75a3d', 0),
 
 (3, 1, '6f44d9d6-0d50-49ff-8d75-5dbb6e80bc7f', 1),
 (3, 2, '2a83c5cf-37c7-4f4d-b0ea-291502ebd435', 2),
