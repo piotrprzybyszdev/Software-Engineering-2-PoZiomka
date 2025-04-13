@@ -20,7 +20,8 @@ export class ApplicationListComponent {
   private applicationService = inject(ApplicationService);
   private toastrService = inject(ToastrService);
 
-  applications = signal<ApplicationModel[]>([]);
+  private _applications = signal<ApplicationModel[]>([]);
+  applications = computed(() => this._applications().filter(application => application.applicationType.id === this.applicationType().id));
 
   applicationStatusToString = applicationStatusToString;
   applicationStatusToColorString = applicationStatusToColorString;
@@ -54,9 +55,9 @@ export class ApplicationListComponent {
       next: response => {
         if (response.success) {
           this.toastrService.success('Pomyślnie utworzono wniosek!');
+          this.refreshApplications();
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
-          this.refreshApplications();
         }
         this.isUploading.set(false);
       }
@@ -83,7 +84,7 @@ export class ApplicationListComponent {
     this.applicationService.getStudentApplications().subscribe({
       next: response => {
         if (response.success) {
-          this.applications.set(response.payload!);
+          this._applications.set(response.payload!);
           this.isDownloading.set(Array(response.payload!.length).fill(false));
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);

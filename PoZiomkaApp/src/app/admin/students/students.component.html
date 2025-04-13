@@ -117,5 +117,5 @@
 </div>
 
 @if (selectedRoomId() !== undefined) {
-    <app-room-details [students]="students" [roomId]="selectedRoomId()!" (hide)="onCloseRoomPopup()"/>
+    <app-room-details [roomId]="selectedRoomId()!" (hide)="onCloseRoomPopup()"/>
 }

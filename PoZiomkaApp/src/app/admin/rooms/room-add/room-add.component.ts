@@ -39,13 +39,10 @@ export class RoomAddComponent {
       next: response => {
         if (response.success) {
           this.toastrService.success('Pokój został dodany');
-          this.onHide(); // Ukrywa popup po dodaniu pokoju
+          this.hide.emit();
         } else {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
-      },
-      error: err => {
-        this.toastrService.error('Wystąpił błąd przy dodawaniu pokoju');
       }
     });
   }

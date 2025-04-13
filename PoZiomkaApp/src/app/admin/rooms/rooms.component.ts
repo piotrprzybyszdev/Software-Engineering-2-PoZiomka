@@ -3,8 +3,6 @@ import { RoomService } from '../../room/room.service';
 import { roomStatusToColorString, roomStatusToString, RoomModel, RoomStatus } from '../../room/room.model';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { StudentService } from '../../student/student.service';
-import { StudentModel } from '../../student/student.model';
 import { RoomDetailsComponent } from './room-details/room-details.component';
 import { RoomAddComponent } from "./room-add/room-add.component";
 import { FormsModule } from '@angular/forms';
@@ -18,11 +16,7 @@ import { EnumPipe } from "../../common/enum-pipe";
 })
 export class RoomListComponent implements OnInit {
   private roomService = inject(RoomService);
-  private studentService = inject(StudentService);
   private toastrService = inject(ToastrService);
-
-  private _students = signal<StudentModel[]>([]);
-  students = this._students.asReadonly();
 
   private _rooms = signal<RoomModel[]>([]);
   rooms = computed(() => this._rooms()
@@ -43,17 +37,7 @@ export class RoomListComponent implements OnInit {
   roomStatus = signal<RoomStatus | undefined>(undefined);
 
   ngOnInit(): void {
-    this.refreshRooms();
-
-    this.studentService.getAllStudents().subscribe({
-      next: response => {
-        if (response.success) {
-          this._students.set(response.payload!);
-        } else {
-          this.toastrService.error(response.error!.detail, response.error!.title);
-        }
-      }
-    });
+    this.refreshRoomsAndStudents();
   }
 
   onAddRoomClick(): void {
@@ -62,6 +46,7 @@ export class RoomListComponent implements OnInit {
 
   onAddRoomCancelClick(): void {
     this.isAddingRoom.set(false);
+    this.refreshRoomsAndStudents();
   }
 
   onRoomClick(room: RoomModel): void {
@@ -70,10 +55,10 @@ export class RoomListComponent implements OnInit {
 
   onRoomDeselect(): void {
     this.selectedRoomId.set(undefined);
-    this.refreshRooms();
+    this.refreshRoomsAndStudents();
   }
 
-  refreshRooms(): void {
+  refreshRoomsAndStudents(): void {
     this.roomService.getRooms().subscribe({
       next: response => {
         if (response.success) {
