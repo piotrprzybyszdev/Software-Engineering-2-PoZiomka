@@ -23,7 +23,7 @@ export class ApplicationDetailsComponent implements OnInit {
   @Output() hide = new EventEmitter<void>();
   isLoading = signal(false);
   
-  studentsMap = signal<Map<number, StudentModel>>(new Map());
+  selectedStudent = signal<StudentModel | null>(null);
 
   applicationStatusText = applicationStatusToString;
 
@@ -35,6 +35,18 @@ export class ApplicationDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (this.selectedApplication?.studentId) {
+        this.studentService.getStudent(this.selectedApplication.studentId).subscribe({
+          next: res => {
+            if (res.success && res.payload) {
+              this.selectedStudent.set(res.payload);
+            } else {
+              this.toastr.error(res.error?.detail || 'Nie udało się pobrać danych studenta');
+            }
+          },
+          error: () => this.toastr.error('Wystąpił błąd przy pobieraniu danych studenta')
+        });
+      }
   }
 
   onHide(): void {
