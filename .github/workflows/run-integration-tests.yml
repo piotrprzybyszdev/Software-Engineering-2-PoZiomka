@@ -15,7 +15,7 @@ jobs:
         image: mcr.microsoft.com/azure-storage/azurite:latest
         ports:
           - 10000:10000
-        command:
+        options:
           azurite-blob --blobHost 0.0.0.0 -l /data/blob
 
       sqlserver:
