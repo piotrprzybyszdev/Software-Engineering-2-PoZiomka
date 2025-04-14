@@ -12,11 +12,9 @@ jobs:
 
     services:
       blobstorage:
-        image: mcr.microsoft.com/azure-storage/azurite
+        image: mcr.microsoft.com/azure-storage/azurite:latest
         ports:
           - 10000:10000
-        options:
-          azurite-blob --blobHost 0.0.0.0 -l /data/blob
 
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
