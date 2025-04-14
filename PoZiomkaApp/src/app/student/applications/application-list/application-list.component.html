@@ -1,0 +1,37 @@
+<app-popup (outsideClicked)="onHide()" (closeClicked)="onHide()" [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'">
+    <div class="p-md-5 p-3">
+        <h3>{{ applicationType().name }}</h3>
+        <div class="table-responsive my-3">
+            <table class="table table-lg table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Numer wniosku</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (application of applications(); track application.id) {
+                        <tr scope="row">
+                            <td>Wniosek nr #{{ application.id }}</td>
+                            <td>
+                                <span [class]="`text-${applicationStatusToColorString(application.applicationStatus)}`">
+                                    {{ applicationStatusToString(application.applicationStatus) }}
+                                </span>
+                            </td>
+                            <td>
+                                <app-loading-button [class]="'border-0 p-0'" [isLoading]="isDownloading()[$index]" [isDisabled]="isUploading()" (clicked)="onDownloadFile($index)">
+                                    <i class="bi bi-download"></i>
+                                </app-loading-button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <app-loading-button (click)="fileUpload.click()" [class]="'border-0'" [isLoading]="isUploading()" [isDisabled]="isDownloadingAny()" class="btn-primary">
+            Złóż wniosek<i class="ms-2 bi bi-filetype-pdf"></i>
+        </app-loading-button>
+        <input type="file" class="d-none" #fileUpload (change)="onUploadFile($event)"/>
+    </div>
+</app-popup>

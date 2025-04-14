@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Student.Queries.GetStudent;
 
@@ -29,7 +30,7 @@ public class GetStudentQueryHandler(IStudentRepository studentRepository, IJudge
         }
         catch
         {
-            throw new UserNotFoundException($"Student with id `{userId}` not found");
+            throw new StudentNotFoundException($"Student with id `{userId}` not found");
         }
     }
 }

@@ -1,0 +1,30 @@
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col">
+    <h1 class="col">Wnioski</h1>
+    <hr class="mb-4">
+
+    <div class="accordion" id="mainAccordion">
+        @for (applicationType of applicationTypes(); track applicationType.id) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="`#collapse${applicationType.id}`"
+                        aria-expanded="false" [attr.aria-controls]="`collapse${applicationType.id}`">
+                        {{ applicationType.name }}
+                    </button>
+                </h2>
+                <div [id]="`collapse${applicationType.id}`" class="accordion-collapse collapse" data-bs-parent="#mainAccordion">
+                    <div class="accordion-body">
+                        <section class="mb-3 border rounded-3 p-3">{{ applicationType.description }}</section>
+
+                        <button type="button" class="btn btn-success" (click)="onShowApplicationList(applicationType)">
+                            Lista wniosków
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (listApplicationType() !== undefined) {
+    <app-application-list [applicationType]="listApplicationType()!" (hide)="onHideApplicationList()" />
+}

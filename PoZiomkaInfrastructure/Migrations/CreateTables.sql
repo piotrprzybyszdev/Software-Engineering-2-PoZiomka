@@ -19,3 +19,26 @@ CREATE TABLE Administrators(
 	Email varchar(100) UNIQUE NOT NULL,
 	PasswordHash varchar(60) NOT NULL
 );
+
+CREATE TABLE Rooms (
+	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+	[Floor] int NOT NULL,
+	Number int UNIQUE NOT NULL,
+	Capacity int NOT NULL
+)
+
+CREATE TABLE ApplicationType (
+    Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+    Name NVARCHAR(255) NOT NULL,
+    Description TEXT
+);
+
+CREATE TABLE Application (
+    Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+    StudentId INT NOT NULL,
+    ApplicationTypeId INT NOT NULL,
+    FileGuid UNIQUEIDENTIFIER NOT NULL,
+    Status INT NOT NULL, -- Enum: ApplicationStatus
+    FOREIGN KEY (StudentId) REFERENCES Students(Id) ON DELETE CASCADE,
+    FOREIGN KEY (ApplicationTypeId) REFERENCES ApplicationType(Id)
+);

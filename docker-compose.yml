@@ -1,5 +1,14 @@
 name: poziomka
 services:
+  poziomka_blob:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    ports:
+      - 10000:10000
+    volumes:
+      - blob_data:/data/blob
+    command:
+      azurite-blob --blobHost 0.0.0.0 -l /data/blob
+
   poziomka_mail:
     image: changemakerstudiosus/papercut-smtp:latest
     ports:
@@ -12,7 +21,7 @@ services:
       - MSSQL_SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
-      - "1433:1433"
+      - 1433:1433
     volumes:
       - db_data:/data/db
 
@@ -21,12 +30,10 @@ services:
       context: .
       dockerfile: PoZiomkaApi/Dockerfile
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - 8080:8080
+      - 8081:8081
     environment:
       - DB_CONNECTION_STRING=Server=poziomka_db;Database=PoziomkaDB;User Id=SA;Password=Pass@word;TrustServerCertificate=true;Encrypt=false
-      - APP_DOMAIN=poziomka_app
-      - APP_PORT=4200
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
@@ -43,9 +50,10 @@ services:
       - API_DOMAIN=poziomka_api
       - API_PORT=8081
     ports:
-      - "4200:4200"
+      - 4200:4200
     depends_on:
       - poziomka_api
 
 volumes:
   db_data:
+  blob_data:

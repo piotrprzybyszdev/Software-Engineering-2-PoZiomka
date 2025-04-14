@@ -4,6 +4,7 @@ using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Student.Dtos;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaDomain.Student.Commands.LoginStudent;
@@ -19,7 +20,7 @@ public class LoginStudentCommandHandler(IPasswordService passwordService, IStude
         }
         catch (EmailNotFoundException e)
         {
-            throw new UserNotFoundException($"Student with email `{request.Email}` not registered", e);
+            throw new StudentNotFoundException($"Student with email `{request.Email}` not registered", e);
         }
 
         if (!student.IsConfirmed)

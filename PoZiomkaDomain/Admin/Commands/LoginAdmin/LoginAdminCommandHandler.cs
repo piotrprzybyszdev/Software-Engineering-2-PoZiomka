@@ -3,7 +3,7 @@ using PoZiomkaDomain.Admin.Dtos;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common.Interface;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Student.Exceptions;
 using System.Security.Claims;
 
 namespace PoZiomkaDomain.Admin.Commands.LoginAdmin;
@@ -19,7 +19,7 @@ public class LoginAdminCommandHandler(IPasswordService passwordService, IAdminRe
         }
         catch (EmailNotFoundException e)
         {
-            throw new UserNotFoundException($"Admin with email {request.Email} not registered", e);
+            throw new StudentNotFoundException($"Admin with email {request.Email} not registered", e);
         }
 
         if (!passwordService.VerifyHash(request.Password, Admin.PasswordHash))

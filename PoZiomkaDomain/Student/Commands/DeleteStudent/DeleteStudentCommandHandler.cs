@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Student.Commands.DeleteStudent;
 
@@ -24,7 +24,7 @@ public class DeleteStudentCommandHandler(IStudentRepository studentRepository) :
         }
         catch (IdNotFoundException e)
         {
-            throw new UserNotFoundException("Student not found", e);
+            throw new StudentNotFoundException("Student not found", e);
         }
     }
 }

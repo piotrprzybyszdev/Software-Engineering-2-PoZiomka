@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Admin.Dtos;
+using PoZiomkaDomain.Admin.Exceptions;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Common.Exceptions;
 
 namespace PoZiomkaDomain.Admin.Queries.GetAdmin;
 
@@ -22,7 +23,7 @@ public class GetAdminQueryHandler(IAdminRepository adminRepository) : IRequestHa
         }
         catch
         {
-            throw new UserNotFoundException($"Student with id `{adminId}` not found");
+            throw new AdminNotFoundException($"Admin with id `{adminId}` not found");
         }
     }
 }

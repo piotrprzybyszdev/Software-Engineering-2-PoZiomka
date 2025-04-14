@@ -16,7 +16,7 @@ export class StudentService {
   fetchLoggedInStudent(): Observable<ApiResponse<StudentModel | null>> {
     return pipeApiResponse(this.httpClient.get<StudentModel | null>('/api/student/get-logged-in').pipe(tap({
       next: student => this._loggedInStudent.set(student)
-    })));
+    })), false);
   }
 
   confirmStudent(token: string): Observable<ApiResponse<void>> {
