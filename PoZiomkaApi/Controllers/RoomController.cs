@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Room;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Room.Commands.DeleteRoom;
+using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Room.Queries.GetAllRooms;
 using PoZiomkaDomain.Room.Queries.GetRoom;
 
@@ -15,20 +16,18 @@ public class RoomController(IMediator mediator) : ControllerBase
 {
     [HttpGet("get")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<IActionResult> Get()
+    public async Task<IEnumerable<RoomDisplay>> Get()
     {
         var command = new GetAllRoomsQuery();
-        return Ok(await mediator.Send(command));
+        return await mediator.Send(command);
     }
 
     [HttpGet("get/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<RoomStudentDisplay> GetById(int id)
     {
         var getRoom = new GetRoomQuery(id, User);
-        var room = await mediator.Send(getRoom);
-
-        return Ok(room);
+        return await mediator.Send(getRoom);
     }
 
     [HttpPost("create")]

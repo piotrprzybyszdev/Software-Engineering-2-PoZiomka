@@ -20,26 +20,23 @@ public class ApplicationController(IMediator mediator) : ControllerBase
 {
     [HttpGet("get-types")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-    public async Task<IActionResult> GetTypes()
+    public async Task<IEnumerable<ApplicationTypeModel>> GetTypes()
     {
-        var result = await mediator.Send(new GetTypesQuery());
-        return Ok(result);
+        return await mediator.Send(new GetTypesQuery());
     }
 
     [HttpGet("get")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<IActionResult> Get([FromQuery] GetRequest getRequest)
+    public async Task<IEnumerable<ApplicationDisplay>> Get([FromQuery] GetRequest getRequest)
     {
-        var result = await mediator.Send(getRequest.ToQuery());
-        return Ok(result);
+        return await mediator.Send(getRequest.ToQuery());
     }
 
     [HttpGet("get-student")]
     [Authorize(Roles = Roles.Student)]
-    public async Task<IActionResult> GetStudent()
+    public async Task<IEnumerable<ApplicationDisplay>> GetStudent()
     {
-        var result = await mediator.Send(new GetStudentQuery(User));
-        return Ok(result);
+        return await mediator.Send(new GetStudentQuery(User));
     }
 
     [HttpPost("submit/{id}")]
@@ -65,7 +62,7 @@ public class ApplicationController(IMediator mediator) : ControllerBase
 
     [HttpGet("download/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<FileStreamResult> Get(int id)
     {
         var command = new DownloadApplicationCommand(id, User);
         var result = await mediator.Send(command);
