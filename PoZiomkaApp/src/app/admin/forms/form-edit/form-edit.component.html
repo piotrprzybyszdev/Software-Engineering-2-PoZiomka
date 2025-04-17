@@ -1,0 +1,51 @@
+<div class="container mt-5 px-5">
+    @if (form() === undefined) {
+        <!-- Loading ... -->
+    } @else {
+        <h2>
+            @if (isEditingTitle()) {
+                <div class="row">
+                    <input class="col form-control-lg" [(ngModel)]="formTitle" name="title" />
+                    <div class="col col-auto align-content-center p-0 mx-2">
+                        <button class="btn btn-primary" type="button" (click)="onSaveTitle()">
+                            <i class="bi bi-save"></i>
+                        </button>
+                    </div>
+                </div>
+            } @else {
+                {{ formTitle() }}<i class="bi bi-pencil-square p-0 btn text-primary border-0 ms-3" (click)="onTitleEditClick()"></i>
+            }
+        </h2>
+        <hr class="mb-5">
+        <div class="col">
+            <ol>
+                @for (preference of form()!.obligatoryPreferences; track $index) {
+                    <h5>
+                        <li>
+                            {{ preference.name }}<i class="bi bi-pencil-square p-0 btn text-primary border-0 ms-3" (click)="onPreferenceEditClick($index)"></i>
+                        </li>
+                    </h5>
+                  }
+            </ol>
+            <div class="d-flex flex-row justify-content-between">
+                <button class="btn btn-primary px-3" type="button" (click)="onAddPreference()">
+                    <i class="bi bi-plus-lg me-3"></i>Dodaj Pytanie
+                </button>
+                @if (isCreating()) {
+                    <div>
+                        <button class="btn btn-danger px-3 ms-3" type="button" (click)="onCancel()">
+                            Anuluj
+                        </button>
+                        <button class="btn btn-success px-3 ms-3" type="button" (click)="onCreate()">
+                            Utwórz Ankietę
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@if (selectedPreferenceIndex() !== undefined) {
+    <app-preference-edit [originalPreference]="form()!.obligatoryPreferences[selectedPreferenceIndex()!]" (close)="onClose()" (save)="onSave($event)" />
+}

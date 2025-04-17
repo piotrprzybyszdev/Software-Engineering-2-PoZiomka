@@ -29,6 +29,10 @@ export class AdminComponent {
     this.router.navigate(['/admin/rooms']);
   }
 
+  onFormListClick(): void {
+    this.router.navigate(['/admin/forms']);
+  }
+
   logout(): void {
     this.authService.logOut().subscribe({
       next: _ => this.router.navigate(['/login'])

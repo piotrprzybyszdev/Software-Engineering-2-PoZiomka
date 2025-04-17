@@ -4,6 +4,8 @@ import { AdminProfileComponent } from "./profile/profile.component";
 import { StudentsListComponent } from "./students/students.component";
 import { RoomListComponent } from "./rooms/rooms.component";
 import { ApplicationListComponent } from "./applications/applications.component";
+import { FormListComponent } from "./forms/forms.component";
+import { FormEditComponent } from "./forms/form-edit/form-edit.component";
 
 export const routes: Routes = [
   {
@@ -36,5 +38,15 @@ export const routes: Routes = [
     path: 'applications',
     title: 'PoZiomka - Wnioski',
     component: ApplicationListComponent
+  },
+  {
+    path: 'forms',
+    title: 'PoZiomka - Ankiety',
+    component: FormListComponent
+  },
+  {
+    path: 'form/edit/:formId',
+    title: 'PoZiomka - Ankieta',
+    component: FormEditComponent
   }
 ]
