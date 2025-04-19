@@ -11,4 +11,15 @@ public enum FormStatus
     NotFilled, InProgress, Filled
 }
 
-public record StudentAnswerStatus(FormModel Form, FormStatus Status);
+public record StudentAnswerStatus(FormModel Form, FormStatus Status)
+{
+    public StudentAnswerStatus(int FormId, string FormTitle, string FormStatusString)
+        : this(new FormModel(FormId, FormTitle), FormStatusString switch
+        {
+            "Filled" => FormStatus.Filled,
+            "InProgress" => FormStatus.InProgress,
+            _ => FormStatus.NotFilled
+        })
+    {
+    }
+}

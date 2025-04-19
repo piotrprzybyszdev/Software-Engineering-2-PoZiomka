@@ -2,8 +2,8 @@
 
 public class StudentService : IStudentService
 {
-    public Task<bool> CanFillForm(int studentId)
+    public async Task<bool> CanFillForm(int studentId)
     {
-        throw new NotImplementedException();
+        return true;
     }
 }

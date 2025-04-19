@@ -42,3 +42,50 @@ CREATE TABLE Application (
     FOREIGN KEY (StudentId) REFERENCES Students(Id) ON DELETE CASCADE,
     FOREIGN KEY (ApplicationTypeId) REFERENCES ApplicationType(Id)
 );
+
+CREATE TABLE Forms (
+    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    Title NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE ObligatoryPreferences (
+    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    FormId INT NOT NULL,
+    Name NVARCHAR(255) NOT NULL,
+    FOREIGN KEY (FormId) REFERENCES Forms(Id) ON DELETE CASCADE
+);
+
+CREATE TABLE ObligatoryPreferenceOptions (
+    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    PreferenceId INT NOT NULL,
+    Name NVARCHAR(255) NOT NULL,
+    FOREIGN KEY (PreferenceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE StudentAnswer (
+    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    FormId INT NOT NULL,
+    StudentId INT NOT NULL,
+    FOREIGN KEY (FormId) REFERENCES Forms(Id),
+    FOREIGN KEY (StudentId) REFERENCES Students(Id)
+);
+
+CREATE TABLE StudentAnswerChoosable (
+    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    AnswerId INT NOT NULL,
+    Name NVARCHAR(255) NOT NULL,
+    IsHidden BIT NOT NULL,
+    FOREIGN KEY (AnswerId) REFERENCES StudentAnswer(Id) ON DELETE CASCADE
+);
+
+CREATE TABLE StudentAnswerObligatory (
+    Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    AnswerId INT NOT NULL,
+    ObligatoryPrefernceId INT NOT NULL,
+    ObligatoryPreferenceOptionId INT NOT NULL,
+    IsHidden BIT NOT NULL,
+    FOREIGN KEY (AnswerId) REFERENCES StudentAnswer(Id) ON DELETE CASCADE,
+    FOREIGN KEY (ObligatoryPrefernceId) REFERENCES ObligatoryPreferences(Id),
+    FOREIGN KEY (ObligatoryPreferenceOptionId) REFERENCES ObligatoryPreferenceOptions(Id)
+);

@@ -30,3 +30,148 @@ INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) VALUES
 (3, 3, 'cf82c9b4-64db-4d0b-8d9d-9ef832e9a574', 0),
 (3, 1, 'ae41fadd-93c9-48a7-bdd3-7dd2fd70f845', 1),
 (3, 1, '3f373a47-93dc-4f07-b438-18835d27aeb1', 0);
+
+INSERT INTO Forms (Title) VALUES 
+('University Application Form'),
+('Scholarship Preference Form'),
+('Housing Preference Form');
+
+
+-- FormId: 1 (University Application Form)
+INSERT INTO ObligatoryPreferences (FormId, Name) VALUES 
+(1, 'Preferred Campus'),
+(1, 'Intended Major'),
+(1, 'Mode of Study'),
+(1, 'Entry Term'),
+(1, 'Preferred Language of Instruction');
+
+-- Preferred Campus (PreferenceId = 1)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(1, 'Main Campus'),
+(1, 'City Campus'),
+(1, 'Online Campus');
+
+-- Intended Major (PreferenceId = 2)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(2, 'Computer Science'),
+(2, 'Business Administration'),
+(2, 'Psychology'),
+(2, 'Mechanical Engineering');
+
+-- Mode of Study (PreferenceId = 3)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(3, 'Full-Time'),
+(3, 'Part-Time'),
+(3, 'Evening Classes');
+
+-- Entry Term (PreferenceId = 4)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(4, 'Fall 2025'),
+(4, 'Spring 2026'),
+(4, 'Summer 2026');
+
+-- Preferred Language of Instruction (PreferenceId = 5)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(5, 'English'),
+(5, 'German'),
+(5, 'Spanish');
+
+-- FormId: 2
+INSERT INTO ObligatoryPreferences (FormId, Name) VALUES 
+(2, 'Scholarship Type'),
+(2, 'Financial Need Level'),
+(2, 'Academic Excellence'),
+(2, 'Extracurricular Involvement'),
+(2, 'Recommendation Source');
+
+-- Scholarship Type (PreferenceId = 6)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(6, 'Merit-Based'),
+(6, 'Need-Based'),
+(6, 'Athletic Scholarship');
+
+-- Financial Need Level (PreferenceId = 7)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(7, 'Low'),
+(7, 'Medium'),
+(7, 'High');
+
+-- Academic Excellence (PreferenceId = 8)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(8, 'Top 5% of Class'),
+(8, 'Top 10% of Class'),
+(8, 'Honors');
+
+-- Extracurricular Involvement (PreferenceId = 9)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(9, 'Very Active'),
+(9, 'Moderately Active'),
+(9, 'Not Active');
+
+-- Recommendation Source (PreferenceId = 10)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(10, 'Teacher'),
+(10, 'Counselor'),
+(10, 'Coach');
+
+-- FormId: 3 (Housing Preference Form)
+INSERT INTO ObligatoryPreferences (FormId, Name) VALUES 
+(3, 'Roommate Preference'),
+(3, 'Dormitory Style'),
+(3, 'Noise Tolerance'),
+(3, 'Wake-up Time'),
+(3, 'Cleanliness Preference');
+
+-- Roommate Preference (11)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(11, 'Same Major'),
+(11, 'No Preference'),
+(11, 'Night Owl');
+
+-- Dormitory Style (12)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(12, 'Single Room'),
+(12, 'Shared Room'),
+(12, 'Suite');
+
+-- Noise Tolerance (13)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(13, 'Very Quiet'),
+(13, 'Moderate'),
+(13, 'Lively');
+
+-- Wake-up Time (14)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(14, 'Early (5-7 AM)'),
+(14, 'Mid (7-9 AM)'),
+(14, 'Late (9+ AM)');
+
+-- Cleanliness Preference (15)
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name) VALUES 
+(15, 'Neat Freak'),
+(15, 'Average'),
+(15, 'Messy but Functional');
+
+
+-- Insert 4 StudentAnswers
+INSERT INTO StudentAnswer (FormId, StudentId) VALUES 
+(1, 1),
+(2, 1),
+(3, 1);
+
+
+INSERT INTO StudentAnswerChoosable (AnswerId, Name, IsHidden) VALUES 
+(1, 'Joined Art Club', 0),
+(1, 'Volunteered at School Events', 0),
+(1, 'Won Debate Championship', 0);
+
+
+-- Preferred Campus (PreferenceId = 1) → 'Main Campus' (OptionId = 1)
+INSERT INTO StudentAnswerObligatory (AnswerId, ObligatoryPrefernceId, ObligatoryPreferenceOptionId, IsHidden) VALUES 
+(1, 1, 1, 0),
+(1, 2, 4, 0),
+(1, 3, 7, 0),
+(1, 4, 10, 0),
+(1, 5, 13, 0),
+(2, 6, 16, 0),
+(2, 9, 22, 0);
