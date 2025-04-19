@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.StudentAnswer;
 using PoZiomkaDomain.Application.Queries.GetStudent;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.StudentAnswers.Commands.Create;
+using PoZiomkaDomain.StudentAnswers.Commands.Delete;
 using PoZiomkaDomain.StudentAnswers.Dtos;
 using PoZiomkaDomain.StudentAnswers.Queries.GetAnswer;
 using PoZiomkaDomain.StudentAnswers.Queries.GetStudent;
@@ -60,20 +62,26 @@ public class StudentAnswerController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> Create([FromBody] StudentAnswerCreateRequest createRequest)
     {
-        return NotFound();
+        var command = createRequest.ToCreateCommand(User);
+        await mediator.Send(command);
+        return Ok();
     }
 
     [HttpPut("update")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> Update([FromBody] StudentAnswerUpdateRequest updateRequest)
     {
-        return NotFound();
+        var command = updateRequest.ToUpdateCommand(User);
+        await mediator.Send(command);
+        return Ok();
     }
 
     [HttpDelete("delete/{id}")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> Delete(int id)
     {
-        return NotFound();
+        var command = new DeleteCommand(User, id);
+        await mediator.Send(command);
+        return Ok();
     }
 }
