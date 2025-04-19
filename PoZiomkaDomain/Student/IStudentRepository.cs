@@ -18,5 +18,4 @@ public interface IStudentRepository
     public Task DeleteStudent(int id, CancellationToken? cancellationToken);
     public Task UpdatePassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken);
     public Task UpdateRoom(int id, int? roomId);
-    public Task<bool> CanFillForms(int studentId, CancellationToken? cancellationToken);
 }

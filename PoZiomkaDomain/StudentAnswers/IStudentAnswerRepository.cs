@@ -17,7 +17,6 @@ public interface IStudentAnswerRepository
         IEnumerable<(string Name, bool IsHidden)> ChoosableAnswers,
         IEnumerable<(int ObligatoryPreferenceId, int ObligatoryPreferenceOptionId, bool IsHidden)> ObligatoryAnswers,
         CancellationToken? cancellationToken);
-    Task DeleteAnswer(int formId, CancellationToken? cancellationToken);
-
+    Task DeleteAnswer(int formId, int studentId, CancellationToken? cancellationToken);
 }
 

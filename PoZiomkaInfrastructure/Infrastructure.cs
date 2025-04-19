@@ -8,6 +8,7 @@ using PoZiomkaDomain.Common.Interface;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Student;
+using PoZiomkaDomain.StudentAnswers;
 using PoZiomkaInfrastructure.Exceptions;
 using PoZiomkaInfrastructure.Migrations;
 using PoZiomkaInfrastructure.Repositories;
@@ -71,7 +72,10 @@ public static class Infrastructure
         services.AddScoped<IAdminRepository, AdminRepository>();
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<IRoomRepository, RoomRepository>();
+        services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
+
         services.AddScoped<IJudgeService, JudgeService>();
+        services.AddScoped<IStudentService, StudentService>();
 
         services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
             configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)

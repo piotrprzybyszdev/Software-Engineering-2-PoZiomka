@@ -21,7 +21,7 @@ public class GetStudentAnswersQueryHandler(IStudentAnswerRepository studentAnswe
             throw new UserCanNotFillFormException("You can't fill this form");
         }
 
-        return await studentAnswerRepository.GetStudentFormAnswerStatus(studentId.Value, cancellationToken);
+        return await studentAnswerRepository.GetStudentFormAnswerStatus(studentId, cancellationToken);
     }
 }
 
