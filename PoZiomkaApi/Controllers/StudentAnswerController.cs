@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.StudentAnswer;
+using PoZiomkaDomain.Application.Queries.GetStudent;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.StudentAnswers.Dtos;
+using PoZiomkaDomain.StudentAnswers.Queries.GetAnswer;
+using PoZiomkaDomain.StudentAnswers.Queries.GetStudent;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -15,6 +18,8 @@ public class StudentAnswerController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Student)]
     public async Task<IEnumerable<StudentAnswerStatus>> GetStudent()
     {
+        GetStudentAnswersQuery query = new(User);
+        return await mediator.Send(query);
         return [
             new StudentAnswerStatus(new(1, "Podstawowa ankieta dotycząca współlokatora"), FormStatus.Filled)
         ];
@@ -24,6 +29,9 @@ public class StudentAnswerController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Student)]
     public async Task<StudentAnswerDisplay> Get(int formId, int studentId)
     {
+        GetAnswerQuery query = new(User, formId, studentId);
+        return await mediator.Send(query);
+
         return new StudentAnswerDisplay(1, formId, studentId, [
             new(1, "Nie pali (przynajmniej nie w pokoju XD)", false),
             new(2, "Nie zamawia tajskiego z dowozem", false)
