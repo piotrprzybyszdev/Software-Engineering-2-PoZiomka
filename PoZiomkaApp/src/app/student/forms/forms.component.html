@@ -1,0 +1,41 @@
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col">
+    <h1 class="col">Ankiety</h1>
+    <hr class="mb-4" />
+  
+    <div class="accordion" id="formAccordion">
+      @for (form of forms(); track form.id) {
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapse' + form.id"
+              aria-expanded="false"
+              [attr.aria-controls]="'collapse' + form.id"
+            >
+              {{ form.title }}
+            </button>
+          </h2>
+          <div
+            [id]="'collapse' + form.id"
+            class="accordion-collapse collapse"
+            data-bs-parent="#formAccordion"
+          >
+            <div class="accordion-body">
+              <button class="btn btn-primary" (click)="onShowForm(form)">
+                Pokaż szczegóły formularza
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+
+  @if (selectedForm() !== undefined) {
+    <app-form-fill [formContent]="selectedForm()!" (hide)="onHideForm()" />
+  }
+  
+  

@@ -1,0 +1,35 @@
+<app-popup
+  (outsideClicked)="hide.emit()"
+  (closeClicked)="hide.emit()"
+  [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'"
+>
+  <div class="p-md-5 p-3 scrollable-content">
+    <h3>{{ formContent.title }}</h3>
+    <form class="mt-3" (submit)="onSubmit(); $event.preventDefault()">
+      <div *ngFor="let pref of formContent.obligatoryPreferences" class="mb-4">
+        <label class="form-label fw-bold">{{ pref.name }}</label>
+        <div *ngFor="let option of pref.options" class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="pref-{{ pref.id }}"
+            [value]="option.id"
+            [checked]="selectedOptions()[pref.id] === option.id"
+            (change)="onOptionSelect(pref.id, option.id)"
+            id="pref-{{ pref.id }}-opt-{{ option.id }}"
+          />
+          <label class="form-check-label" [for]="'pref-' + pref.id + '-opt-' + option.id">
+            {{ option.name }}
+          </label>
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-success w-100"
+        [disabled]="isSubmitting()"
+      >
+        Zapisz odpowiedzi
+      </button>
+    </form>
+  </div>
+</app-popup>
