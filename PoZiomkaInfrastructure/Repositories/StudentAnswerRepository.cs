@@ -44,6 +44,7 @@ public class StudentAnswerRepository(IDbConnection connection) : IStudentAnswerR
 	                JOIN ObligatoryPreferences as o on s.ObligatoryPrefernceId = o.Id 
 	                JOIN ObligatoryPreferenceOptions as op on op.PreferenceId = o.Id 
 	                WHERE AnswerId = @answerId ";
+        var sql3 = @"SELECT Id, Name, IsHidden FROM StudentAnswerChoosable WHERE AnswerId = @answerId ";
         int answerId;
         try
         {
@@ -96,8 +97,18 @@ public class StudentAnswerRepository(IDbConnection connection) : IStudentAnswerR
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
+        List<StudentAnswerChoosableDisplay> choosableAnswers;
+        try
+        {
+            choosableAnswers = (await connection.QueryAsync<StudentAnswerChoosableDisplay>(sql3, new { answerId })).ToList();
+        }
+        catch(SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+        
 
-        StudentAnswerDisplay display = new StudentAnswerDisplay(answerId, formId, studentId, new List<StudentAnswerChoosableDisplay>(), lookup.Values.ToList());
+        StudentAnswerDisplay display = new StudentAnswerDisplay(answerId, formId, studentId, choosableAnswers, lookup.Values.ToList());
         return display ?? throw new IdNotFoundException();
     }
 

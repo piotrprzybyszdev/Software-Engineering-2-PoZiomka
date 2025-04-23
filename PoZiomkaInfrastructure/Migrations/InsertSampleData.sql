@@ -170,8 +170,8 @@ INSERT INTO StudentAnswerChoosable (AnswerId, Name, IsHidden) VALUES
 INSERT INTO StudentAnswerObligatory (AnswerId, ObligatoryPrefernceId, ObligatoryPreferenceOptionId, IsHidden) VALUES 
 (1, 1, 1, 0),
 (1, 2, 4, 0),
-(1, 3, 7, 0),
-(1, 4, 10, 0),
-(1, 5, 13, 0),
-(2, 6, 16, 0),
-(2, 9, 22, 0);
+(1, 3, 10, 0),
+(1, 4, 12, 0),
+(1, 5, 15, 0),
+(2, 6, 28, 0),
+(2, 9, 17, 0);
