@@ -12,7 +12,7 @@ public class UpdateCommandHandler(IStudentAnswerRepository studentAnswerReposito
     public async Task Handle(UpdateCommand request, CancellationToken cancellationToken)
     {
         int studentId = request.User.GetUserId() ?? throw new DomainException("UserId is null");
-        await studentAnswerRepository.CreateAnswer(
+        await studentAnswerRepository.UpdateAnswer(
             studentId, request.formId, request.ChoosableAnswers, request.ObligatoryAnswers, null);
     }
 }

@@ -17,7 +17,7 @@ public class DeleteCommandHandler(IStudentAnswerRepository studentAnswerReposito
 
         try
         {
-            await studentAnswerRepository.DeleteAnswer(request.formId, studentId, null);
+            await studentAnswerRepository.DeleteAnswer(request.answerId, null);
         }
         catch (UserDidNotAnswerItException ex)
         {

@@ -9,20 +9,98 @@ using Dapper;
 using Microsoft.Extensions.Options;
 using PoZiomkaDomain.Form.Dtos;
 using System.Linq;
+using Microsoft.SqlServer.Server;
+using System.Transactions;
+using System.Runtime.Serialization;
+using TransactionException = PoZiomkaInfrastructure.Exceptions.TransactionException;
 
 namespace PoZiomkaInfrastructure.Repositories;
 
 public class StudentAnswerRepository(IDbConnection connection) : IStudentAnswerRepository
 {
-    public Task CreateAnswer(int studentId, int FormId, IEnumerable<(string Name, bool IsHidden)> ChoosableAnswers, IEnumerable<(int ObligatoryPreferenceId, int ObligatoryPreferenceOptionId, bool IsHidden)> ObligatoryAnswers, CancellationToken? cancellationToken)
+    public async Task CreateAnswer(int studentId, int FormId, IEnumerable<(string Name, bool IsHidden)> ChoosableAnswers, IEnumerable<(int ObligatoryPreferenceId, int ObligatoryPreferenceOptionId, bool IsHidden)> ObligatoryAnswers, CancellationToken? cancellationToken)
     {
-        throw new NotImplementedException();
+        if (connection.State != ConnectionState.Open)
+        {
+            connection.Open();
+        }
+        using var transaction = connection.BeginTransaction();
+        try
+        {
+            // Insert into StudentAnswer and get answerId
+            var insertAnswerSql = @"
+            INSERT INTO StudentAnswer (StudentId, FormId)
+            VALUES (@StudentId, @FormId);
+            SELECT CAST(SCOPE_IDENTITY() as int);";
+
+            var answerId = await connection.ExecuteScalarAsync<int>(
+            insertAnswerSql,
+                new { StudentId = studentId, FormId = FormId }, transaction);
+
+            // Insert into StudentAnswerChoosable
+            var insertChoosableSql = @"
+            INSERT INTO StudentAnswerChoosable (AnswerId, Name, IsHidden)
+            VALUES (@AnswerId, @Name, @IsHidden);";
+
+            foreach (var (name, isHidden) in ChoosableAnswers)
+            {
+                await connection.ExecuteAsync(
+                    insertChoosableSql,
+                    new { AnswerId = answerId, Name = name, IsHidden = isHidden }, transaction);
+            }
+
+            // Insert into StudentAnswerObligatory
+            var insertObligatorySql = @"
+            INSERT INTO StudentAnswerObligatory (AnswerId, ObligatoryPrefernceId, ObligatoryPreferenceOptionId, IsHidden)
+            VALUES (@AnswerId, @ObligatoryPreferenceId, @ObligatoryPreferenceOptionId, @IsHidden);";
+
+            foreach (var (prefId, optionId, isHidden) in ObligatoryAnswers)
+            {
+                await connection.ExecuteAsync(
+                    insertObligatorySql,
+                    new
+                    {
+                        AnswerId = answerId,
+                        ObligatoryPreferenceId = prefId,
+                        ObligatoryPreferenceOptionId = optionId,
+                        IsHidden = isHidden
+                    }, transaction);
+            }
+
+            transaction.Commit();
+        }
+        catch (SqlException exception)
+        {
+            transaction.Rollback();
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
     }
 
-    public Task DeleteAnswer(int formId, int studentId, CancellationToken? cancellationToken)
+    public async Task DeleteAnswer(int formId, int studentId, CancellationToken? cancellationToken)
     {
-        throw new NotImplementedException();
+        var sql = @"DELETE FROM StudentAnswer WHERE FormId = @formId AND StudentId = @studentId";
+        try
+        {
+            await connection.ExecuteAsync(sql, new { formId, studentId });
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
     }
+    public async Task DeleteAnswer(int answerId, CancellationToken? cancellationToken)
+    {
+        var sql = @"DELETE FROM StudentAnswer WHERE Id = @answerId";
+        try
+        {
+            await connection.ExecuteAsync(sql, new { answerId });
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
+
     public record StudentAnswerObligatoryDto(int StudentAnswerObligatoryId, int ObligatoryPreferenceOptionId, bool IsHidden);
     public record ObligatoryPreferenceDto(int ObligatoryPreferenceId, string ObligatoryPreferenceName);
     public async Task<StudentAnswerDisplay> GetStudentAnswer(int formId, int studentId, CancellationToken? cancellationToken)
@@ -142,8 +220,16 @@ GROUP BY f.Id, f.Title;
         }
     }
 
-    public Task UpdateAnswer(int studentId, int FormId, IEnumerable<(string Name, bool IsHidden)> ChoosableAnswers, IEnumerable<(int ObligatoryPreferenceId, int ObligatoryPreferenceOptionId, bool IsHidden)> ObligatoryAnswers, CancellationToken? cancellationToken)
+    public async Task UpdateAnswer(int studentId, int FormId, IEnumerable<(string Name, bool IsHidden)> ChoosableAnswers, IEnumerable<(int ObligatoryPreferenceId, int ObligatoryPreferenceOptionId, bool IsHidden)> ObligatoryAnswers, CancellationToken? cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await DeleteAnswer(FormId, studentId, cancellationToken);
+            await CreateAnswer(studentId, FormId, ChoosableAnswers, ObligatoryAnswers, cancellationToken);
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
     }
 }
