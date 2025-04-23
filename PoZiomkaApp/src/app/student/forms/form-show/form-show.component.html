@@ -1,0 +1,42 @@
+<app-popup
+  (outsideClicked)="hide.emit()"
+  (closeClicked)="hide.emit()"
+  [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'"
+>
+  <div class="p-md-5 p-3 scrollable-content" *ngIf="answer() as ans">
+    <h3>Odpowiedzi ucznia</h3>
+
+    <form class="mt-3" (submit)="onSubmit(); $event.preventDefault()">
+      <div *ngFor="let a of ans.ogligatoryAnswers" class="mb-4">
+        <label class="form-label fw-bold">
+          {{ a.obligatoryPreference.name }}
+          <span class="text-danger">*</span>
+        </label>
+        <div *ngFor="let option of a.obligatoryPreference.options" class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="pref-{{ a.obligatoryPreference.id }}"
+            [value]="option.id"
+            [checked]="selectedAnswers()[a.obligatoryPreference.id] === option.id"
+            (change)="onSelect(a.obligatoryPreference.id, option.id)"
+            id="opt-{{ a.obligatoryPreference.id }}-{{ option.id }}"
+          />
+          <label class="form-check-label" [for]="'opt-' + a.obligatoryPreference.id + '-' + option.id">
+            {{ option.name }}
+          </label>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-success w-100"
+        [disabled]="isSubmitting()"
+      >
+        Zapisz zmiany
+      </button>
+    </form>
+  </div>
+</app-popup>
+
+  

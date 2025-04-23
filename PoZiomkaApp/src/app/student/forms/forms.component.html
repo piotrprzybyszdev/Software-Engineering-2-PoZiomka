@@ -23,8 +23,15 @@
             data-bs-parent="#formAccordion"
           >
             <div class="accordion-body">
-              <button class="btn btn-primary" (click)="onShowForm(form)">
-                Pokaż szczegóły formularza
+              <button class="btn btn-primary me-2" (click)="onShowForm(form)">
+                Wypełnij ankietę
+              </button>
+              <button
+                class="btn btn-outline-secondary"
+                [disabled]="!hasAnswer(form.id)"
+                (click)="onShowAnswers(form.id)"
+              >
+              {{ hasAnswer(form.id) ? 'Pokaż odpowiedzi' : 'Brak odpowiedzi' }}
               </button>
             </div>
           </div>
@@ -32,10 +39,22 @@
       }
     </div>
   </div>
-
-
+  
   @if (selectedForm() !== undefined) {
-    <app-form-fill [formContent]="selectedForm()!" (hide)="onHideForm()" />
+    <app-form-fill
+      [formContent]="selectedForm()!"
+      (hide)="onHideForm()"
+    />
   }
+  
+  @if (selectedFormIdForView() !== undefined){
+    <app-form-show
+      [formId]="selectedFormIdForView()!"
+      [studentId]="getStudentId()!"
+      (hide)="onHideAnswers()"
+    />
+    }
+  
+  
   
   
