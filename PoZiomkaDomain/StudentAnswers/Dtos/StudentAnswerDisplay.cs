@@ -4,7 +4,33 @@ namespace PoZiomkaDomain.StudentAnswers.Dtos;
 
 public record StudentAnswerChoosableDisplay(int Id, string Name, bool IsHidden);
 public record StudentAnswerObligatoryDisplay(int Id, ObligatoryPreferenceDisplay ObligatoryPreference, int ObligatoryPreferenceOptionId, bool IsHidden);
-public record StudentAnswerDisplay(int Id, int FormId, int StudentId, IEnumerable<StudentAnswerChoosableDisplay> ChoosableAnswers, IEnumerable<StudentAnswerObligatoryDisplay> ObligatoryAnswers);
+public class StudentAnswerDisplay
+{
+    public int Id { get; set; }
+    public int FormId { get; set; }
+    public int StudentId { get; set; }
+    public IEnumerable<StudentAnswerChoosableDisplay> ChoosableAnswers { get; set; }
+    public IEnumerable<StudentAnswerObligatoryDisplay> ObligatoryAnswers { get; set; }
+
+    public StudentAnswerDisplay(int id, int formId, int studentId,
+        IEnumerable<StudentAnswerChoosableDisplay> choosableAnswers,
+        IEnumerable<StudentAnswerObligatoryDisplay> obligatoryAnswers)
+    {
+        Id = id;
+        FormId = formId;
+        StudentId = studentId;
+        ChoosableAnswers = choosableAnswers;
+        ObligatoryAnswers = obligatoryAnswers;
+    }
+
+    public void RemoveHiddenAnswers()
+    {
+        if (ChoosableAnswers != null)
+            ChoosableAnswers = ChoosableAnswers.Where(x => !x.IsHidden);
+        if (ObligatoryAnswers != null)
+            ObligatoryAnswers = ObligatoryAnswers.Where(x => !x.IsHidden);
+    }
+}
 
 public enum FormStatus
 {

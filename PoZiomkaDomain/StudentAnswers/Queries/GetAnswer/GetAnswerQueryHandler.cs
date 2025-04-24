@@ -26,8 +26,13 @@ public class GetAnswerQueryHandler(IStudentAnswerRepository studentAnswerReposit
         {
             throw new UnauthorizedAccessException("You are not authorized to see this answer");
         }
+        var result = await studentAnswerRepository.GetStudentAnswer(request.formId, request.studentId, cancellationToken);
 
-        return await studentAnswerRepository.GetStudentAnswer(request.formId, request.studentId, cancellationToken);
+        if(studentId!=request.studentId)
+        {
+            result.RemoveHiddenAnswers();
+        }
+        return result;
     }
 }
 
