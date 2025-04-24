@@ -15,6 +15,10 @@ public class DeleteCommandHandler(IStudentAnswerRepository studentAnswerReposito
         if(!await studentService.CanFillForm(studentId))
             throw new UserCanNotFillFormException("Student can not fill form");
 
+        var studentAnswers = await studentAnswerRepository.GetStudentAnswerModels(studentId, null);
+        if (studentAnswers.All(x => x.Id != request.answerId))
+            throw new DomainException("Student has not filled this form or invalid answerId");
+
         try
         {
             await studentAnswerRepository.DeleteAnswer(request.answerId, null);

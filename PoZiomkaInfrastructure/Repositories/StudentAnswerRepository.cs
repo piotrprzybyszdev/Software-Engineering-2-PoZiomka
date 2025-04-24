@@ -79,25 +79,35 @@ public class StudentAnswerRepository(IDbConnection connection) : IStudentAnswerR
     public async Task DeleteAnswer(int formId, int studentId, CancellationToken? cancellationToken)
     {
         var sql = @"DELETE FROM StudentAnswer WHERE FormId = @formId AND StudentId = @studentId";
+        int affectedRows;
         try
         {
-            await connection.ExecuteAsync(sql, new { formId, studentId });
+            affectedRows = await connection.ExecuteAsync(sql, new { formId, studentId });
         }
         catch (SqlException exception)
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+        if (affectedRows == 0)
+        {
+            throw new UserDidNotAnswerItException("User did not answer this form");
         }
     }
     public async Task DeleteAnswer(int answerId, CancellationToken? cancellationToken)
     {
         var sql = @"DELETE FROM StudentAnswer WHERE Id = @answerId";
+        int affectedRows;
         try
         {
-            await connection.ExecuteAsync(sql, new { answerId });
+            affectedRows = await connection.ExecuteAsync(sql, new { answerId });
         }
         catch (SqlException exception)
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+        if (affectedRows == 0)
+        {
+            throw new UserDidNotAnswerItException("User did not answer this form");
         }
     }
 
@@ -226,6 +236,21 @@ GROUP BY f.Id, f.Title;
         {
             await DeleteAnswer(FormId, studentId, cancellationToken);
             await CreateAnswer(studentId, FormId, ChoosableAnswers, ObligatoryAnswers, cancellationToken);
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
+
+    public async Task<IEnumerable<StudentAnswerModel>> GetStudentAnswerModels(int studentId, CancellationToken? cancellationToken)
+    {
+        var sql = "SELECT * FROM StudentAnswer WHERE StudentId = @studentId";
+        try
+        {
+            var studentAnswerModels = await connection.QueryAsync<StudentAnswerModel>(
+                               new CommandDefinition(sql, new { studentId }, cancellationToken: cancellationToken ?? default));
+            return studentAnswerModels ?? throw new IdNotFoundException();
         }
         catch (SqlException exception)
         {

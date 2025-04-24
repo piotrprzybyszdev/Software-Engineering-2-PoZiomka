@@ -19,5 +19,7 @@ public interface IStudentAnswerRepository
         CancellationToken? cancellationToken);
     Task DeleteAnswer(int formId, int studentId, CancellationToken? cancellationToken);
     Task DeleteAnswer(int answerId, CancellationToken? cancellationToken);
+
+    Task<IEnumerable<StudentAnswerModel>> GetStudentAnswerModels(int studentId, CancellationToken? cancellationToken);
 }
 
