@@ -51,14 +51,14 @@ CREATE TABLE Forms (
 CREATE TABLE ObligatoryPreferences (
     Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     FormId INT NOT NULL,
-    Name NVARCHAR(255) NOT NULL,
+    [Name] NVARCHAR(255) NOT NULL,
     FOREIGN KEY (FormId) REFERENCES Forms(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE ObligatoryPreferenceOptions (
     Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     PreferenceId INT NOT NULL,
-    Name NVARCHAR(255) NOT NULL,
+    [Name] NVARCHAR(255) NOT NULL,
     FOREIGN KEY (PreferenceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE
 );
 

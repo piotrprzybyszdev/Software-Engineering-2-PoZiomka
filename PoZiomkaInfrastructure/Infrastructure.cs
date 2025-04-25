@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Common.Interface;
+using PoZiomkaDomain.Form;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Room;
 using PoZiomkaDomain.Student;
@@ -73,6 +74,7 @@ public static class Infrastructure
         services.AddScoped<IApplicationRepository, ApplicationRepository>();
         services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
+        services.AddScoped<IFormRepository, FormRepository>();
 
         services.AddScoped<IJudgeService, JudgeService>();
         services.AddScoped<IStudentService, StudentService>();
