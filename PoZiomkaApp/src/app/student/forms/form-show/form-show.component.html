@@ -3,30 +3,58 @@
   (closeClicked)="hide.emit()"
   [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'"
 >
-  <div class="p-md-5 p-3 scrollable-content" *ngIf="answer() as ans">
+  <div class="p-md-5 p-3 scrollable-content" *ngIf="formContent() as form">
     <h3>Odpowiedzi ucznia</h3>
 
     <form class="mt-3" (submit)="onSubmit(); $event.preventDefault()">
-      <div *ngFor="let a of ans.ogligatoryAnswers" class="mb-4">
+      <div *ngFor="let pref of form.obligatoryPreferences" class="mb-4">
         <label class="form-label fw-bold">
-          {{ a.obligatoryPreference.name }}
+          {{ pref.name }}
           <span class="text-danger">*</span>
         </label>
-        <div *ngFor="let option of a.obligatoryPreference.options" class="form-check">
+        <div *ngFor="let option of pref.options" class="form-check">
           <input
             class="form-check-input"
             type="radio"
-            name="pref-{{ a.obligatoryPreference.id }}"
+            name="pref-{{ pref.id }}"
             [value]="option.id"
-            [checked]="selectedAnswers()[a.obligatoryPreference.id] === option.id"
-            (change)="onSelect(a.obligatoryPreference.id, option.id)"
-            id="opt-{{ a.obligatoryPreference.id }}-{{ option.id }}"
+            [checked]="selectedAnswers()[pref.id] === option.id"
+            (change)="onSelect(pref.id, option.id)"
+            id="opt-{{ pref.id }}-{{ option.id }}"
           />
-          <label class="form-check-label" [for]="'opt-' + a.obligatoryPreference.id + '-' + option.id">
+          <label class="form-check-label" [for]="'opt-' + pref.id + '-' + option.id">
             {{ option.name }}
           </label>
         </div>
       </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-bold">Odpowiedzi otwarte</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Wpisz odpowiedź i naciśnij Enter"
+          [(ngModel)]="choosableInput"
+          name="choosableInput"
+          (keydown.enter)="onAddChoosable(); $event.preventDefault()"
+        />
+        <div class="mt-2">
+          <span
+            class="badge bg-secondary me-2 mb-1"
+            *ngFor="let answer of choosableAnswers(); let i = index"
+          >
+            {{ answer }}
+            <button
+              type="button"
+              class="btn-close btn-close-white ms-2"
+              aria-label="Usuń"
+              (click)="removeChoosable(i)"
+              style="font-size: 0.7em;"
+            ></button>
+          </span>
+        </div>
+      </div>
+      
 
       <button
         type="submit"
