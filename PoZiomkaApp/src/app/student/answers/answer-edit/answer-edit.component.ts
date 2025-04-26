@@ -87,7 +87,7 @@ export class AnswerEditComponent {
   
     if (this.existingAnswer) {
       const payload: AnswerUpdate = {
-        id: this.existingAnswer.id,
+        formId: this.formContent.id,
         obligatoryAnswers,
         choosableAnswers
       };

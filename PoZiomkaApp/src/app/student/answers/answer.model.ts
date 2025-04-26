@@ -47,7 +47,7 @@ export type AnswerCreate = {
 }
 
 export type AnswerUpdate = {
-  id: number,
+  formId: number,
   choosableAnswers: ChoosableAnswerCreate[],
   obligatoryAnswers: ObligatoryAnswerCreate[]
 }
