@@ -23,15 +23,12 @@
             data-bs-parent="#formAccordion"
           >
             <div class="accordion-body">
-              <button class="btn btn-primary me-2" (click)="onShowForm(form)" [disabled]="hasAnswer(form.id)">
-                {{ hasAnswer(form.id) ? 'Ankieta już wypełniona' : 'Wypełnij ankietę' }}
-              </button>
-              <button
-                class="btn btn-outline-secondary"
-                
-                (click)="onShowAnswers(form.id)"
+              
+              <button 
+                [class]="getButtonClass(form.id)" 
+                (click)="onHandleForm(form)"
               >
-              {{ hasAnswer(form.id) ? 'Pokaż odpowiedzi' : 'Brak odpowiedzi' }}
+                {{ getActionLabel(form.id) }}
               </button>
             </div>
           </div>
@@ -43,6 +40,14 @@
   @if (selectedForm() !== undefined) {
     <app-answer-edit
       [formContent]="selectedForm()!"
+      (hide)="onHideForm()"
+    />
+  }
+
+  @if (selectedForm() !== undefined && selectedAnswer() !== undefined) {
+    <app-answer-edit
+      [formContent]="selectedForm()!"
+      [existingAnswer]="selectedAnswer()"
       (hide)="onHideForm()"
     />
   }

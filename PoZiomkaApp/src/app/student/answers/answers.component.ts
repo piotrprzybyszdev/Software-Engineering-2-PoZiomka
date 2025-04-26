@@ -3,7 +3,7 @@ import { FormService } from '../../admin/forms/form.service';
 import { FormContentModel, FormModel } from '../../admin/forms/form.model';
 import { ToastrService } from 'ngx-toastr';
 import { AnswerEditComponent } from './answer-edit/answer-edit.component';
-import { AnswerModel, AnswerStatus } from './answer.model';
+import { AnswerModel, AnswerStatus, FormStatus } from './answer.model';
 import { AnswerService } from './answer.service';
 import { StudentService } from '../student.service';
 import { AnswerViewComponent } from './answer-view/answer-view.component';
@@ -27,6 +27,8 @@ export class AnswersComponent implements OnInit {
   selectedForm = signal<FormContentModel | undefined>(undefined);
   selectedFormIdForView = signal<number | undefined>(undefined);
   studentId = signal<number | undefined>(undefined);
+  selectedAnswer = signal<AnswerModel | undefined>(undefined);
+
 
   ngOnInit(): void {
     this.loadForms();
@@ -78,8 +80,79 @@ export class AnswersComponent implements OnInit {
     });
   }
 
+  getAnswerStatusForForm(formId: number): AnswerStatus | undefined {
+    return this.answers().find(ans => ans.form.id === formId);
+  }
+  
+  getActionLabel(formId: number): string {
+    const status = this.getAnswerStatusForForm(formId)?.status;
+    switch (status) {
+      case 0: // NotFilled
+        return 'Wypełnij ankietę';
+      case 1: // InProgress
+        return 'Kontynuuj wypełnianie';
+      case 2: // Filled
+        return 'Pokaż odpowiedzi';
+      default:
+        return 'Wypełnij ankietę';
+    }
+  }
+
+  getButtonClass(formId: number): string {
+    const status = this.getAnswerStatusForForm(formId)?.status;
+    switch (status) {
+      case 0: // NotFilled
+        return 'btn btn-primary me-2'; 
+      case 1: // InProgress
+        return 'btn btn-warning me-2'; 
+      case 2: // Filled
+        return 'btn btn-success me-2'; 
+      default:
+        return 'btn btn-secondary me-2'; 
+    }
+  }
+  
+  
+  onHandleForm(form: FormModel): void {
+    const status = this.getAnswerStatusForForm(form.id)?.status;
+  
+    if (status === undefined || status === 0) { 
+      this.onShowForm(form);
+    } else if (status === 1) { 
+      const studentId = this.getStudentId();
+      if (studentId !== undefined) {
+        this.answerService.getAnswers(form.id, studentId).subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.formService.getFormContent(form.id).subscribe({
+                next: (formContentRes) => {
+                  if (formContentRes.success) {
+                    this.selectedForm.set(formContentRes.payload);
+                    this.selectedAnswer.set(res.payload); 
+                  } else {
+                    this.toastr.error('Nie udało się pobrać pełnej treści formularza');
+                  }
+                },
+                error: () => {
+                  this.toastr.error('Błąd pobierania treści formularza');
+                }
+              });
+            } else {
+              this.toastr.error('Nie udało się pobrać Twojej odpowiedzi');
+            }
+          }
+        });
+      }
+    } else if (status === 2) { 
+      this.onShowAnswers(form.id);
+    }
+  }
+  
+  
+
   onHideForm(): void {
     this.selectedForm.set(undefined);
+    this.selectedAnswer.set(undefined);
   }
 
   onShowAnswers(formId: number): void {

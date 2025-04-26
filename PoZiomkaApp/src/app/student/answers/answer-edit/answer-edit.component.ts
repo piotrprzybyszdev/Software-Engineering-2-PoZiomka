@@ -31,17 +31,23 @@ export class AnswerEditComponent {
   missingObligatoryAnswers = signal(false);
 
   ngOnInit(): void {
+    const selected: Record<number, number> = {};
+    for (const pref of this.formContent.obligatoryPreferences) {
+      selected[pref.id] = undefined!;
+    }
+  
     if (this.existingAnswer) {
-      const selected: Record<number, number> = {};
       for (const ans of this.existingAnswer.obligatoryAnswers) {
         selected[ans.obligatoryPreference.id] = ans.obligatoryPreferenceOptionId;
       }
-      this.selectedOptions.set(selected);
   
       const choosable = this.existingAnswer.choosableAnswers.map(a => a.name);
       this.choosableAnswers.set(choosable);
     }
+  
+    this.selectedOptions.set(selected);
   }
+  
   
   
 
@@ -63,14 +69,14 @@ export class AnswerEditComponent {
 
   onSubmit(): void {
     const selected = this.selectedOptions();
-  
+  /*
     const missing = this.formContent.obligatoryPreferences.some(pref => !selected[pref.id]);
     if (missing) {
       this.missingObligatoryAnswers.set(true);
       return;
     }
   
-    this.missingObligatoryAnswers.set(false);
+    this.missingObligatoryAnswers.set(false);*/
   
     const obligatoryAnswers: ObligatoryAnswerCreate[] = Object.entries(selected).map(([prefId, optionId]) => ({
       obligatoryPreferenceId: +prefId,
