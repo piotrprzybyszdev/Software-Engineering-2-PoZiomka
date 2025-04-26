@@ -1,3 +1,9 @@
-﻿namespace PoZiomkaApi.Requests.Form;
+﻿using PoZiomkaDomain.Form.Commands.UpdateForm;
 
-public record FormUpdateRequest(int Id, string Title, IEnumerable<ObligatoryPreferenceCreate> ObligatoryPreferences);
+namespace PoZiomkaApi.Requests.Form;
+
+public record FormUpdateRequest(int Id, string Title, IEnumerable<ObligatoryPreferenceCreate> ObligatoryPreferences)
+{
+    public UpdateFormCommand ToUpdateFormCommand() =>
+        new(Id, Title, ObligatoryPreferences.Select(op => new PoZiomkaDomain.Form.Dtos.ObligatoryPreferenceCreate(op.Name, op.Options)));
+}

@@ -11,11 +11,6 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class FormRepository(IDbConnection connection) : IFormRepository
 {
-    public Task CreateForm(string title, CancellationToken? cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task CreateForm(FormCreate form, CancellationToken? cancellationToken)
     {
         connection.Open();
@@ -58,16 +53,6 @@ VALUES (@preferenceId, @name);
         transaction.Commit();
     }
 
-    public Task CreateFormObligatoryPreferenceOptions(int preferenceId, string name, CancellationToken? cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task CreateFormObligatoryPreferences(int formId, string name, CancellationToken? cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task DeleteForm(int id, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"DELETE FROM Forms WHERE Id = @id";
@@ -94,19 +79,29 @@ LEFT JOIN ObligatoryPreferenceOptions opo ON op.Id = opo.PreferenceId
 WHERE f.Id = @id
 ";
 
-        var forms = await connection.QueryAsync<FormDisplayList, ObligatoryPreferenceDisplayList, ObligatoryPreferenceOptionDisplay, FormDisplayList>(
-            new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default),
-            (form, preference, option) =>
-            {
-                if (preference is not null)
+        IEnumerable<FormDisplayList> forms;
+        try
+        {
+            forms = await connection.QueryAsync<FormDisplayList, ObligatoryPreferenceDisplayList, ObligatoryPreferenceOptionDisplay, FormDisplayList>(
+                new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default),
+                (form, preference, option) =>
                 {
-                    form.ObligatoryPreferences.Add(preference);
-                    if (option is not null)
-                        preference.Options.Add(option);
-                }
-                return form;
-            },
-            splitOn: "Id, Id");
+                    if (preference is not null)
+                    {
+                        form.ObligatoryPreferences.Add(preference);
+                        if (option is not null)
+                            preference.Options.Add(option);
+                    }
+                    return form;
+                },
+                splitOn: "Id, Id");
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+
+        if (forms.Count() == 0) throw new IdNotFoundException();
 
         var form = forms.First();
 
@@ -132,10 +127,58 @@ WHERE f.Id = @id
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
-    }    
+    }
 
-    public Task UpdateForm(int id, string title, CancellationToken? cancellationToken)
+    public async Task UpdateForm(FormUpdate form, CancellationToken? cancellationToken)
     {
-        throw new NotImplementedException();
+        connection.Open();
+
+        var sqlQueryFormExists = @"
+SELECT COUNT(*) FROM Forms WHERE Id = @id
+";
+        var formExists = await connection.ExecuteScalarAsync<int>(new CommandDefinition(sqlQueryFormExists, new { id = form.Id }, cancellationToken: cancellationToken ?? default));
+        if (formExists == 0) throw new IdNotFoundException();
+
+        using var transaction = connection.BeginTransaction();
+
+        var sqlQueryForm = @"
+UPDATE Forms
+SET Title = @title
+WHERE Id = @id;
+";
+        var sqlQueryClearObligatoryPreferences = @"
+DELETE FROM ObligatoryPreferences
+WHERE FormId = @formId;
+";
+        var sqlQueryObligatoryPreference = @"
+INSERT INTO ObligatoryPreferences (FormId, Name)
+OUTPUT INSERTED.Id
+VALUES (@formId, @name);
+";
+        var sqlQueryObligatoryPreferenceOption = @"
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name)
+VALUES (@preferenceId, @name);
+";
+
+        try
+        {
+            await connection.ExecuteAsync(new CommandDefinition(sqlQueryForm, new { title = form.Title, id = form.Id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+            await connection.ExecuteAsync(new CommandDefinition(sqlQueryClearObligatoryPreferences, new { formId = form.Id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+            foreach (var obligatoryPreference in form.ObligatoryPreferences)
+            {
+                var preferenceId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(sqlQueryObligatoryPreference, new { formId = form.Id, name = obligatoryPreference.Name }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+                foreach (var option in obligatoryPreference.Options)
+                {
+                    await connection.ExecuteAsync(new CommandDefinition(sqlQueryObligatoryPreferenceOption, new { preferenceId, name = option }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+                }
+            }
+        }
+        catch (SqlException exception)
+        {
+            transaction.Rollback();
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+
+        transaction.Commit();
     }
 }
