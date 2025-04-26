@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { ApiResponse, pipeApiResponse } from "../common/api";
+import { ApiResponse, pipeApiResponse } from "../../common/api";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { RoomCreate, RoomModel, RoomStudentModel } from "./room.model";

@@ -1,9 +1,9 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { StudentService } from '../student/student.service';
-import { CardConfiguration, CenteredCardComponent } from '../common/centered-card/centered-card.component';
+import { StudentService } from '../../student/student.service';
+import { CardConfiguration, CenteredCardComponent } from '../../common/centered-card/centered-card.component';
 import { ToastrService } from 'ngx-toastr';
-import { LoadingButtonComponent } from "../common/loading-button/loading-button.component";
+import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
 
 @Component({
   selector: 'app-confirm-email',

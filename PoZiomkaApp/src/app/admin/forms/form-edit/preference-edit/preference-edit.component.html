@@ -1,0 +1,51 @@
+<app-popup size="col-10 col-lg-8" (closeClicked)="onClose()" (outsideClicked)="onClose()">
+    <form class="p-5" [formGroup]="form">
+        <h4>
+            @if (isEditing()) {
+                <input type="text" style="width: 80%;" class="form-control-lg mb-3" formControlName="name"/>
+            } @else {
+                {{ form.controls.name.value }}
+            }
+        </h4>
+        <ol>
+        <div formGroupName="options">
+                @for (optionForm of options.controls; track $index) {
+                    <h5>
+                        <li>
+                            @if (isEditing()) {
+                                <div>
+                                    <input type="text" style="width: 80%;" class="form-control-lg ms-3" [formControlName]="$index" />
+                                    <button type="button" class="btn btn-sm btn-outline-danger ms-4" (click)="onRemoveOptionClick($index)">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            } @else {
+                                {{ optionForm.value }}
+                            }
+                        </li>
+                    </h5>
+                }
+            </div>
+            @if (isEditing()) {
+                <h5>
+                    <li>
+                        <button type="button" class="btn btn-primary ms-4" (click)="onAddOptionClick()">
+                            <i class="bi bi-plus-lg me-2"></i>Dodaj opcję
+                        </button>
+                    </li>
+                </h5>
+            }
+        </ol>
+        <div class="d-flex mt-5">
+            @if (isEditing()) {
+                <button type="button" class="btn btn-primary ms-auto" (click)="onSaveClick()">
+                    Zapisz<i class="bi bi-save ms-3"></i>
+                </button>
+            } @else {
+                <button type="button" class="btn btn-outline-primary ms-auto" (click)="onEditClick()">
+                    Edytuj<i class="bi bi-pencil-square ms-3"></i>
+                </button>
+            }
+        </div>
+    </form>
+</app-popup>

@@ -1,0 +1,53 @@
+import { FormModel, ObligatoryPreferenceModel } from "../../admin/forms/form.model"
+
+export type ChoosableAnswerModel = {
+  id: number,
+  name: string,
+  isHidden: boolean
+}
+
+export type ObligatoryAnswerModel = {
+  id: number,
+  obligatoryPreference: ObligatoryPreferenceModel,
+  obligatoryPreferenceOptionId: number,
+  isHidden: boolean
+}
+
+export type AnswerModel = {
+  id: number,
+  formId: number,
+  choosableAnswers: ChoosableAnswerModel[],
+  obligatoryAnswers: ObligatoryAnswerModel[]
+}
+
+export enum FormStatus {
+  NotFilled, InProgress, Filled
+}
+
+export type AnswerStatus = {
+  form: FormModel,
+  status: FormStatus
+}
+
+export type ChoosableAnswerCreate = {
+  name: string,
+  isHidden: boolean
+}
+
+export type ObligatoryAnswerCreate = {
+  obligatoryPreferenceId: number,
+  obligatoryPreferenceOptionId: number,
+  isHidden: boolean
+}
+
+export type AnswerCreate = {
+  formId: number,
+  choosableAnswers: ChoosableAnswerCreate[],
+  obligatoryAnswers: ObligatoryAnswerCreate[]
+}
+
+export type AnswerUpdate = {
+  id: number,
+  choosableAnswers: ChoosableAnswerCreate[],
+  obligatoryAnswers: ObligatoryAnswerCreate[]
+}

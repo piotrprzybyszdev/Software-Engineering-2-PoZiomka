@@ -1,4 +1,4 @@
-import { StudentModel } from "../student/student.model"
+import { StudentModel } from "../../student/student.model"
 
 export enum RoomStatus {
   Available, Reserved, Occupied, Full

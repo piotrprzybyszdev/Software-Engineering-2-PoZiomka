@@ -1,7 +1,7 @@
 import { CanMatchFn, RedirectCommand, Router, Routes } from "@angular/router";
 import { routes as authRoutes } from "./auth/auth.routes";
 import { NotFoundComponent } from "./not-found/not-found.component";
-import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { ConfirmEmailComponent } from './auth/confirm-email/confirm-email.component';
 import { inject } from "@angular/core";
 import { StudentService } from "./student/student.service";
 import { AdminService } from "./admin/admin.service";
