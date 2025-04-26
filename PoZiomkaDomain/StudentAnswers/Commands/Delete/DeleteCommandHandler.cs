@@ -1,18 +1,20 @@
-﻿
-
-using MediatR;
+﻿using MediatR;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.StudentAnswers.Exceptions;
 
 namespace PoZiomkaDomain.StudentAnswers.Commands.Delete;
-public class DeleteCommandHandler(IStudentAnswerRepository studentAnswerRepository, IStudentService studentService) : IRequestHandler<DeleteCommand>
+
+public class DeleteCommandHandler(IStudentRepository studentRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<DeleteCommand>
 {
     public async Task Handle(DeleteCommand request, CancellationToken cancellationToken)
     {
         int studentId = request.User.GetUserId() ?? throw new DomainException("UserId is null");
-        if(!await studentService.CanFillForm(studentId))
+
+        var student = await studentRepository.GetStudentById(studentId, cancellationToken);
+
+        if (!student.ToStudentDisplay(false).CanFillForms)
             throw new UserCanNotFillFormException("Student can not fill form");
 
         var studentAnswers = await studentAnswerRepository.GetStudentAnswerModels(studentId, null);

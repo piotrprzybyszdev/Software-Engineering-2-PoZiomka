@@ -1,5 +1,4 @@
-﻿
-using MediatR;
+﻿using MediatR;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Student;
@@ -7,12 +6,15 @@ using PoZiomkaDomain.StudentAnswers.Exceptions;
 
 namespace PoZiomkaDomain.StudentAnswers.Commands.Create;
 
-public class CreateCommandHandler(IStudentAnswerRepository studentAnswerRepository, IStudentService studentService) : IRequestHandler<CreateCommand>
+public class CreateCommandHandler(IStudentRepository studentRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<CreateCommand>
 {
     public async Task Handle(CreateCommand request, CancellationToken cancellationToken)
     {
         int studentId = request.User.GetUserId() ?? throw new DomainException("UserId is null");
-        if (!await studentService.CanFillForm(studentId))
+
+        var student = await studentRepository.GetStudentById(studentId, cancellationToken);
+
+        if (!student.ToStudentDisplay(false).CanFillForms)
             throw new UserCanNotFillFormException("Student can not fill form");
 
         // Checking if answers are already filled

@@ -77,7 +77,6 @@ public static class Infrastructure
         services.AddScoped<IFormRepository, FormRepository>();
 
         services.AddScoped<IJudgeService, JudgeService>();
-        services.AddScoped<IStudentService, StudentService>();
 
         services.AddScoped<IFileStorage>(_ => new AzureFileStorage(int.Parse(configuration["FileStorage:MaxSize"]!),
             configuration["FileStorage:ConnectionString"]!, configuration["FileStorage:ContainerName"]!)
