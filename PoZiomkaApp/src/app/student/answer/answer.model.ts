@@ -17,7 +17,7 @@ export type AnswerModel = {
   id: number,
   formId: number,
   choosableAnswers: ChoosableAnswerModel[],
-  ogligatoryAnswers: ObligatoryAnswerModel[]
+  obligatoryAnswers: ObligatoryAnswerModel[]
 }
 
 export enum FormStatus {
@@ -48,6 +48,6 @@ export type AnswerCreate = {
 
 export type AnswerUpdate = {
   id: number,
-  choosableAnsers: ChoosableAnswerCreate[],
+  choosableAnswers: ChoosableAnswerCreate[],
   obligatoryAnswers: ObligatoryAnswerCreate[]
 }

@@ -8,15 +8,16 @@ import { PopupComponent } from '../../../common/popup/popup.component';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { AnswerEditComponent } from '../answer-edit/answer-edit.component';
 
 @Component({
-  selector: 'app-form-show',
+  selector: 'app-answer-view',
   standalone: true,
-  imports: [PopupComponent, CommonModule, FormsModule],
-  templateUrl: './form-show.component.html',
-  styleUrl: './form-show.component.css'
+  imports: [PopupComponent, CommonModule, FormsModule, AnswerEditComponent],
+  templateUrl: './answer-view.component.html',
+  styleUrl: './answer-view.component.css'
 })
-export class FormShowComponent implements OnInit {
+export class AnswerViewComponent implements OnInit {
   @Input() formId!: number;
   @Input() studentId!: number;
   @Output() hide = new EventEmitter<void>();
@@ -27,10 +28,10 @@ export class FormShowComponent implements OnInit {
 
   choosableInput = '';
   choosableAnswers = signal<string[]>([]); 
-
+  showEdit = false;
 
   formContent = signal<FormContentModel | null>(null);
-  answer = signal<AnswerModel | null>(null);
+  answer = signal<AnswerModel | undefined>(undefined);
   selectedAnswers = signal<Record<number, number>>({});
   isSubmitting = signal(false);
 
@@ -48,7 +49,7 @@ export class FormShowComponent implements OnInit {
 
         if (answer.success && answer.payload) {
           this.answer.set(answer.payload);
-          const map = Object.fromEntries(answer.payload.ogligatoryAnswers.map(a => [a.obligatoryPreference.id, a.obligatoryPreferenceOptionId]));
+          const map = Object.fromEntries(answer.payload.obligatoryAnswers.map(a => [a.obligatoryPreference.id, a.obligatoryPreferenceOptionId]));
           this.selectedAnswers.set(map);
           this.choosableAnswers.set(answer.payload.choosableAnswers.map(a => a.name));
         } else {
@@ -63,40 +64,7 @@ export class FormShowComponent implements OnInit {
     this.selectedAnswers.update(s => ({ ...s, [prefId]: optionId }));
   }
 
-  onSubmit(): void {
-    const currentAnswer = this.answer();
-    if (!currentAnswer) return;
   
-    const payload: AnswerUpdate = {
-      id: currentAnswer.id,
-      obligatoryAnswers: Object.entries(this.selectedAnswers()).map(([prefId, optionId]) => ({
-        obligatoryPreferenceId: +prefId,
-        obligatoryPreferenceOptionId: optionId,
-        isHidden: false,
-      })),
-      choosableAnsers: this.choosableAnswers().map(name => ({
-        name,
-        isHidden: false,
-      })),
-    };
-  
-    this.isSubmitting.set(true);
-    this.answerService.updateAnswer(payload).subscribe({
-      next: (res) => {
-        this.isSubmitting.set(false);
-        if (res.success) {
-          this.toastr.success('Zaktualizowano odpowiedzi!');
-          this.hide.emit();
-        } else {
-          this.toastr.error(res.error?.detail ?? 'Błąd zapisu', res.error?.title ?? 'Błąd');
-        }
-      },
-      error: () => {
-        this.isSubmitting.set(false);
-        this.toastr.error('Błąd zapisu');
-      }
-    });
-  }
   
 
   onAddChoosable(): void {
@@ -136,6 +104,15 @@ export class FormShowComponent implements OnInit {
       }
     });
   }
+
+  openEdit() {
+    this.showEdit = true;
+  }
+  
+  hideEdit() {
+    this.showEdit = false;
+  }
+  
   
   
 }

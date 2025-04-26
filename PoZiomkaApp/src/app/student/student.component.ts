@@ -14,7 +14,7 @@ export class StudentComponent {
   private router = inject(Router);
 
   onFormsClick(): void {
-    this.router.navigate(['/student/forms']);
+    this.router.navigate(['/student/answers']);
   }
 
   onApplicationsClick(): void {

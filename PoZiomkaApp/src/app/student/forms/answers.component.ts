@@ -2,20 +2,20 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormService } from '../../form/form.service';
 import { FormContentModel, FormModel } from '../../form/form.model';
 import { ToastrService } from 'ngx-toastr';
-import { FormFillComponent } from './form-fill/form-fill.component';
+import { AnswerEditComponent } from './answer-edit/answer-edit.component';
 import { AnswerModel, AnswerStatus } from '../answer/answer.model';
 import { AnswerService } from '../answer/answer.service';
-import { StudentService } from '../../student/student.service';
-import { StudentModel } from '../../student/student.model';
-import { FormShowComponent } from './form-show/form-show.component';
+import { StudentService } from '../student.service';
+import { StudentModel } from '../student.model';
+import { AnswerViewComponent } from './answer-view/answer-view.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-forms',
+  selector: 'app-answers',
   standalone: true,
-  imports: [FormFillComponent, FormShowComponent, CommonModule],
-  templateUrl: './forms.component.html',
-  styleUrl: './forms.component.css'
+  imports: [AnswerEditComponent, AnswerViewComponent, CommonModule],
+  templateUrl: './answers.component.html',
+  styleUrl: './answers.component.css'
 })
 export class FormsComponent implements OnInit {
   private formService = inject(FormService);
