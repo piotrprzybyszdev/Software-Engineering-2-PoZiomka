@@ -56,13 +56,25 @@
       </div>
       
 
-      <button
-        type="submit"
-        class="btn btn-success w-100"
-        [disabled]="isSubmitting()"
-      >
-        Zapisz zmiany
-      </button>
+      <div class="d-flex gap-2 mt-3">
+        <button
+          type="submit"
+          class="btn btn-success flex-grow-1"
+          [disabled]="isSubmitting()"
+        >
+          Zapisz zmiany
+        </button>
+      
+        <button
+          type="button"
+          class="btn btn-danger flex-grow-1"
+          (click)="onDelete()"
+          [disabled]="isSubmitting()"
+        >
+          Usuń odpowiedzi
+        </button>
+      </div>
+      
     </form>
   </div>
 </app-popup>

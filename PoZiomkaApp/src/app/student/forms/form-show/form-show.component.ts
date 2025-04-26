@@ -110,6 +110,33 @@ export class FormShowComponent implements OnInit {
   removeChoosable(index: number): void {
     this.choosableAnswers.update(list => list.filter((_, i) => i !== index));
   }
+
+  onDelete(): void {
+    const current = this.answer();
+    if (!current) return;
+  
+    if (!confirm('Czy na pewno chcesz usunąć odpowiedzi?')) {
+      return;
+    }
+  
+    this.isSubmitting.set(true);
+    this.answerService.deleteAnswer(current.id).subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+        if (res.success) {
+          this.toastr.success('Usunięto odpowiedzi!');
+          this.hide.emit();
+        } else {
+          this.toastr.error(res.error?.detail ?? 'Błąd usuwania', res.error?.title ?? 'Błąd');
+        }
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.toastr.error('Błąd usuwania');
+      }
+    });
+  }
+  
   
 }
 

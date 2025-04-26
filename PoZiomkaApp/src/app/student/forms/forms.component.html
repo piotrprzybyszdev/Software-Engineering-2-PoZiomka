@@ -23,8 +23,8 @@
             data-bs-parent="#formAccordion"
           >
             <div class="accordion-body">
-              <button class="btn btn-primary me-2" (click)="onShowForm(form)">
-                Wypełnij ankietę
+              <button class="btn btn-primary me-2" (click)="onShowForm(form)" [disabled]="hasAnswer(form.id)">
+                {{ hasAnswer(form.id) ? 'Ankieta już wypełniona' : 'Wypełnij ankietę' }}
               </button>
               <button
                 class="btn btn-outline-secondary"
