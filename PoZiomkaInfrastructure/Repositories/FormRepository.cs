@@ -68,9 +68,20 @@ VALUES (@preferenceId, @name);
         throw new NotImplementedException();
     }
 
-    public Task DeleteForm(int id, CancellationToken? cancellationToken)
+    public async Task DeleteForm(int id, CancellationToken? cancellationToken)
     {
-        throw new NotImplementedException();
+        var sqlQuery = @"DELETE FROM Forms WHERE Id = @id";
+
+        int rowsAffected;
+        try
+        {
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
+            if (rowsAffected == 0) throw new IdNotFoundException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
     }
 
     public async Task<FormDisplay> GetFormDisplay(int id, CancellationToken? cancellationToken)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Form;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Form.Commands;
+using PoZiomkaDomain.Form.Commands.DeleteForm;
 using PoZiomkaDomain.Form.Commands.GetAllForms;
 using PoZiomkaDomain.Form.Commands.GetForm;
 using PoZiomkaDomain.Form.Dtos;
@@ -47,6 +48,7 @@ public class FormController(IMediator mediator) : ControllerBase
     [Authorize(Roles = Roles.Administrator)]
     public async Task<IActionResult> Delete(int id)
     {
-        return NotFound();
+        await mediator.Send(new DeleteFormCommand(id));
+        return Ok();
     }
 }

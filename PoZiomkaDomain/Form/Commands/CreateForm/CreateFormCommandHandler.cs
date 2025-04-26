@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Form.Dtos;
 
-namespace PoZiomkaDomain.Form.Commands;
+namespace PoZiomkaDomain.Form.Commands.CreateForm;
 
 public class CreateFormCommandHandler(IFormRepository formRepository) : IRequestHandler<CreateFormCommand>
 {

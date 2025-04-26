@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Form.Dtos;
+using PoZiomkaDomain.Form.Exceptions;
 using PoZiomkaDomain.Room;
 
 namespace PoZiomkaDomain.Form.Commands.GetForm;
@@ -16,7 +17,7 @@ public class GetFormQueryHandler(IFormRepository formRepository) : IRequestHandl
         }
         catch (IdNotFoundException e)
         {
-            throw new DomainException($"Form with id `{request.Id}` not found", e);
+            throw new FormNotFoundException($"Form with id `{request.Id}` not found", e);
         }
     }
 }
