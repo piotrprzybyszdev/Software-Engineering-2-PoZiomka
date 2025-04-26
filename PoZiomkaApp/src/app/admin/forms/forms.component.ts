@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormService } from '../../form/form.service';
+import { FormService } from './form.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormModel } from '../../form/form.model';
+import { FormModel } from './form.model';
 import { Router } from '@angular/router';
 
 @Component({

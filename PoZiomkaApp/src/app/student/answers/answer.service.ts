@@ -11,7 +11,7 @@ export class AnswerService {
   private httpClient = inject(HttpClient);
 
   getStudentAnswers(): Observable<ApiResponse<AnswerStatus[]>> {
-    return pipeApiResponse(this.httpClient.get<AnswerStatus[]>('/api/answer/get'));
+    return pipeApiResponse(this.httpClient.get<AnswerStatus[]>('/api/answer/get-student'));
   }
 
   getAnswers(formId: number, studentId: number): Observable<ApiResponse<AnswerModel>> {

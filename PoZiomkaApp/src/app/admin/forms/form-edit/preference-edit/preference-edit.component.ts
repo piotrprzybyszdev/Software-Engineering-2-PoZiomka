@@ -1,6 +1,6 @@
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { PopupComponent } from "../../../../common/popup/popup.component";
-import { ObligatoryPreferenceCreate } from '../../../../form/form.model';
+import { ObligatoryPreferenceCreate } from '../../form.model';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({

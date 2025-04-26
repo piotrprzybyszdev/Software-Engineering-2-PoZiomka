@@ -1,4 +1,4 @@
-import { FormModel, ObligatoryPreferenceModel } from "../../form/form.model"
+import { FormModel, ObligatoryPreferenceModel } from "../../admin/forms/form.model"
 
 export type ChoosableAnswerModel = {
   id: number,

@@ -1,6 +1,6 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { FormUpdate, ObligatoryPreferenceCreate } from '../../../form/form.model';
-import { FormService } from '../../../form/form.service';
+import { FormUpdate, ObligatoryPreferenceCreate } from '../form.model';
+import { FormService } from '../form.service';
 import { ToastrService } from 'ngx-toastr';
 import { PreferenceEditComponent } from "./preference-edit/preference-edit.component";
 import { FormsModule } from '@angular/forms';
@@ -108,7 +108,7 @@ export class FormEditComponent implements OnInit {
       this.selectedPreferenceIndex.set(data?.obligatoryPreferences.length);
       return {
         id: data!.id,
-        title: data!.title,
+        title: this.formTitle(),
         obligatoryPreferences: [...data!.obligatoryPreferences, {
           name: '',
           options: []
@@ -118,7 +118,10 @@ export class FormEditComponent implements OnInit {
   }
 
   onCreate(): void {
-    this.formService.createForm(this._form()!).subscribe({
+    this.formService.createForm({
+      title: this.formTitle(),
+      obligatoryPreferences: this.form()!.obligatoryPreferences
+    }).subscribe({
       next: response => {
         if (response.success) {
           this.toastrService.success('Pomyślnie utworzono ankietę');

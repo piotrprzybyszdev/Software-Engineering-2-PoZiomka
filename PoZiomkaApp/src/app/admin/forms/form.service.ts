@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { ApiResponse, pipeApiResponse } from "../common/api";
+import { ApiResponse, pipeApiResponse } from "../../common/api";
 import { FormContentModel, FormCreate, FormModel, FormUpdate } from "./form.model";
 import { Observable } from "rxjs";
 

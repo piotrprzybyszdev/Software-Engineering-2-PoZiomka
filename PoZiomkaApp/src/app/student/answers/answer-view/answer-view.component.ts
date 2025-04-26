@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, OnInit, inject, signal } from '@angular/core';
-import { AnswerService } from '../../answer/answer.service';
-import { FormService } from '../../../form/form.service';
-import { AnswerModel, AnswerUpdate } from '../../answer/answer.model';
-import { FormContentModel } from '../../../form/form.model';
+import { AnswerService } from '../answer.service';
+import { FormService } from '../../../admin/forms/form.service';
+import { AnswerModel, AnswerUpdate } from '../answer.model';
+import { FormContentModel } from '../../../admin/forms/form.model';
 import { ToastrService } from 'ngx-toastr';
 import { PopupComponent } from '../../../common/popup/popup.component';
 import { CommonModule } from '@angular/common';

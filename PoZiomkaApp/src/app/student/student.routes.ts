@@ -1,7 +1,7 @@
 import { Routes } from "@angular/router";
 import { ProfileComponent } from "./profile/profile.component";
 import { ApplicationsComponent } from "./applications/applications.component";
-import { FormsComponent } from "./forms/answers.component";
+import { AnswersComponent } from "./answers/answers.component";
 
 export const routes: Routes = [
   {
@@ -23,6 +23,6 @@ export const routes: Routes = [
   {
     path: 'answers',
     title: 'PoZiomka - Ankiety',
-    component: FormsComponent
+    component: AnswersComponent
   }
 ]

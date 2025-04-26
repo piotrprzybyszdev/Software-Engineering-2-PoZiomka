@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { RoomService } from '../../../room/room.service';
-import { RoomCreate } from '../../../room/room.model';
+import { RoomService } from '../room.service';
+import { RoomCreate } from '../room.model';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
