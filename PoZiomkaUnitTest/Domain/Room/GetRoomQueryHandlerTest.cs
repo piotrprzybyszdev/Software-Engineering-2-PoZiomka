@@ -1,16 +1,12 @@
 ﻿using Moq;
-using PoZiomkaDomain.Room.Dtos;
-using PoZiomkaDomain.Room.Queries.GetAllRooms;
-using PoZiomkaDomain.Room;
-using PoZiomkaDomain.Student.Dtos;
-using PoZiomkaDomain.Student;
-using PoZiomkaDomain.Room.Commands.RemoveStudent;
-using PoZiomkaDomain.Room.Exceptions;
-using PoZiomkaInfrastructure.Repositories;
-using PoZiomkaDomain.Room.Queries.GetRoom;
 using PoZiomkaDomain.Common;
-using System.Security.Claims;
 using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Room;
+using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaDomain.Room.Queries.GetRoom;
+using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Student.Dtos;
+using System.Security.Claims;
 
 namespace PoZiomkaUnitTest.Domain.Room;
 public class GetRoomQueryHandlerTest
@@ -50,8 +46,8 @@ public class GetRoomQueryHandlerTest
         var roomRepository = new Mock<IRoomRepository>();
         roomRepository.Setup(x => x.GetRoomById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(roomModel);
 
-        GetRoomQuery roomQuery = new (102, new ClaimsPrincipal(
-                        new ClaimsIdentity(new Claim[] { new(ClaimTypes.Role, Roles.Administrator), new(ClaimTypes.NameIdentifier, "99") })) );
+        GetRoomQuery roomQuery = new(102, new ClaimsPrincipal(
+                        new ClaimsIdentity(new Claim[] { new(ClaimTypes.Role, Roles.Administrator), new(ClaimTypes.NameIdentifier, "99") })));
         GetRoomQueryHandler handler = new(roomRepository.Object, studentRepository.Object);
 
         var room = await handler.Handle(roomQuery, new CancellationToken());

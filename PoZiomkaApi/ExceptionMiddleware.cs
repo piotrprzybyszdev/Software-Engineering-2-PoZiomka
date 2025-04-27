@@ -4,8 +4,10 @@ using PoZiomkaDomain.Admin.Exceptions;
 using PoZiomkaDomain.Application.Exceptions;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Exceptions;
+using PoZiomkaDomain.Form.Exceptions;
 using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student.Exceptions;
+using PoZiomkaDomain.StudentAnswers.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Text.Json;
 
@@ -208,6 +210,26 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status400BadRequest,
                 Detail = exception.Message,
                 Title = "Room number is taken"
+            };
+        }
+        catch (FormNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Form not found"
+            };
+        }
+        catch (UserCanNotFillFormException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "User can't fill forms"
             };
         }
         catch (DomainException exception)

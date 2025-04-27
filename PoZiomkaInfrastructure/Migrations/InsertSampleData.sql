@@ -30,3 +30,76 @@ INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) VALUES
 (3, 3, 'cf82c9b4-64db-4d0b-8d9d-9ef832e9a574', 0),
 (3, 1, 'ae41fadd-93c9-48a7-bdd3-7dd2fd70f845', 1),
 (3, 1, '3f373a47-93dc-4f07-b438-18835d27aeb1', 0);
+
+INSERT INTO Forms (Title)
+VALUES ('Podstawowa ankieta dotycząca współlokatora');
+
+INSERT INTO ObligatoryPreferences (FormId, Name)
+VALUES 
+(1, 'Czy wolisz dzielić pokój z osobą tej samej płci?'),                     -- ID = 1
+(1, 'Jakie cechy są dla Ciebie najważniejsze u współlokatora?'),           -- ID = 2
+(1, 'Jakie godziny aktywności Ci odpowiadają?'),                           -- ID = 3
+(1, 'Czy ważne jest dla Ciebie, aby współlokator był studentem tego samego kierunku?'), -- ID = 4
+(1, 'Czy współlokator powinien przestrzegać ciszy nocnej?');               -- ID = 5
+
+-- Preference ID = 1
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name)
+VALUES 
+(1, 'Tak'),
+(1, 'Nie'),
+(1, 'Nie mam preferencji');
+
+-- Preference ID = 2
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name)
+VALUES 
+(2, 'Czystość i porządek'),
+(2, 'Towarzyskość'),
+(2, 'Cichy tryb życia'),
+(2, 'Wspólne zainteresowania'),
+(2, 'Brak nałogów (np. palenie, alkohol)');
+
+-- Preference ID = 3
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name)
+VALUES 
+(3, 'Poranne (6:00–10:00)'),
+(3, 'Dziennie (10:00–18:00)'),
+(3, 'Wieczorne (18:00–24:00)'),
+(3, 'Nocne (24:00–6:00)');
+
+-- Preference ID = 4
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name)
+VALUES 
+(4, 'Tak'),
+(4, 'Nie'),
+(4, 'Nie mam preferencji');
+
+-- Preference ID = 5
+INSERT INTO ObligatoryPreferenceOptions (PreferenceId, Name)
+VALUES 
+(5, 'Zdecydowanie tak'),
+(5, 'Raczej tak'),
+(5, 'Raczej nie'),
+(5, 'Zdecydowanie nie');
+
+INSERT INTO StudentAnswers (FormId, StudentId, FormStatus)
+VALUES 
+(1, 1, 2),
+(1, 2, 1),
+(1, 3, 0);
+
+INSERT INTO StudentAnswersChoosable (AnswerId, Name, IsHidden)
+VALUES 
+(1, 'Lubię piłkę nożną', 0),
+(1, 'Lubię chodzić na siłownię', 0),
+(1, 'Lubię grać w gry komputerowe', 0);
+
+INSERT INTO StudentAnswersObligatory (AnswerId, ObligatoryPreferenceId, ObligatoryPreferenceOptionId, IsHidden)
+VALUES
+(1, 1, 1, 0),
+(1, 2, 5, 0),
+(1, 3, 11, 0),
+(1, 4, 14, 0),
+(1, 5, 17, 0),
+(2, 1, 2, 0),
+(2, 2, 4, 0),
+(2, 3, 12, 0);

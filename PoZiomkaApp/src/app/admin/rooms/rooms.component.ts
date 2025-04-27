@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { RoomService } from '../../room/room.service';
-import { roomStatusToColorString, roomStatusToString, RoomModel, RoomStatus } from '../../room/room.model';
+import { RoomService } from './room.service';
+import { roomStatusToColorString, roomStatusToString, RoomModel, RoomStatus } from './room.model';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { RoomDetailsComponent } from './room-details/room-details.component';

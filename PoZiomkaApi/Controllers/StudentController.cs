@@ -6,6 +6,7 @@ using PoZiomkaApi.Requests.Auth;
 using PoZiomkaApi.Requests.Student;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Student.Commands.DeleteStudent;
+using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.Student.Queries.GetAllStudents;
 using PoZiomkaDomain.Student.Queries.GetStudent;
 
@@ -24,28 +25,26 @@ public class StudentController(IMediator mediator) : Controller
 
     [HttpGet("get-logged-in")]
     [Authorize(Roles = Roles.Student)]
-    public async Task<IActionResult> GetLoggedIn()
+    public async Task<StudentDisplay> GetLoggedIn()
     {
         GetStudentQuery getStudent = new(null, User);
-        return Ok(await mediator.Send(getStudent));
+        return await mediator.Send(getStudent);
     }
 
     [HttpGet("get")]
     [Authorize(Roles = Roles.Administrator)]
-    public async Task<IActionResult> Get()
+    public async Task<IEnumerable<StudentDisplay>> Get()
     {
         GetAllStudentsQuery command = new();
-        return Ok(await mediator.Send(command));
+        return await mediator.Send(command);
     }
 
     [HttpGet("get/{id}")]
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
-    public async Task<IActionResult> GetStudentById(int id)
+    public async Task<StudentDisplay> GetStudentById(int id)
     {
         GetStudentQuery getStudent = new(id, User);
-        var student = await mediator.Send(getStudent);
-
-        return Ok(student);
+        return await mediator.Send(getStudent);
     }
 
     [HttpPost("create")]

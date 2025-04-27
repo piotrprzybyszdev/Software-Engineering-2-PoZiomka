@@ -1,0 +1,30 @@
+<div class="mh-100 w-100 container py-5 mx-auto px-3 px-md-5 col">
+    <h1 class="col">Ankiety</h1>
+    <hr class="mb-4" />
+
+    <div class="accordion" id="formAccordion">
+        @for (answer of answers(); track answer.id) {
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapse' + answer.id" aria-expanded="false"
+                        [attr.aria-controls]="'collapse' + answer.id">
+                        {{ answer.form.title }}
+                    </button>
+                </h2>
+                <div [id]="'collapse' + answer.id" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                    <div class="accordion-body">
+
+                        <button [class]="getButtonClass(answer.status)" (click)="onShowForm(answer.form)">
+                            {{ getActionLabel(answer.status) }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (selectedForm() !== undefined) {
+    <app-answer-edit [form]="selectedForm()!" (hide)="onHideForm()" (save)="onSave()" />
+}
