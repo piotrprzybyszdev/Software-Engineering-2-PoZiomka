@@ -29,7 +29,6 @@ public class DeleteCommandHandler(IStudentRepository studentRepository, IStudent
         {
             throw new DomainException("User does not answered this form so can not delete it", ex);
         }
-        
     }
 }
 

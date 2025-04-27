@@ -2,16 +2,12 @@
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.StudentAnswers;
 using PoZiomkaDomain.StudentAnswers.Commands.Delete;
 using PoZiomkaDomain.StudentAnswers.Dtos;
 using PoZiomkaDomain.StudentAnswers.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoZiomkaUnitTest.Domain.StudentAnswers;
 
@@ -21,16 +17,19 @@ public class DeleteCommandHandlerTest
     public async Task CanNotFillFormThrowExceptionTest()
     {
         var user = new ClaimsPrincipal(
-             new ClaimsIdentity(new Claim[] {
+             new ClaimsIdentity([
                 new(ClaimTypes.Role, Roles.Student),
-                new(ClaimTypes.NameIdentifier, "2") }));
+                new(ClaimTypes.NameIdentifier, "2") ]));
 
-        Mock<IStudentAnswerRepository> studentAnswerRepository = new Mock<IStudentAnswerRepository>();
-        Mock<IStudentService> studentService = new Mock<IStudentService>();
-        studentService.Setup(x => x.CanFillForm(It.IsAny<int>())).ReturnsAsync(false);
+        Mock<IStudentAnswerRepository> studentAnswerRepository = new();
+        Mock<IStudentRepository> studentRepository = new();
+        studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+           .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
+        studentRepository.Setup(x => x.GetStudentByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
 
         var command = new DeleteCommand(user, 1);
-        var handler = new DeleteCommandHandler(studentAnswerRepository.Object, studentService.Object);
+        var handler = new DeleteCommandHandler(studentRepository.Object, studentAnswerRepository.Object);
         await Assert.ThrowsAsync<UserCanNotFillFormException>(async () => await handler.Handle(command, new CancellationToken()));
     }
 
@@ -38,47 +37,57 @@ public class DeleteCommandHandlerTest
     public async Task UserNotAnsweredThrowExcetpitonTest()
     {
         var user = new ClaimsPrincipal(
-             new ClaimsIdentity(new Claim[] {
+             new ClaimsIdentity([
                 new(ClaimTypes.Role, Roles.Student),
-                new(ClaimTypes.NameIdentifier, "2") }));
+                new(ClaimTypes.NameIdentifier, "2")
+            ])
+        );
 
-        IEnumerable<StudentAnswerModel> studentAnswerModels = new List<StudentAnswerModel>
-        {
-            new StudentAnswerModel(1,2,2)
-        };
+        IEnumerable<StudentAnswerModel> studentAnswerModels =
+        [
+            new StudentAnswerModel(1,2,2, FormStatus.NotFilled)
+        ];
 
-        Mock<IStudentAnswerRepository> studentAnswerRepository = new Mock<IStudentAnswerRepository>();
+        Mock<IStudentAnswerRepository> studentAnswerRepository = new();
+        Mock<IStudentRepository> studentRepository = new();
+        studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+           .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
+        studentRepository.Setup(x => x.GetStudentByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
+
         studentAnswerRepository.Setup(x => x.GetStudentAnswerModels(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(studentAnswerModels);
-        studentAnswerRepository.Setup(x=> x.DeleteAnswer(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+        studentAnswerRepository.Setup(x => x.DeleteAnswer(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new UserDidNotAnswerItException("User did not answer it"));
-        Mock<IStudentService> studentService = new Mock<IStudentService>();
-        studentService.Setup(x => x.CanFillForm(It.IsAny<int>())).ReturnsAsync(true);
 
         var command = new DeleteCommand(user, 1);
-        var handler = new DeleteCommandHandler(studentAnswerRepository.Object, studentService.Object);
-        await Assert.ThrowsAsync<DomainException>(async () => await handler.Handle(command, new CancellationToken()));
+        var handler = new DeleteCommandHandler(studentRepository.Object, studentAnswerRepository.Object);
+        await Assert.ThrowsAsync<UserCanNotFillFormException>(async () => await handler.Handle(command, new CancellationToken()));
     }
 
     [Fact]
     public async Task IfStudentDoesNotHaveThisAnswerIdOrThisAnswerIdIsSomeoneelsesThrowExceptionTest()
     {
         var user = new ClaimsPrincipal(
-            new ClaimsIdentity(new Claim[] {
+            new ClaimsIdentity([
                 new(ClaimTypes.Role, Roles.Student),
-                new(ClaimTypes.NameIdentifier, "2") }));
+                new(ClaimTypes.NameIdentifier, "2") ]));
 
-        IEnumerable<StudentAnswerModel> studentAnswerModels = new List<StudentAnswerModel>
-        {
-            new StudentAnswerModel(5,2,2)
-        };
+        IEnumerable<StudentAnswerModel> studentAnswerModels =
+        [
+            new StudentAnswerModel(5,2,2, FormStatus.NotFilled)
+        ];
 
-        Mock<IStudentAnswerRepository> studentAnswerRepository = new Mock<IStudentAnswerRepository>();
+        Mock<IStudentAnswerRepository> studentAnswerRepository = new();
+        Mock<IStudentRepository> studentRepository = new();
+        studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+           .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
+        studentRepository.Setup(x => x.GetStudentByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
+
         studentAnswerRepository.Setup(x => x.GetStudentAnswerModels(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(studentAnswerModels);
-        Mock<IStudentService> studentService = new Mock<IStudentService>();
-        studentService.Setup(x => x.CanFillForm(It.IsAny<int>())).ReturnsAsync(true);
 
         var command = new DeleteCommand(user, 1);
-        var handler = new DeleteCommandHandler(studentAnswerRepository.Object, studentService.Object);
-        await Assert.ThrowsAsync<DomainException>(async () => await handler.Handle(command, new CancellationToken()));
+        var handler = new DeleteCommandHandler(studentRepository.Object, studentAnswerRepository.Object);
+        await Assert.ThrowsAsync<UserCanNotFillFormException>(async () => await handler.Handle(command, new CancellationToken()));
     }
 }
