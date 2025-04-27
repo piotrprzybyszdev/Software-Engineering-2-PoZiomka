@@ -30,7 +30,7 @@ public class GetAnswerQueryHandler(IStudentAnswerRepository studentAnswerReposit
 
         if(studentId!=request.studentId)
         {
-            result.RemoveHiddenAnswers();
+            result = result.HideAnswers();
         }
         return result;
     }

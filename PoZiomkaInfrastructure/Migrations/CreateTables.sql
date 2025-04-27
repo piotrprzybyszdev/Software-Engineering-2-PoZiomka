@@ -62,30 +62,30 @@ CREATE TABLE ObligatoryPreferenceOptions (
     FOREIGN KEY (PreferenceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE
 );
 
-
-CREATE TABLE StudentAnswer (
+CREATE TABLE StudentAnswers (
     Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     FormId INT NOT NULL,
     StudentId INT NOT NULL,
+    FormStatus INT NOT NULL,
     FOREIGN KEY (FormId) REFERENCES Forms(Id),
     FOREIGN KEY (StudentId) REFERENCES Students(Id)
 );
 
-CREATE TABLE StudentAnswerChoosable (
+CREATE TABLE StudentAnswersChoosable (
     Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     AnswerId INT NOT NULL,
     Name NVARCHAR(255) NOT NULL,
     IsHidden BIT NOT NULL,
-    FOREIGN KEY (AnswerId) REFERENCES StudentAnswer(Id) ON DELETE CASCADE
+    FOREIGN KEY (AnswerId) REFERENCES StudentAnswers(Id) ON DELETE CASCADE
 );
 
-CREATE TABLE StudentAnswerObligatory (
+CREATE TABLE StudentAnswersObligatory (
     Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
     AnswerId INT NOT NULL,
-    ObligatoryPrefernceId INT NOT NULL,
+    ObligatoryPreferenceId INT NOT NULL,
     ObligatoryPreferenceOptionId INT NOT NULL,
     IsHidden BIT NOT NULL,
-    FOREIGN KEY (AnswerId) REFERENCES StudentAnswer(Id) ON DELETE CASCADE,
-    FOREIGN KEY (ObligatoryPrefernceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE,
+    FOREIGN KEY (AnswerId) REFERENCES StudentAnswers(Id) ON DELETE CASCADE,
+    FOREIGN KEY (ObligatoryPreferenceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE,
     FOREIGN KEY (ObligatoryPreferenceOptionId) REFERENCES ObligatoryPreferenceOptions(Id)
 );

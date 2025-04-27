@@ -3,49 +3,22 @@
 namespace PoZiomkaDomain.StudentAnswers.Dtos;
 
 public record StudentAnswerChoosableDisplay(int Id, string Name, bool IsHidden);
-public record StudentAnswerObligatoryDisplay(int Id, ObligatoryPreferenceDisplay ObligatoryPreference, int ObligatoryPreferenceOptionId, bool IsHidden);
-public class StudentAnswerDisplay
+public record StudentAnswerObligatoryDisplay(int? Id, ObligatoryPreferenceDisplay ObligatoryPreference, int? ObligatoryPreferenceOptionId, bool IsHidden);
+public record StudentAnswerDisplay(int? Id, int FormId, int StudentId, FormStatus Status, IEnumerable<StudentAnswerChoosableDisplay> ChoosableAnswers, IEnumerable<StudentAnswerObligatoryDisplay> ObligatoryAnswers)
 {
-    public int Id { get; set; }
-    public int FormId { get; set; }
-    public int StudentId { get; set; }
-    public IEnumerable<StudentAnswerChoosableDisplay> ChoosableAnswers { get; set; }
-    public IEnumerable<StudentAnswerObligatoryDisplay> ObligatoryAnswers { get; set; }
-
-    public StudentAnswerDisplay(int id, int formId, int studentId,
-        IEnumerable<StudentAnswerChoosableDisplay> choosableAnswers,
-        IEnumerable<StudentAnswerObligatoryDisplay> obligatoryAnswers)
+    public StudentAnswerDisplay HideAnswers()
     {
-        Id = id;
-        FormId = formId;
-        StudentId = studentId;
-        ChoosableAnswers = choosableAnswers;
-        ObligatoryAnswers = obligatoryAnswers;
-    }
-
-    public void RemoveHiddenAnswers()
-    {
-        if (ChoosableAnswers != null)
-            ChoosableAnswers = ChoosableAnswers.Where(x => !x.IsHidden);
-        if (ObligatoryAnswers != null)
-            ObligatoryAnswers = ObligatoryAnswers.Where(x => !x.IsHidden);
+        return new StudentAnswerDisplay(Id, FormId, StudentId, Status,
+            ChoosableAnswers.Where(answer => !answer.IsHidden),
+            ObligatoryAnswers.Where(answer => !answer.IsHidden)
+        );
     }
 }
 
-public enum FormStatus
+public record StudentAnswerStatus(int? Id, FormModel Form, FormStatus Status)
 {
-    NotFilled, InProgress, Filled
-}
-
-public record StudentAnswerStatus(FormModel Form, FormStatus Status)
-{
-    public StudentAnswerStatus(int FormId, string FormTitle, string FormStatusString)
-        : this(new FormModel(FormId, FormTitle), FormStatusString switch
-        {
-            "Filled" => FormStatus.Filled,
-            "InProgress" => FormStatus.InProgress,
-            _ => FormStatus.NotFilled
-        })
+    public StudentAnswerStatus(int? id, int formId, string title, FormStatus status)
+        : this(id, new FormModel(formId, title), status)
     {
     }
 }

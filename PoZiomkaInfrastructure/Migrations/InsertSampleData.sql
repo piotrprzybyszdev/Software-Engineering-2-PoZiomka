@@ -81,19 +81,19 @@ VALUES
 (5, 'Raczej nie'),
 (5, 'Zdecydowanie nie');
 
-INSERT INTO StudentAnswer (FormId, StudentId)
+INSERT INTO StudentAnswers (FormId, StudentId, FormStatus)
 VALUES 
-(1, 1),
-(1, 2),
-(1, 3);
+(1, 1, 2),
+(1, 2, 1),
+(1, 3, 0);
 
-INSERT INTO StudentAnswerChoosable (AnswerId, Name, IsHidden)
+INSERT INTO StudentAnswersChoosable (AnswerId, Name, IsHidden)
 VALUES 
 (1, 'Lubię piłkę nożną', 0),
 (1, 'Lubię chodzić na siłownię', 0),
 (1, 'Lubię grać w gry komputerowe', 0);
 
-INSERT INTO StudentAnswerObligatory (AnswerId, ObligatoryPrefernceId, ObligatoryPreferenceOptionId, IsHidden)
+INSERT INTO StudentAnswersObligatory (AnswerId, ObligatoryPreferenceId, ObligatoryPreferenceOptionId, IsHidden)
 VALUES
 (1, 1, 1, 0),
 (1, 2, 5, 0),

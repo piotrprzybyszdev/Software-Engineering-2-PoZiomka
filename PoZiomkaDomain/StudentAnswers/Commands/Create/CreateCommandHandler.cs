@@ -1,12 +1,14 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Form;
 using PoZiomkaDomain.Student;
+using PoZiomkaDomain.StudentAnswers.Dtos;
 using PoZiomkaDomain.StudentAnswers.Exceptions;
 
 namespace PoZiomkaDomain.StudentAnswers.Commands.Create;
 
-public class CreateCommandHandler(IStudentRepository studentRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<CreateCommand>
+public class CreateCommandHandler(IStudentRepository studentRepository, IFormRepository formRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<CreateCommand>
 {
     public async Task Handle(CreateCommand request, CancellationToken cancellationToken)
     {
@@ -17,12 +19,14 @@ public class CreateCommandHandler(IStudentRepository studentRepository, IStudent
         if (!student.ToStudentDisplay(false).CanFillForms)
             throw new UserCanNotFillFormException("Student can not fill form");
 
+        var form = await formRepository.GetFormDisplay(request.FormId, cancellationToken);
+
         // Checking if answers are already filled
         var answerStatus = await studentAnswerRepository.GetStudentFormAnswerStatus(studentId, null);
-        if (answerStatus.Any(x => x.Form.Id == request.FormId))
-            throw new DomainException("Student has already filled the form");
+        if (answerStatus.Single(answer => answer.Form.Id == request.FormId).Status != FormStatus.NotFilled)
+            throw new DomainException("Answer for this form already exists");
 
         await studentAnswerRepository.CreateAnswer(
-            studentId, request.FormId, request.ChoosableAnswers, request.ObligatoryAnswers, null);
+            studentId, request.FormId, form.ObligatoryPreferences.Count() == request.ObligatoryAnswers.Count() ? FormStatus.Filled : FormStatus.InProgress, request.ChoosableAnswers, request.ObligatoryAnswers, null);
     }
 }

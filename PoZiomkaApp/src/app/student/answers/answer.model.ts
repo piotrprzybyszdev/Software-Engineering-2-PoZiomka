@@ -7,15 +7,17 @@ export type ChoosableAnswerModel = {
 }
 
 export type ObligatoryAnswerModel = {
-  id: number,
+  id: number | null,
   obligatoryPreference: ObligatoryPreferenceModel,
-  obligatoryPreferenceOptionId: number,
+  obligatoryPreferenceOptionId: number | null,
   isHidden: boolean
 }
 
 export type AnswerModel = {
-  id: number,
+  id: number | null,
   formId: number,
+  studentId: number,
+  status: FormStatus,
   choosableAnswers: ChoosableAnswerModel[],
   obligatoryAnswers: ObligatoryAnswerModel[]
 }
@@ -25,7 +27,9 @@ export enum FormStatus {
 }
 
 export type AnswerStatus = {
+  id: number | null,
   form: FormModel,
+  title: string,
   status: FormStatus
 }
 

@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, Output, signal, inject } from '@angular/core';
-import { FormContentModel } from '../../../admin/forms/form.model';
-import { AnswerModel, AnswerCreate, ObligatoryAnswerCreate, ChoosableAnswerCreate, AnswerUpdate } from '../answer.model';
+import { Component, signal, inject, output, input, ɵIS_INCREMENTAL_HYDRATION_ENABLED } from '@angular/core';
+import { ObligatoryAnswerCreate, AnswerModel, AnswerUpdate, ChoosableAnswerCreate } from '../answer.model';
 import { AnswerService } from '../answer.service';
 import { ToastrService } from 'ngx-toastr';
 import { PopupComponent } from '../../../common/popup/popup.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { StudentService } from '../../student.service';
+import { FormModel } from '../../../admin/forms/form.model';
 
 @Component({
   selector: 'app-answer-edit',
@@ -15,122 +16,202 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './answer-edit.component.html'
 })
 export class AnswerEditComponent {
-  @Input() formContent!: FormContentModel;
-  @Input() existingAnswer?: AnswerModel;
-  @Output() hide = new EventEmitter<void>();
+  form = input.required<FormModel>();
+  save = output<void>();
+  hide = output<void>();
 
   private answerService = inject(AnswerService);
+  private studentService = inject(StudentService);
   private toastr = inject(ToastrService);
 
   choosableInput = '';
-  choosableAnswers = signal<string[]>([]);
 
-  selectedOptions = signal<Record<number, number>>({}); 
+  answer = signal<AnswerModel | undefined>(undefined);
 
   isSubmitting = signal(false);
-  missingObligatoryAnswers = signal(false);
 
   ngOnInit(): void {
-    const selected: Record<number, number> = {};
-    for (const pref of this.formContent.obligatoryPreferences) {
-      selected[pref.id] = undefined!;
-    }
-  
-    if (this.existingAnswer) {
-      for (const ans of this.existingAnswer.obligatoryAnswers) {
-        selected[ans.obligatoryPreference.id] = ans.obligatoryPreferenceOptionId;
+    this.loadAnswer();
+  }
+
+  loadAnswer(): void {
+    this.answerService.getAnswers(this.form().id, this.studentService.loggedInStudent()!.id).subscribe({
+      next: response => {
+        if (response.success) {
+          this.answer.set(response.payload);
+        } else {
+          this.toastr.error(response.error!.detail, response.error!.title);
+        }
       }
-  
-      const choosable = this.existingAnswer.choosableAnswers.map(a => a.name);
-      this.choosableAnswers.set(choosable);
-    }
-  
-    this.selectedOptions.set(selected);
+    });
   }
   
-  
-  
+  onOptionSelect(answerIndex: number, optionId: number): void {
+    this.answer.update(value => {
+      if (value === undefined) {
+        return undefined;
+      }
 
-  onOptionSelect(prefId: number, optionId: number): void {
-    this.selectedOptions.update((s) => ({ ...s, [prefId]: optionId }));
+      const oldAnswer = value.obligatoryAnswers[answerIndex];
+
+      return {
+        id: value.id,
+        formId: value.formId,
+        studentId: value.studentId,
+        status: value.status,
+        choosableAnswers: value.choosableAnswers,
+        obligatoryAnswers: value.obligatoryAnswers.updateClone(answerIndex, {
+          id: oldAnswer.id,
+          obligatoryPreference: oldAnswer.obligatoryPreference,
+          obligatoryPreferenceOptionId: optionId,
+          isHidden: oldAnswer.isHidden
+        })
+      }
+    })
   }
 
   onAddChoosable(): void {
     const trimmed = this.choosableInput.trim();
     if (trimmed) {
-      this.choosableAnswers.update((answers) => [...answers, trimmed]);
+      this.answer.update(value => {
+        if (value === undefined) {
+          return undefined;
+        }
+
+        return {
+          id: value.id,
+          formId: value.formId,
+          studentId: value.studentId,
+          status: value.status,
+          choosableAnswers: [...value.choosableAnswers, {
+            id: 0,
+            name: trimmed,
+            isHidden: false
+          }],
+          obligatoryAnswers: value.obligatoryAnswers
+        }
+      });
+
       this.choosableInput = '';
     }
   }
   
   removeChoosable(index: number): void {
-    this.choosableAnswers.update((answers) => answers.filter((_, i) => i !== index));
+    this.answer.update(value => {
+      if (value === undefined) {
+        return undefined;
+      }
+
+      return {
+        id: value.id,
+        formId: value.formId,
+        studentId: value.studentId,
+        status: value.status,
+        choosableAnswers: value.choosableAnswers.filter((_, i) => i !== index),
+        obligatoryAnswers: value.obligatoryAnswers
+      }
+    });
+  }
+
+  toggleObligatoryVisiblity(index: number): void {
+    this.answer.update(value => {
+      if (value === undefined) {
+        return undefined;
+      }
+
+      return {
+        id: value.id,
+        formId: value.formId,
+        studentId: value.studentId,
+        status: value.status,
+        choosableAnswers: value.choosableAnswers,
+        obligatoryAnswers: value.obligatoryAnswers.map((answer, i) => {
+          if (i !== index) {
+            return answer;
+          }
+
+          return {
+            id: answer.id,
+            obligatoryPreference: answer.obligatoryPreference,
+            obligatoryPreferenceOptionId: answer.obligatoryPreferenceOptionId,
+            isHidden: !answer.isHidden
+          };
+        })
+      }
+    });
+  }
+
+  toggleChoosableVisibility(index: number): void {
+    this.answer.update(value => {
+      if (value === undefined) {
+        return undefined;
+      }
+
+      return {
+        id: value.id,
+        formId: value.formId,
+        studentId: value.studentId,
+        status: value.status,
+        choosableAnswers: value.choosableAnswers.map((answer, i) => {
+          if (i !== index) {
+            return answer;
+          }
+
+          return {
+            id: answer.id,
+            name: answer.name,
+            isHidden: !answer.isHidden
+          };
+        }),
+        obligatoryAnswers: value.obligatoryAnswers
+      }
+    });
   }
 
   onSubmit(): void {
-    const selected = this.selectedOptions();
-  /*
-    const missing = this.formContent.obligatoryPreferences.some(pref => !selected[pref.id]);
-    if (missing) {
-      this.missingObligatoryAnswers.set(true);
-      return;
-    }
-  
-    this.missingObligatoryAnswers.set(false);*/
-  
-    const obligatoryAnswers: ObligatoryAnswerCreate[] = Object.entries(selected).map(([prefId, optionId]) => ({
-      obligatoryPreferenceId: +prefId,
-      obligatoryPreferenceOptionId: optionId,
-      isHidden: false,
-    }));
-  
-    const choosableAnswers: ChoosableAnswerCreate[] = this.choosableAnswers().map(name => ({
-      name,
-      isHidden: false
-    }));
-  
-    this.isSubmitting.set(true);
-  
-    if (this.existingAnswer) {
-      const payload: AnswerUpdate = {
-        formId: this.formContent.id,
-        obligatoryAnswers,
-        choosableAnswers
-      };
-  
-      this.answerService.updateAnswer(payload).subscribe({
-        next: (res) => {
-          this.isSubmitting.set(false);
-          if (res.success) {
-            this.toastr.success('Odpowiedź zaktualizowana pomyślnie!');
-            this.hide.emit();
+    const newAnswer = {
+      formId: this.answer()!.formId,
+      choosableAnswers: this.answer()!.choosableAnswers.map<ChoosableAnswerCreate>(answer => {
+        return {
+          name: answer.name,
+          isHidden: answer.isHidden
+        };
+      }),
+      obligatoryAnswers: this.answer()!.obligatoryAnswers
+        .filter(answer => answer.obligatoryPreferenceOptionId !== null)
+        .map<ObligatoryAnswerCreate>(answer => {
+        return {
+          obligatoryPreferenceId: answer.obligatoryPreference.id,
+          obligatoryPreferenceOptionId: answer.obligatoryPreferenceOptionId!,
+          isHidden: answer.isHidden
+        };
+      })
+    };
+
+    if (this.answer()!.id === null) {
+      this.answerService.createAnswer(newAnswer).subscribe({
+        next: response => {
+          if (response.success) {
+            this.toastr.success('Zapisano odpowiedzi');
+            this.loadAnswer();
+            this.save.emit();
           } else {
-            this.toastr.error(res.error?.detail ?? 'Błąd aktualizacji', res.error?.title ?? 'Błąd');
+            this.toastr.error(response.error!.detail, response.error!.title);
           }
-        },
-        error: () => this.isSubmitting.set(false),
+        }
       });
     } else {
-      const payload: AnswerCreate = {
-        formId: this.formContent.id,
-        obligatoryAnswers,
-        choosableAnswers
-      };
-  
-      this.answerService.createAnswer(payload).subscribe({
-        next: (res) => {
-          this.isSubmitting.set(false);
-          if (res.success) {
-            this.toastr.success('Formularz zapisany pomyślnie!');
-            this.hide.emit();
+      this.answerService.updateAnswer(newAnswer).subscribe({
+        next: response => {
+          if (response.success) {
+            this.toastr.success('Zapisano odpowiedzi');
+            this.loadAnswer();
+            this.save.emit();
           } else {
-            this.toastr.error(res.error?.detail ?? 'Błąd zapisu', res.error?.title ?? 'Błąd');
+            this.toastr.error(response.error!.detail, response.error!.title);
           }
-        },
-        error: () => this.isSubmitting.set(false),
+        }
       });
     }
   }
-  
-  
 }

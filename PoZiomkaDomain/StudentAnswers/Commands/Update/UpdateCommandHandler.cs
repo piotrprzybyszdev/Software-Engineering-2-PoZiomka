@@ -1,12 +1,14 @@
 ﻿using MediatR;
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Form;
 using PoZiomkaDomain.Student;
+using PoZiomkaDomain.StudentAnswers.Dtos;
 using PoZiomkaDomain.StudentAnswers.Exceptions;
 
 namespace PoZiomkaDomain.StudentAnswers.Commands.Update;
 
-public class UpdateCommandHandler(IStudentRepository studentRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<UpdateCommand>
+public class UpdateCommandHandler(IStudentRepository studentRepository, IFormRepository formRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<UpdateCommand>
 {
     public async Task Handle(UpdateCommand request, CancellationToken cancellationToken)
     {
@@ -17,7 +19,9 @@ public class UpdateCommandHandler(IStudentRepository studentRepository, IStudent
         if (!student.ToStudentDisplay(false).CanFillForms)
             throw new UserCanNotFillFormException("Student can not fill form");
 
+        var form = await formRepository.GetFormDisplay(request.formId, cancellationToken);
+
         await studentAnswerRepository.UpdateAnswer(
-            studentId, request.formId, request.ChoosableAnswers, request.ObligatoryAnswers, null);
+            studentId, request.formId, form.ObligatoryPreferences.Count() == request.ObligatoryAnswers.Count() ? FormStatus.Filled : FormStatus.InProgress, request.ChoosableAnswers, request.ObligatoryAnswers, null);
     }
 }

@@ -1,66 +1,53 @@
-<app-popup
-  (outsideClicked)="hide.emit()"
-  (closeClicked)="hide.emit()"
-  [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'"
->
-  <div class="p-md-5 p-3 scrollable-content">
-    <h3>{{ formContent.title }}</h3>
-    <form class="mt-3" (submit)="onSubmit(); $event.preventDefault()">
-      <div *ngFor="let pref of formContent.obligatoryPreferences" class="mb-4">
-        <label class="form-label fw-bold">{{ pref.name }} <span class="text-danger">*</span></label>
-        <div *ngFor="let option of pref.options" class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="pref-{{ pref.id }}"
-            [value]="option.id"
-            [checked]="selectedOptions()[pref.id] === option.id"
-            (change)="onOptionSelect(pref.id, option.id)"
-            id="pref-{{ pref.id }}-opt-{{ option.id }}"
-          />
-          <label class="form-check-label" [for]="'pref-' + pref.id + '-opt-' + option.id">
-            {{ option.name }}
-          </label>
-        </div>
-      </div>
-      <div class="mb-4">
-        <label class="form-label fw-bold">Odpowiedzi otwarte</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Wpisz odpowiedź i naciśnij Enter"
-          [(ngModel)]="choosableInput"
-          name="choosableInput"
-          (keydown.enter)="onAddChoosable(); $event.preventDefault()"
-        />
-        <div class="mt-2">
-          <span
-            class="badge bg-secondary me-2 mb-1"
-            *ngFor="let answer of choosableAnswers(); let i = index"
-          >
-            {{ answer }}
-            <button
-              type="button"
-              class="btn-close btn-close-white ms-2"
-              aria-label="Usuń"
-              (click)="removeChoosable(i)"
-              style="font-size: 0.7em;"
-            ></button>
-          </span>
-        </div>
-      </div>
-      
+<app-popup (outsideClicked)="hide.emit()" (closeClicked)="hide.emit()" [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'">
+    <div class="p-md-5 p-3 scrollable-content">
+        <h3>{{ form().title }}</h3>
+        <form class="mt-3" (submit)="onSubmit(); $event.preventDefault()">
+            <div *ngFor="let ans of answer()?.obligatoryAnswers; let answerIndex = index" class="mb-4">
+                <label class="form-label fw-bold">{{ ans.obligatoryPreference.name }}</label>
+                <br>
+                <div *ngFor="let option of ans.obligatoryPreference.options" class="form-check">
+                    <input class="form-check-input" type="radio" name="pref-{{ ans.obligatoryPreference.id }}" [value]="option.id"
+                        [checked]="ans.obligatoryPreferenceOptionId === option.id"
+                        (change)="onOptionSelect(answerIndex, option.id)" id="pref-{{ ans.obligatoryPreference.id }}-opt-{{ option.id }}" />
+                    <label class="form-check-label" [for]="'pref-' + ans.obligatoryPreference.id + '-opt-' + option.id">
+                        {{ option.name }}
+                    </label>
+                </div>
+                <hr class="my-0">
+                <input class="form-check-input" type="checkbox" name="hide-{{ ans.obligatoryPreference.id }}" [value]="ans.isHidden"
+                [checked]="ans.isHidden"
+                (change)="toggleObligatoryVisiblity(answerIndex)" id="hide-{{ ans.obligatoryPreference.id }}" />
+                <label class="form-check-label ms-2" [for]="'hide-' + ans.obligatoryPreference.id">
+                    Ukryj odpowiedź
+                </label>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-bold">Odpowiedzi otwarte</label>
+                <input type="text" class="form-control" placeholder="Wpisz odpowiedź i naciśnij Enter"
+                    [(ngModel)]="choosableInput" name="choosableInput"
+                    (keydown.enter)="onAddChoosable(); $event.preventDefault()" />
+                <div class="mt-2">
+                    <span class="badge bg-secondary me-2 mb-1" *ngFor="let answer of answer()?.choosableAnswers; let i = index">
+                        {{ answer.name }}
+                        <button type="button" class="btn btn-sm border-0 p-0 btn-white ms-2" aria-label="Usuń"
+                            (click)="toggleChoosableVisibility(i)">
+                            @if (answer.isHidden) {
+                                <i class="bi bi-eye-slash"></i>
+                            } @else {
+                                <i class="bi bi-eye"></i>
+                            }
+                        </button>
+                        <button type="button" class="btn btn-sm border-0 p-0 btn-white ms-2" aria-label="Usuń"
+                        (click)="removeChoosable(i)">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    </span>
+                </div>
+            </div>
 
-      <div *ngIf="missingObligatoryAnswers()" class="alert alert-danger">
-        Uzupełnij wszystkie obowiązkowe odpowiedzi przed wysłaniem.
-      </div>
-      <button
-        type="submit"
-        class="btn btn-success w-100"
-        [disabled]="isSubmitting()"
-      >
-        Zapisz odpowiedzi
-      </button>
-    </form>
-  </div>
+            <button type="submit" class="btn btn-success w-100" [disabled]="isSubmitting()">
+                Zapisz odpowiedzi
+            </button>
+        </form>
+    </div>
 </app-popup>
