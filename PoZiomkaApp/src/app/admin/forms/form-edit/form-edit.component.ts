@@ -75,12 +75,12 @@ export class FormEditComponent implements OnInit {
     this.selectedPreferenceIndex.set(undefined);
   }
 
-  onSave(preference: ObligatoryPreferenceCreate): void {
+  onSave(preference?: ObligatoryPreferenceCreate): void {
     this._form.update(data => {
       return {
         id: data!.id,
         title: this.formTitle(),
-        obligatoryPreferences: data!.obligatoryPreferences.updateClone(this.selectedPreferenceIndex()!, preference)
+        obligatoryPreferences: preference === undefined ? data!.obligatoryPreferences : data!.obligatoryPreferences.updateClone(this.selectedPreferenceIndex()!, preference)
       };
     });
 
@@ -101,6 +101,8 @@ export class FormEditComponent implements OnInit {
 
   onSaveTitle(): void {
     this.isEditingTitle.set(false);
+
+    this.onSave();
   }
 
   onAddPreference(): void {
