@@ -149,6 +149,7 @@ export class FormEditComponent implements OnInit {
           this.toastrService.error(response.error!.detail, response.error!.title);
         }
       }
-    })
+    });
+    this.router.navigate(['admin', 'forms']);
   }
 }
