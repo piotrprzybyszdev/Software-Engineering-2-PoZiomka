@@ -1,12 +1,11 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
 using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Form.Dtos;
 using PoZiomkaDomain.StudentAnswers;
 using PoZiomkaDomain.StudentAnswers.Dtos;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
-using Dapper;
-using PoZiomkaDomain.Form.Dtos;
-using PoZiomkaDomain.Form;
 
 namespace PoZiomkaInfrastructure.Repositories;
 
@@ -26,7 +25,7 @@ public class StudentAnswerRepository(IDbConnection connection) : IStudentAnswerR
             INSERT INTO StudentAnswers (StudentId, FormId, FormStatus)
             VALUES (@StudentId, @FormId, @Status);
             SELECT CAST(SCOPE_IDENTITY() as int);";
-            
+
             // CHANGE FORM STATUS
             var answerId = await connection.ExecuteScalarAsync<int>(
             insertAnswerSql,
@@ -162,11 +161,11 @@ WHERE form.Id = @formId";
                 choosableAnswers = await connection.QueryAsync<StudentAnswerChoosableDisplay>(sql3, new { answerId = answer.Id });
             }
         }
-        catch(SqlException exception)
+        catch (SqlException exception)
         {
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
-        
+
 
         return new(answer?.Id, formId, studentId, FormStatus.NotFilled, choosableAnswers, obligatoryAnswers);
     }

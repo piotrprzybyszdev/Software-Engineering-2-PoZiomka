@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.StudentAnswer;
-using PoZiomkaDomain.Application.Queries.GetStudent;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.StudentAnswers.Commands.Create;
 using PoZiomkaDomain.StudentAnswers.Commands.Delete;
 using PoZiomkaDomain.StudentAnswers.Dtos;
 using PoZiomkaDomain.StudentAnswers.Queries.GetAnswer;

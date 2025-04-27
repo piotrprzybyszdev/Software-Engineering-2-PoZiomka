@@ -1,12 +1,9 @@
 ﻿using Moq;
-using PoZiomkaDomain.Room.Commands.AddStudent;
-using PoZiomkaDomain.Room.Commands.AddStudentToRoom;
-using PoZiomkaDomain.Room.Dtos;
-using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Room;
-using PoZiomkaDomain.Student.Dtos;
-using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Room.Queries.GetAllRooms;
+using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaUnitTest.Domain.Room;
 
@@ -40,14 +37,14 @@ public class GetAllRoomsQueryHandlerTest
 
         var studentRepository = new Mock<IStudentRepository>();
         studentRepository.Setup(x => x.GetStudentIdsByRoomId(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<int> {  });
+            .ReturnsAsync(new List<int> { });
 
 
         var roomRepository = new Mock<IRoomRepository>();
         roomRepository.Setup(x => x.GetAllRooms(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<RoomModel> { roomModel});
+            .ReturnsAsync(new List<RoomModel> { roomModel });
 
-        GetAllRoomsQuery query = new ();
+        GetAllRoomsQuery query = new();
         GetAllRoomsQueryHandler handler = new(roomRepository.Object, studentRepository.Object);
         await handler.Handle(query, new CancellationToken());
         Assert.True(true);

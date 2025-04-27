@@ -7,18 +7,18 @@ using PoZiomkaDomain.Match;
 using PoZiomkaDomain.StudentAnswers.Dtos;
 
 namespace PoZiomkaDomain.StudentAnswers.Queries.GetAnswer;
-public class GetAnswerQueryHandler(IStudentAnswerRepository studentAnswerRepository, IJudgeService judgeService): IRequestHandler<GetAnswerQuery, StudentAnswerDisplay>
+public class GetAnswerQueryHandler(IStudentAnswerRepository studentAnswerRepository, IJudgeService judgeService) : IRequestHandler<GetAnswerQuery, StudentAnswerDisplay>
 {
     public async Task<StudentAnswerDisplay> Handle(GetAnswerQuery request, CancellationToken cancellationToken)
     {
         int studentId = request.user.GetUserId() ?? throw new DomainException("Id of the user isn't known");
-        
+
         bool authorized = false;
-        if(await judgeService.IsMatch(studentId, request.studentId))
+        if (await judgeService.IsMatch(studentId, request.studentId))
         {
             authorized = true;
         }
-        if(studentId==request.studentId)
+        if (studentId == request.studentId)
         {
             authorized = true;
         }
@@ -28,7 +28,7 @@ public class GetAnswerQueryHandler(IStudentAnswerRepository studentAnswerReposit
         }
         var result = await studentAnswerRepository.GetStudentAnswer(request.formId, request.studentId, cancellationToken);
 
-        if(studentId!=request.studentId)
+        if (studentId != request.studentId)
         {
             result = result.HideAnswers();
         }
