@@ -31,16 +31,20 @@
                 <button class="btn btn-primary px-3" type="button" (click)="onAddPreference()">
                     <i class="bi bi-plus-lg me-3"></i>Dodaj Pytanie
                 </button>
-                @if (isCreating()) {
-                    <div>
+                <div>
+                    @if (isCreating()) {
                         <button class="btn btn-danger px-3 ms-3" type="button" (click)="onCancel()">
                             Anuluj
                         </button>
                         <button class="btn btn-success px-3 ms-3" type="button" (click)="onCreate()">
                             Utwórz Ankietę
                         </button>
-                    </div>
-                }
+                    } @else {
+                        <button class="btn btn-danger px-3 ms-3" type="button" (click)="onDelete()">
+                            Usuń Ankietę
+                        </button>
+                    }
+                </div>
             </div>
         </div>
     }

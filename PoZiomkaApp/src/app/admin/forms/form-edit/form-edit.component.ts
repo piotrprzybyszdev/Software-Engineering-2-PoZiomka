@@ -139,4 +139,16 @@ export class FormEditComponent implements OnInit {
     this.toastrService.info('Tworznie ankiety anulowane - Nie utworzono ankiety');
     this.router.navigate(['admin', 'forms']);
   }
+
+  onDelete(): void {
+    this.formService.deleteForm(this.form()!.id).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Pomyślnie usunięto ankietę');
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+      }
+    })
+  }
 }
