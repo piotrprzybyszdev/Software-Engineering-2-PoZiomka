@@ -68,7 +68,7 @@ CREATE TABLE StudentAnswers (
     StudentId INT NOT NULL,
     FormStatus INT NOT NULL,
     FOREIGN KEY (FormId) REFERENCES Forms(Id),
-    FOREIGN KEY (StudentId) REFERENCES Students(Id)
+    FOREIGN KEY (StudentId) REFERENCES Students(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE StudentAnswersChoosable (

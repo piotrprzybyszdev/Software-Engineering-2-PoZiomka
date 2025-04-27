@@ -54,18 +54,37 @@ VALUES (@preferenceId, @name);
 
     public async Task DeleteForm(int id, CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"DELETE FROM Forms WHERE Id = @id";
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+
+        var sqlQueryAnswersDelete = @"DELETE FROM StudentAnswers WHERE FormId = @id";
+
+        try
+        {
+            await connection.ExecuteAsync(new CommandDefinition(sqlQueryAnswersDelete, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        {
+            transaction.Rollback();
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+
+        var sqlQueryFormDelete = @"DELETE FROM Forms WHERE Id = @id";
 
         int rowsAffected;
         try
         {
-            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
-            if (rowsAffected == 0) throw new IdNotFoundException();
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQueryFormDelete, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
         }
         catch (SqlException exception)
         {
+            transaction.Rollback();
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
+        if (rowsAffected == 0) throw new IdNotFoundException();
+
+        transaction.Commit();
     }
 
     public async Task<FormDisplay> GetFormDisplay(int id, CancellationToken? cancellationToken)
