@@ -86,6 +86,6 @@ CREATE TABLE StudentAnswerObligatory (
     ObligatoryPreferenceOptionId INT NOT NULL,
     IsHidden BIT NOT NULL,
     FOREIGN KEY (AnswerId) REFERENCES StudentAnswer(Id) ON DELETE CASCADE,
-    FOREIGN KEY (ObligatoryPrefernceId) REFERENCES ObligatoryPreferences(Id),
+    FOREIGN KEY (ObligatoryPrefernceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE,
     FOREIGN KEY (ObligatoryPreferenceOptionId) REFERENCES ObligatoryPreferenceOptions(Id)
 );

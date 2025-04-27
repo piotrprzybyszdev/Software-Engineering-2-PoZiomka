@@ -32,4 +32,8 @@
     <ProjectReference Include="..\PoZiomkaInfrastructure\PoZiomkaInfrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Form\" />
+  </ItemGroup>
+
 </Project>
