@@ -1,3 +1,3 @@
 ﻿namespace PoZiomkaDomain.Communication.Dtos;
 
-public record CommunicationModel(int Id, int UserId, string Description);
+public record CommunicationModel(int Id, int StudentId, string Description);

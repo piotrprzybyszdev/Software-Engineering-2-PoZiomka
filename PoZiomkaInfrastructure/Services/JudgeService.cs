@@ -20,7 +20,7 @@ public class JudgeService() : IJudgeService
 
     public Task<bool> IsMatch(int studentId, int otherStudentId)
     {
-        return Task.FromResult(false);
+        return Task.FromResult(true);
     }
 
 }
