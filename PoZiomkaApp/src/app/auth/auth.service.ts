@@ -21,7 +21,7 @@ export class AuthService {
       this.httpClient.post<void>('/api/login', {
         email: email,
         password: password
-      })
+      }), false
     );
   }
 
@@ -30,7 +30,7 @@ export class AuthService {
       this.httpClient.post<void>('/api/admin-login', {
         email: email,
         password: password
-      })
+      }), false
     );
   }
 

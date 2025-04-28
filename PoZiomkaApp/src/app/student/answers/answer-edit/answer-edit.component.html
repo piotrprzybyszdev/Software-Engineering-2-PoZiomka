@@ -1,4 +1,4 @@
-<app-popup (outsideClicked)="hide.emit()" (closeClicked)="hide.emit()" [size]="'col-10 col-sm-8 col-lg-6 col-xl-4'">
+<app-popup (outsideClicked)="hide.emit()" (closeClicked)="hide.emit()" [size]="'col-10'">
     <div class="p-md-5 p-3 scrollable-content">
         <h3>{{ form().title }}</h3>
         <form class="mt-3" (submit)="onSubmit(); $event.preventDefault()">
@@ -45,9 +45,14 @@
                 </div>
             </div>
 
-            <app-loading-button [class]="'btn btn-success w-100'" [isLoading]="isSubmitting()" (clicked)="onSubmit()">
-                Zapisz odpowiedzi
-            </app-loading-button>
+            <div class="d-flex justify-content-between">
+                <app-loading-button [class]="'btn btn-success col-auto'" [isLoading]="isSubmitting()" (clicked)="onSubmit()" [isDisabled]="isDeleting()">
+                    Zapisz odpowiedzi
+                </app-loading-button>
+                <app-loading-button [class]="'btn btn-danger col-auto'" [isLoading]="isDeleting()" (clicked)="onDelete()" [isDisabled]="isSubmitting()">
+                    Usuń odpowiedzi
+                </app-loading-button>
+            </div>
         </form>
     </div>
 </app-popup>

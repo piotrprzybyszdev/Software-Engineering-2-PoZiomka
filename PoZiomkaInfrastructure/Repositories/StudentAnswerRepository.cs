@@ -87,6 +87,7 @@ public class StudentAnswerRepository(IDbConnection connection) : IStudentAnswerR
             throw new UserDidNotAnswerItException("User did not answer this form");
         }
     }
+
     public async Task DeleteAnswer(int answerId, CancellationToken? cancellationToken)
     {
         var sql = @"DELETE FROM StudentAnswers WHERE Id = @answerId";
