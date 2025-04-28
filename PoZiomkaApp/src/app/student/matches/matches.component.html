@@ -1,0 +1,67 @@
+<div class="p-5">
+    <h2>Twoje Dopasowania</h2>
+    <div class="col p-5">
+        <div class="table-responsive">
+            <table class="table table-lg table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Imię</th>
+                        <th scope="col">Nazwisko</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Numer Telefonu</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-center">Profil</th>
+                        <th scope="col" class="text-center">Ankiety</th>
+                        <th scope="col" class="text-center">Zaakceptuj</th>
+                        <th scope="col" class="text-center">Odrzuć</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (match of matches(); track match.id) {
+                        <tr scope="row">
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ match.otherStudent.firstName ?? "-" }}</td>
+                            <td>{{ match.otherStudent.lastName ?? "-" }}</td>
+                            <td>{{ match.otherStudent.email }}</td>
+                            <td>{{ match.otherStudent.phoneNumber ?? "-" }}</td>
+                            <td>
+                                <span [class]="`text-${matchToColorString(match)}`">{{ matchToString(match) }}</span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn border-0 p-0 text-primary" (click)="onProfileSelect(match.otherStudent.id)">
+                                    <i class="bi bi-person-circle"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn border-0 p-0 text-primary" (click)="onFormSelect(match.otherStudent.id)">
+                                    <i class="bi bi-card-checklist"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                <app-loading-button [class]="'btn border-0 p-0 text-success'" [isLoading]="isAccepting()[$index]"
+                                [isDisabled]="isRejecting()[$index]" (clicked)="onAccept($index)">
+                                    <i class="bi bi-check-square"></i>
+                                </app-loading-button>
+                            </td>
+                            <td class="text-center">
+                                <app-loading-button [class]="'btn border-0 p-0 text-danger'" [isLoading]="isRejecting()[$index]"
+                                [isDisabled]="isAccepting()[$index]" (clicked)="onReject($index)">
+                                    <i class="bi bi-x-square"></i>
+                                </app-loading-button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (selectedStudentProfileId() !== undefined) {
+    <app-student-profile (hide)="onHideProfilePopup()" [studentId]="selectedStudentProfileId()!"/>
+}
+
+@if (selectedStudentFormsId() !== undefined) {
+    <app-answers-view (hide)="onHideFormPopup()" [studentId]="selectedStudentFormsId()!"/>
+}

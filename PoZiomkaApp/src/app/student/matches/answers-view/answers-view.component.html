@@ -1,0 +1,19 @@
+<app-popup [size]="size()" (closeClicked)="onHide()" (outsideClicked)="onHide()">
+    @if (selectedAnswer() === undefined) {
+        <h3>Wybierz ankietę</h3>
+        <div class="col p-3">
+            <hr>
+            @for (answer of answers(); track answer.id) {
+                <div class="d-flex justify-content-between">
+                    <h5 class="mx-0 my-auto">{{ answer.form.title }}</h5>
+                    <button class="btn btn-primary" (click)="onAnswerSelect(answer.form.id)">Pokaż odpowiedzi</button>
+                </div>
+                <hr>
+            }
+        </div>
+    } @else {
+        <button class="btn m-md-3 m-1 position-absolute border-0 start-0 top-0" (click)="onAnswerListShow()">
+            <h4 class="m-0"><i class="bi bi-arrow-left"></i></h4>
+        </button>
+    }
+</app-popup>

@@ -29,7 +29,6 @@ export enum FormStatus {
 export type AnswerStatus = {
   id: number | null,
   form: FormModel,
-  title: string,
   status: FormStatus
 }
 

@@ -22,5 +22,4 @@ public class JudgeService() : IJudgeService
     {
         return Task.FromResult(true);
     }
-
 }
