@@ -1,1 +1,89 @@
-<p>communications works!</p>
+<div class="container mt-5 px-5">
+    <h1>Komunikaty</h1>
+    <hr>
+    <form class="bg-secondary bg-opacity-25 row mt-4 mx-0 py-2 rounded-3 border gx-lg-4 gx-2">
+        <div class="col-md mb-md-0 mb-2">
+            <input class="form-control" type="text" name="firstName" placeholder="Imię" [(ngModel)]="firstName" >
+        </div>
+        <div class="col-md mb-md-0 mb-2">
+            <input class="form-control" type="text" name="lastName" placeholder="Nazwisko" [(ngModel)]="lastName" >
+        </div>
+        <div class="col-md mb-md-0 mb-2">
+            <input class="form-control" type="text" name="email" placeholder="Email" [(ngModel)]="email" >
+        </div>
+        <div class="col-md mb-md-0 mb-2">
+            <input class="form-control" type="text" name="indexNumber" placeholder="Numer indeksu" [(ngModel)]="indexNumber"/>
+        </div>
+        <div class="col-md mb-md-0 mb-2">
+            <input class="form-control" type="text" name="phoneNumber" placeholder="Numer telefonu" [(ngModel)]="phoneNumber"/>
+        </div>
+        <div class="col-md-auto ms-md-2">
+            <button type="button" class="btn btn-primary" (click)="onOpenCommunicationPopup()">
+                Wyślij komunikat
+            </button>
+        </div>
+    </form>
+    <div class="table-responsive py-3">
+        <table class="table table-lg table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Imię</th>
+                    <th scope="col">Nazwisko</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Numer telefonu</th>
+                    <th scope="col">Numer indeksu</th>
+                    <th scope="col">
+                        <button class="btn btn-sm btn-white text-success border-0 p-0" (click)="onToggleSelectAll()">
+                            @if (allSelected()) {
+                                <i class="bi bi-check-square-fill" style="font-size: 1.25rem;"></i>
+                            } @else {
+                                <i class="bi bi-square" style="font-size: 1.25rem;"></i>
+                            }
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (student of students(); track student.id) {
+                    <tr scope="row">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ student.firstName ?? "-" }}</td>
+                        <td>{{ student.lastName ?? "-" }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.phoneNumber ?? "-" }}</td>
+                        <td>{{ student.indexNumber ?? "-" }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-white text-success border-0 p-0" (click)="onToggleSelected($index)">
+                                @if (isSelected()[$index]) {
+                                    <i class="bi bi-check-square-fill" style="font-size: 1.25rem;"></i>
+                                } @else {
+                                    <i class="bi bi-square" style="font-size: 1.25rem;"></i>
+                                }
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (isShowingPopup()) {
+    <app-popup [size]="'col-xl-7'" (closeClicked)="onHidePopup()" (outsideClicked)="onHidePopup()">
+        <div class="col-11 p-5 mx-auto">
+            <div class="row justify-content-between">
+                <div class="col-auto">
+                    <h4 class="mb-4">Wprowadź tekst powiadomienia</h4>
+                </div>
+                <div class="col-auto">
+                    <app-loading-button [class]="'btn-primary'" [isLoading]="isSending()" (clicked)="onSend()">
+                        Wyślij
+                    </app-loading-button>
+                </div>
+            </div>
+            <textarea class="form-control" type="text" name="description" [(ngModel)]="description" rows="5">
+            </textarea>
+        </div>
+    </app-popup>
+}

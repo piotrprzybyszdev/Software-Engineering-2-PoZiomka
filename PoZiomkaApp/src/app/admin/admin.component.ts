@@ -33,6 +33,14 @@ export class AdminComponent {
     this.router.navigate(['/admin/forms']);
   }
 
+  onReservationsClick(): void {
+    this.router.navigate(['/admin/reservations']);
+  }
+
+  onCommunicationsClick(): void {
+    this.router.navigate(['/admin/communications']);
+  }
+
   logout(): void {
     this.authService.logOut().subscribe({
       next: _ => this.router.navigate(['/login'])
