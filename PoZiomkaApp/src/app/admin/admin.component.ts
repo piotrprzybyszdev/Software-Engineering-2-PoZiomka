@@ -17,8 +17,8 @@ export class AdminComponent {
     this.router.navigate(['/admin/applications']);
   }
 
-  onProfileClick(): void {
-    this.router.navigate(['/admin/profile']);
+  onDashboardClick(): void {
+    this.router.navigate(['/admin/dashboard']);
   }
 
   onStudentListClick(): void {
