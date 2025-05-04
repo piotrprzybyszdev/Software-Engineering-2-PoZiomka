@@ -89,3 +89,13 @@ CREATE TABLE StudentAnswersObligatory (
     FOREIGN KEY (ObligatoryPreferenceId) REFERENCES ObligatoryPreferences(Id) ON DELETE CASCADE,
     FOREIGN KEY (ObligatoryPreferenceOptionId) REFERENCES ObligatoryPreferenceOptions(Id)
 );
+
+CREATE TABLE Matches (
+	Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+	StudentId1 INT NOT NULL,
+	StudentId2 INT NOT NULL,
+	Status1 VARCHAR(20) NOT NULL,
+	Status2 VARCHAR(20) NOT NULL,
+	FOREIGN KEY (StudentId1) REFERENCES Students(Id),
+	FOREIGN KEY (StudentId2) REFERENCES Students(Id)
+);

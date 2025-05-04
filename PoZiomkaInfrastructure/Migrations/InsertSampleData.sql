@@ -103,3 +103,16 @@ VALUES
 (2, 1, 2, 0),
 (2, 2, 4, 0),
 (2, 3, 12, 0);
+
+-- Mathces table
+INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
+VALUES (3, 2, 'Accepted', 'Pending');
+
+INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
+VALUES (1, 3, 'Rejected', 'Rejected');
+
+INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
+VALUES (1, 4, 'Accepted', 'Accepted');
+
+INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
+VALUES (2, 1, 'Pending', 'Pending');

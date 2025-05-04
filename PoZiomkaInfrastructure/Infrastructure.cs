@@ -75,6 +75,7 @@ public static class Infrastructure
         services.AddScoped<IRoomRepository, RoomRepository>();
         services.AddScoped<IStudentAnswerRepository, StudentAnswerRepository>();
         services.AddScoped<IFormRepository, FormRepository>();
+        services.AddScoped<IMatchRepository, MatchRepository>();
 
         services.AddScoped<IJudgeService, JudgeService>();
 
