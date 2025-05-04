@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Match;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Match.Commands.UpdateMatchCommand;
 using PoZiomkaDomain.Match.Dtos;
+using PoZiomkaDomain.Match.Queries.StudentMatchesQuery;
+using PoZiomkaDomain.StudentAnswers.Commands.Update;
 
 namespace PoZiomkaApi.Controllers;
 
@@ -15,17 +18,16 @@ public class MatchController(IMediator mediator) : Controller
     [Authorize(Roles = Roles.Student)]
     public async Task<IEnumerable<MatchModel>> GetStudentMatches()
     {
-        return [
-            new MatchModel(1, 1, 2, MatchStatus.Accepted, MatchStatus.Pending),
-            new MatchModel(1, 1, 3, MatchStatus.Accepted, MatchStatus.Rejected),
-            new MatchModel(1, 1, 4, MatchStatus.Accepted, MatchStatus.Accepted)
-        ];
+        StudentMatchQuery query = new(User);
+        return await mediator.Send(query);
     }
 
     [HttpPut("update")]
     [Authorize(Roles = Roles.Student)]
     public async Task<IActionResult> UpdateMatch(MatchUpdateRequest updateRequest)
     {
-        return NotFound();
+        UpdateMatchCommand command = new(User, updateRequest.Id, updateRequest.IsAcceptation);
+        await mediator.Send(command);
+        return Ok();
     }
 }
