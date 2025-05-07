@@ -3,6 +3,7 @@ using PoZiomkaDomain.Match.Dtos;
 using PoZiomkaDomain.Reservation;
 using PoZiomkaDomain.Reservation.Dtos;
 using PoZiomkaDomain.Room;
+using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.StudentAnswers.Dtos;
@@ -21,23 +22,54 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
         return matches;
     }
 
+    /*
+     * adds only to empty rooms
+     * 1) find empty rooms
+     * 2) iterate over students and assign them to rooms
+     */
     public async Task<IEnumerable<ReservationModel>> GenerateReservations(IEnumerable<MatchModel> matches)
     {
-        //update students and reservations
+        List<ReservationModel> reservations = new List<ReservationModel>();
 
-        int roomId = -1;
-        List<int> studentIds = new List<int>();
-
-        // create reservations
-        ReservationModel reservationModel = await reservationRepository.CreateRoomReservation(roomId);
-
-        // update students
-        foreach (var studetnId in studentIds)
+        List<(int roomId, int placesLeft, int reservationId)> akademik = new List<(int roomId, int placesLeft, int reservationId)>();
+        List<RoomModel> emptyRooms = (await roomRepository.GetEmptyRooms()).ToList();
+        foreach (var room in emptyRooms)
         {
-            await studentRepository.UpdateReservation(studetnId, reservationModel.Id, null, null);
+            akademik.Add((room.Id, room.Capacity, -1));
         }
 
-        throw new NotImplementedException();
+        // get uniq student ids from matches
+        List<int> studentIds = matches.SelectMany(match => new[] { match.StudentId1, match.StudentId2 }).Distinct().ToList();
+
+        // asign for each student room
+        for (int i = 0; i < studentIds.Count; i++)
+        {
+            if (akademik.Count == 0)
+                break;
+            int akademikRoomIndex = 0;
+            (int roomId, int placesLeft, int reservationId) room = akademik[akademikRoomIndex];
+
+            if (room.reservationId == -1)
+            {
+                // create reservation
+                ReservationModel reservationModel = await reservationRepository.CreateRoomReservation(room.roomId);
+                reservations.Add(reservationModel);
+                room.reservationId = reservationModel.Id;
+            }
+
+            // update student's reservation
+            await studentRepository.UpdateReservation(studentIds[i], room.reservationId, null, null);
+
+            room.placesLeft--;
+
+            // remove room if no places left
+            if (room.placesLeft == 0)
+            {
+                akademik.RemoveAt(akademikRoomIndex);
+            }
+        }
+
+        return reservations;
     }
 
     public async Task<bool> IsMatch(int studentId, int otherStudentId)
