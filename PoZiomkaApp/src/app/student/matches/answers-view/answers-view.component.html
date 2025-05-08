@@ -1,19 +1,51 @@
 <app-popup [size]="size()" (closeClicked)="onHide()" (outsideClicked)="onHide()">
     @if (selectedAnswer() === undefined) {
-        <h3>Wybierz ankietę</h3>
-        <div class="col p-3">
-            <hr>
-            @for (answer of answers(); track answer.id) {
-                <div class="d-flex justify-content-between">
-                    <h5 class="mx-0 my-auto">{{ answer.form.title }}</h5>
-                    <button class="btn btn-primary" (click)="onAnswerSelect(answer.form.id)">Pokaż odpowiedzi</button>
-                </div>
-                <hr>
-            }
-        </div>
+      <h3>Wybierz ankietę</h3>
+      <div class="col p-3">
+        <hr>
+        @for (answer of answers(); track answer.id) {
+          <div class="d-flex justify-content-between">
+            <h5 class="mx-0 my-auto">{{ answer.form.title }}</h5>
+            <button class="btn btn-primary" (click)="onAnswerSelect(answer.form.id)">Pokaż odpowiedzi</button>
+          </div>
+          <hr>
+        }
+      </div>
     } @else {
-        <button class="btn m-md-3 m-1 position-absolute border-0 start-0 top-0" (click)="onAnswerListShow()">
-            <h4 class="m-0"><i class="bi bi-arrow-left"></i></h4>
-        </button>
+      <button class="btn m-md-3 m-1 position-absolute border-0 start-0 top-0" (click)="onAnswerListShow()">
+        <h4 class="m-0"><i class="bi bi-arrow-left"></i></h4>
+      </button>
+  
+      <div class="p-4 pt-5">
+        <h3>Odpowiedzi do formularza:</h3>
+        <h4 class="mb-4">{{ selectedFormContent()?.title }}</h4>
+  
+        <h5>Odpowiedzi obowiązkowe:</h5>
+        <ul class="mb-4">
+          @for (a of selectedAnswer()?.obligatoryAnswers || []; track a.id) {
+            <li class="mb-2">
+              <strong>{{ a.obligatoryPreference.name }}:</strong>
+              <span *ngIf="!a.isHidden">
+                {{ getObligatoryAnswerName(a.obligatoryPreference.id, a.obligatoryPreferenceOptionId) }}
+              </span>
+              <span *ngIf="a.isHidden">ukryta</span>
+            </li>
+          }
+        </ul>
+  
+        <h5>Odpowiedzi dodatkowe:</h5>
+        <ul>
+        @for (c of filteredChoosableAnswers(); track c.id) {
+            <li class="mb-1">
+                <strong>{{ c.name }}</strong>
+            </li>
+            }                           
+          <li *ngIf="(selectedAnswer()?.choosableAnswers?.length || 0) === 0">
+            Brak odpowiedzi dodatkowych
+          </li>
+        </ul>
+      </div>
     }
-</app-popup>
+  </app-popup>
+  
+  

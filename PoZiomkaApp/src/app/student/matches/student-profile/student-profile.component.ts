@@ -3,10 +3,11 @@ import { PopupComponent } from "../../../common/popup/popup.component";
 import { StudentService } from '../../student.service';
 import { ToastrService } from 'ngx-toastr';
 import { StudentModel } from '../../student.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-student-profile',
-  imports: [PopupComponent],
+  imports: [PopupComponent, CommonModule],
   templateUrl: './student-profile.component.html',
   styleUrl: './student-profile.component.css'
 })

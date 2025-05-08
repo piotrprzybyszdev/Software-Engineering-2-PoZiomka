@@ -1,3 +1,32 @@
 <app-popup [size]="'col-6'" (closeClicked)="onHide()" (outsideClicked)="onHide()">
-
-</app-popup>
+    <ng-container *ngIf="student() as s">
+      <h2>{{ s.firstName || 'Imię ukryte' }} {{ s.lastName || 'Nazwisko ukryte' }}</h2>
+  
+      <p><strong>Email:</strong> {{ s.email }}</p>
+  
+      <p *ngIf="!s.isIndexNumberHidden && s.indexNumber">
+        <strong>Nr indeksu:</strong> {{ s.indexNumber }}
+      </p>
+      <p *ngIf="s.isIndexNumberHidden || !s.indexNumber">
+        <strong>Nr indeksu:</strong> ukryty
+      </p>
+  
+      <p *ngIf="!s.isPhoneNumberHidden && s.phoneNumber">
+        <strong>Telefon:</strong> {{ s.phoneNumber }}
+      </p>
+      <p *ngIf="s.isPhoneNumberHidden || !s.phoneNumber">
+        <strong>Telefon:</strong> ukryty
+      </p>
+  
+      <p *ngIf="s.roomId">
+        <strong>Pokój:</strong> {{ s.roomId }}
+      </p>
+      <p *ngIf="!s.roomId">
+        <strong>Pokój:</strong> brak
+      </p>
+    </ng-container>
+  
+    <ng-container *ngIf="!student()">Ładowanie danych studenta...</ng-container>
+  </app-popup>
+  
+  
