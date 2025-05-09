@@ -1,0 +1,40 @@
+<app-popup [size]="'col-6 p-5'" (closeClicked)="onHide()" (outsideClicked)="onHide()">
+    <ng-container *ngIf="reservation() as r; else roomBlock">
+      <h4 class="mb-3">Szczegóły rezerwacji</h4>
+      <p><strong>Numer pokoju:</strong> {{ r.room.number }}</p>
+      <p><strong>Piętro:</strong> {{ r.room.floor }}</p>
+      <p><strong>Pojemność:</strong> {{ r.room.capacity }}</p>
+      <p><strong>Status:</strong> {{ roomStatusToString(r.room.status) }}</p>
+      <p><strong>Czy zatwierdzona przez admina:</strong> {{ r.isAcceptedByAdmin ? 'Tak' : 'Nie' }}</p>
+  
+      <h5 class="mt-4">Studenci w pokoju:</h5>
+      <ul>
+        <li *ngFor="let student of r.students">
+          {{ student.firstName }} {{ student.lastName }} ({{ student.email }})
+        </li>
+      </ul>
+    </ng-container>
+  
+    <ng-template #roomBlock>
+      <div *ngIf="room() as rm">
+        <h4 class="mb-3">Informacje o pokoju</h4>
+        <p><strong>Numer pokoju:</strong> {{ rm.number }}</p>
+        <p><strong>Piętro:</strong> {{ rm.floor }}</p>
+        <p><strong>Pojemność:</strong> {{ rm.capacity }}</p>
+        <p><strong>Status:</strong> {{ roomStatusToString(rm.status) }}</p>
+  
+        <h5 class="mt-4">Studenci w pokoju:</h5>
+        <ul>
+            <li *ngFor="let student of rm.students">
+              <span [ngClass]="{ 'fw-bold text-primary': student.id === loggedInStudent()?.id }">
+                {{ student.firstName }} {{ student.lastName }} ({{ student.email }})
+                <span *ngIf="student.id === loggedInStudent()?.id"> – Ty</span>
+              </span>
+            </li>
+          </ul>          
+      </div>
+    </ng-template>
+  </app-popup>
+  
+  
+  

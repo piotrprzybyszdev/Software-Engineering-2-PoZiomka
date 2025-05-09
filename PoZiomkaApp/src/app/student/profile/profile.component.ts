@@ -6,11 +6,12 @@ import { StudentModel } from '../../student/student.model';
 import { ToastrService } from 'ngx-toastr';
 import { LoadingButtonComponent } from "../../common/loading-button/loading-button.component";
 import { Router } from '@angular/router';
+import { ReservationPopupComponent } from './room-reservation/room-reservation.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LoadingButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, LoadingButtonComponent, ReservationPopupComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -26,6 +27,8 @@ export class ProfileComponent implements OnInit {
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   dataForm!: FormGroup;
+
+  isReservationPopupVisible = signal(false);
 
   ngOnInit(): void {
     this.fetchProfile();
@@ -103,5 +106,14 @@ export class ProfileComponent implements OnInit {
         }
       }
     });
+  }
+
+
+  showReservationPopup(): void {
+    this.isReservationPopupVisible.set(true);
+  }
+  
+  hideReservationPopup(): void {
+    this.isReservationPopupVisible.set(false);
   }
 }
