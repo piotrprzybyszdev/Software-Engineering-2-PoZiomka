@@ -1,0 +1,22 @@
+<app-popup [size]="'col-6 p-5'" (closeClicked)="onHide()" (outsideClicked)="onHide()">
+    <h4 class="mb-4 text-center">Komunikaty od administracji</h4>
+  
+    <div *ngIf="communications().length > 0; else noMessages">
+      <ul class="list-group">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-start"
+          *ngFor="let msg of communications()"
+        >
+          <div class="me-3">{{ msg.description }}</div>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteCommunication(msg.id)">
+            Usuń
+          </button>
+        </li>
+      </ul>
+    </div>
+  
+    <ng-template #noMessages>
+      <p class="text-center text-muted mt-4">Brak komunikatów.</p>
+    </ng-template>
+  </app-popup>
+  
