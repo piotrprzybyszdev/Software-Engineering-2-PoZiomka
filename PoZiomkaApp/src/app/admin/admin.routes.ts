@@ -1,11 +1,12 @@
 import { Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { AdminProfileComponent } from "./profile/profile.component";
 import { StudentsListComponent } from "./students/students.component";
 import { RoomListComponent } from "./rooms/rooms.component";
 import { ApplicationListComponent } from "./applications/applications.component";
 import { FormListComponent } from "./forms/forms.component";
 import { FormEditComponent } from "./forms/form-edit/form-edit.component";
+import { ReservationsComponent } from "./reservations/reservations.component";
+import { CommunicationsComponent } from "./communications/communications.component";
 
 export const routes: Routes = [
   {
@@ -18,11 +19,6 @@ export const routes: Routes = [
     path: 'dashboard',
     title: 'PoZiomka - Panel Administratora',
     component: DashboardComponent
-  },
-  {
-    path: 'profile',
-    title: 'PoZiomka - Profil Administratora',
-    component: AdminProfileComponent 
   },
   {
     path: 'students',
@@ -43,6 +39,16 @@ export const routes: Routes = [
     path: 'forms',
     title: 'PoZiomka - Ankiety',
     component: FormListComponent
+  },
+  {
+    path: 'reservations',
+    title: 'PoZiomka - Rezerwacje',
+    component: ReservationsComponent
+  },
+  {
+    path: 'communications',
+    title: 'PoZiomka - Komunikaty',
+    component: CommunicationsComponent
   },
   {
     path: 'form/edit/:formId',

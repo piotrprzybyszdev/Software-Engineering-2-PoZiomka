@@ -5,6 +5,7 @@ import { AnswerStatus, FormStatus } from './answer.model';
 import { AnswerService } from './answer.service';
 import { CommonModule } from '@angular/common';
 import { FormModel } from '../../admin/forms/form.model';
+import { StudentService } from '../student.service';
 
 @Component({
   selector: 'app-answers',
@@ -14,6 +15,7 @@ import { FormModel } from '../../admin/forms/form.model';
   styleUrl: './answers.component.css'
 })
 export class AnswersComponent implements OnInit {
+  private studentService = inject(StudentService);
   private answerService = inject(AnswerService);
   private toastr = inject(ToastrService);
 
@@ -25,7 +27,7 @@ export class AnswersComponent implements OnInit {
   }
 
   loadAnswers(): void {
-    this.answerService.getStudentAnswers().subscribe({
+    this.answerService.getStudentAnswers(this.studentService.loggedInStudent()!.id).subscribe({
       next: (res) => {
         if (res.success) {
           this.answers.set(res.payload!);

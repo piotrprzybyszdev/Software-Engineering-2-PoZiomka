@@ -77,5 +77,4 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
         var studentMathces = await matchRepository.GetStudentMatches(studentId);
         return studentMathces.Any(m => m.StudentId2 == otherStudentId || m.StudentId1 == otherStudentId);
     }
-
 }
