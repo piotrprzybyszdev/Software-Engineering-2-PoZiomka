@@ -1,1 +1,52 @@
-<p>reservations works!</p>
+<div class="container mt-5 px-5">
+    <h1>Rezerwacje</h1>
+    <hr>
+  
+    <div *ngIf="isLoading" class="text-center my-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Ładowanie...</span>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading" class="table-responsive py-3">
+      <table class="table table-lg table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Pokój</th>
+            <th>Studenci (emaile)</th>
+            <th>Status</th>
+            <th>Akcja</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of reservations; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ reservation.room.number }}</td>
+            <td>
+              <ul class="mb-0 ps-3">
+                <li *ngFor="let student of reservation.students">
+                  {{ student.email }}
+                </li>
+              </ul>
+            </td>
+            <td>
+              <span [class]="reservation.isAcceptedByAdmin ? 'text-success' : 'text-danger'">
+                {{ reservation.isAcceptedByAdmin ? 'Zaakceptowana' : 'Oczekuje' }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm"
+                [ngClass]="reservation.isAcceptedByAdmin ? 'btn-outline-danger' : 'btn-outline-success'"
+                (click)="toggleAccept(reservation.id, reservation.isAcceptedByAdmin)">
+                {{ reservation.isAcceptedByAdmin ? 'Odrzuć' : 'Akceptuj' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  
