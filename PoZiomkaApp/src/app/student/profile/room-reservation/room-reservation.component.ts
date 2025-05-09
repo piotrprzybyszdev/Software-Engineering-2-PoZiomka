@@ -5,7 +5,6 @@ import { ReservationStudentModel } from '../../../reservation/reservation.model'
 import { RoomService } from '../../../admin/rooms/room.service';
 import { RoomStudentModel, roomStatusToString } from '../../../admin/rooms/room.model';
 import { PopupComponent } from '../../../common/popup/popup.component';
-import { StudentModel } from '../../student.model';
 import { StudentService } from '../../student.service';
 
 @Component({

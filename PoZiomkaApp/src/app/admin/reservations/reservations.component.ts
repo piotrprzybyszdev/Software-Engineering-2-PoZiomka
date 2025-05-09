@@ -1,7 +1,8 @@
-import { Component, OnInit, NgModule} from '@angular/core';
-import { ReservationModel, ReservationStudentModel } from '../../reservation/reservation.model';
+import { Component, OnInit} from '@angular/core';
+import { ReservationStudentModel } from '../../reservation/reservation.model';
 import { ReservationService } from '../../reservation/reservation.service';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reservations',
@@ -13,7 +14,10 @@ export class ReservationsComponent implements OnInit {
   reservations: ReservationStudentModel[] = [];
   isLoading = true;
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(
+    private reservationService: ReservationService,
+    private toastrService: ToastrService 
+  ) {}
 
   ngOnInit(): void {
     this.loadReservationsWithDetails();
@@ -24,7 +28,6 @@ export class ReservationsComponent implements OnInit {
     this.reservationService.getReservations().subscribe(response => {
       const reservationList = response.payload ?? [];
 
-      // pobieramy dane szczegółowe dla każdej rezerwacji
       const detailRequests = reservationList.map(r =>
         this.reservationService.getReservation(r.id)
       );
@@ -40,9 +43,18 @@ export class ReservationsComponent implements OnInit {
 
   toggleAccept(reservationId: number, currentStatus: boolean) {
     const newStatus = !currentStatus;
-    this.reservationService.updateReservation(reservationId, newStatus).subscribe(() => {
-      const reservation = this.reservations.find(r => r.id === reservationId);
-      if (reservation) reservation.isAcceptedByAdmin = newStatus;
+    this.reservationService.updateReservation(reservationId, newStatus).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Pomyślnie zmieniono status rezerwacji');
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+        this.loadReservationsWithDetails();
+      },
+      error: err => {
+        this.toastrService.error('Wystąpił błąd podczas aktualizacji rezerwacji');
+      }
     });
   }
 }
