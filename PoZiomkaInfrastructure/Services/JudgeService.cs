@@ -27,7 +27,7 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
      * 1) find empty rooms
      * 2) iterate over students and assign them to rooms
      */
-    public async Task<IEnumerable<ReservationModel>> GenerateReservations(IEnumerable<MatchModel> matches)
+    public async Task<IEnumerable<ReservationModel>> GenerateReservations(IEnumerable<MatchModel> matches, CancellationToken? cancellationToken)
     {
         List<ReservationModel> reservations = new List<ReservationModel>();
 
@@ -52,7 +52,7 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
             if (room.reservationId == -1)
             {
                 // create reservation
-                ReservationModel reservationModel = await reservationRepository.CreateRoomReservation(room.roomId);
+                ReservationModel reservationModel = await reservationRepository.CreateRoomReservation(room.roomId, cancellationToken);
                 reservations.Add(reservationModel);
                 room.reservationId = reservationModel.Id;
             }

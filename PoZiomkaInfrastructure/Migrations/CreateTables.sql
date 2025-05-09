@@ -106,3 +106,10 @@ CREATE TABLE Communications (
     [Description] NVARCHAR(255) NOT NULL,
     FOREIGN KEY (StudentId) REFERENCES Students(Id) ON DELETE CASCADE,
 )
+
+CREATE TABLE Reservations (
+    Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+    RoomId INT NOT NULL,
+    IsAcceptedByAdmin BIT NOT NULL,
+    FOREIGN KEY (RoomId) REFERENCES Rooms(Id) ON DELETE CASCADE
+)

@@ -1,3 +1,9 @@
-﻿namespace PoZiomkaApi.Requests.Reservation;
+﻿using PoZiomkaDomain.Reservation.Commands.UpdateReservation;
+using System.Security.Claims;
 
-public record ReservationUpdateRequest(int Id, bool IsAcceptation);
+namespace PoZiomkaApi.Requests.Reservation;
+
+public record ReservationUpdateRequest(int Id, bool IsAcceptation, ClaimsPrincipal User)
+{
+    public UpdateReservationCommand ToUpdateReservationCommand() => new(Id, IsAcceptation, User);
+};

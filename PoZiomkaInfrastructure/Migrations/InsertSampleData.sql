@@ -7,10 +7,10 @@ INSERT INTO Administrators (Email, PasswordHash)
 VALUES ('admin@example.com', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S');
 
 INSERT INTO Students (Email, FirstName, LastName, PasswordHash, IsConfirmed, PhoneNumber, IndexNumber, ReservationId, HasAcceptedReservation, RoomId, IsPhoneNumberHidden, IsIndexNumberHidden) VALUES
-('student@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 1, 0, 1),
-('wojtek@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 1, 0, 1),
+('student@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', 1, 1, 1, 0, 1),
+('wojtek@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', 1, 0, 1, 0, 1),
 ('emil@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 2, 0, 1),
-('test@gmail.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, NULL, 0, 1);
+('test@gmail.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', 2, 0, 2, 0, 1);
 
 INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) VALUES
 (1, 1, 'b6f4cfe3-fc21-45fc-95b5-3dd29ea4de4f', 0),
@@ -120,10 +120,16 @@ VALUES (2, 1, 'Pending', 'Pending');
 -- Communications table
 INSERT INTO Communications (StudentId, [Description])
 VALUES
-(1, 'Zostałeś zakwaterowany w pokoju 311'),
+(1, 'Zostałeś zakwaterowany w pokoju 101'),
 (1, 'Twój wniosek został odrzucony'),
 (1, 'Zostałeś wydalony z akademika'),
 (2, 'Wygrałeś iPhone 16 Pro Max'),
-(3, 'Zostałeś zakwaterowany w pokoju 205'),
-(4, 'Zostałeś zakwaterowany w pokoju 101'),
+(3, 'Zostałeś zakwaterowany w pokoju 311'),
+(4, 'Zostałeś zakwaterowany w pokoju 205'),
 (4, 'Twój wniosek został odrzucony');
+
+-- Reservations table
+INSERT INTO Reservations (RoomId, IsAcceptedByAdmin)
+VALUES
+(1, 1),
+(2, 0);
