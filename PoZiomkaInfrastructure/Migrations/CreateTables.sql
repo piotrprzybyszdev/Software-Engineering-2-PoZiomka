@@ -99,3 +99,10 @@ CREATE TABLE Matches (
 	FOREIGN KEY (StudentId1) REFERENCES Students(Id),
 	FOREIGN KEY (StudentId2) REFERENCES Students(Id)
 );
+
+CREATE TABLE Communications (
+    Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+    StudentId INT NOT NULL,
+    [Description] NVARCHAR(255) NOT NULL,
+    FOREIGN KEY (StudentId) REFERENCES Students(Id) ON DELETE CASCADE,
+)

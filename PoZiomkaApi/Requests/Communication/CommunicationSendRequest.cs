@@ -1,3 +1,8 @@
-﻿namespace PoZiomkaApi.Requests.Communication;
+﻿using PoZiomkaDomain.Communication.Commands.SendCommunication;
 
-public record CommunicationSendRequest(IEnumerable<int> StudentIds, string Description);
+namespace PoZiomkaApi.Requests.Communication;
+
+public record CommunicationSendRequest(IEnumerable<int> StudentIds, string Description)
+{
+    public SendCommunicationCommand ToSendCommunicationCommand() => new(StudentIds, Description);
+};

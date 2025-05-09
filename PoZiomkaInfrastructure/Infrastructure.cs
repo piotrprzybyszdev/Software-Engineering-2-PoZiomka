@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PoZiomkaDomain.Admin;
 using PoZiomkaDomain.Application;
 using PoZiomkaDomain.Common.Interface;
+using PoZiomkaDomain.Communication;
 using PoZiomkaDomain.Form;
 using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Reservation;
@@ -78,6 +79,7 @@ public static class Infrastructure
         services.AddScoped<IFormRepository, FormRepository>();
         services.AddScoped<IMatchRepository, MatchRepository>();
         services.AddScoped<IReservationRepository, ReservationRepository>();
+        services.AddScoped<ICommunicationRepository, CommunicationRepository>();
 
         services.AddScoped<IJudgeService, JudgeService>();
 

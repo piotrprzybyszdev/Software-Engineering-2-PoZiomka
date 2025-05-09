@@ -116,3 +116,14 @@ VALUES (1, 4, 'Accepted', 'Accepted');
 
 INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
 VALUES (2, 1, 'Pending', 'Pending');
+
+-- Communications table
+INSERT INTO Communications (StudentId, [Description])
+VALUES
+(1, 'Zostałeś zakwaterowany w pokoju 311'),
+(1, 'Twój wniosek został odrzucony'),
+(1, 'Zostałeś wydalony z akademika'),
+(2, 'Wygrałeś iPhone 16 Pro Max'),
+(3, 'Zostałeś zakwaterowany w pokoju 205'),
+(4, 'Zostałeś zakwaterowany w pokoju 101'),
+(4, 'Twój wniosek został odrzucony');
