@@ -1,4 +1,18 @@
-﻿CREATE TABLE Students (
+﻿CREATE TABLE Rooms (
+	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+	[Floor] int NOT NULL,
+	Number int UNIQUE NOT NULL,
+	Capacity int NOT NULL
+)
+
+CREATE TABLE Reservations (
+    Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
+    RoomId INT NOT NULL,
+    IsAcceptedByAdmin BIT NOT NULL,
+    FOREIGN KEY (RoomId) REFERENCES Rooms(Id) ON DELETE CASCADE
+)
+
+CREATE TABLE Students (
 	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
 	Email varchar(100) UNIQUE NOT NULL,
 	FirstName varchar(100) NULL,
@@ -12,6 +26,8 @@
 	RoomId int NULL,
 	IsPhoneNumberHidden bit NOT NULL DEFAULT 1,
 	IsIndexNumberHidden bit NOT NULL DEFAULT 1,
+    FOREIGN KEY (ReservationId) REFERENCES Reservations(Id),
+    FOREIGN KEY (RoomId) REFERENCES Rooms(Id) ON DELETE SET NULL,
 );
 
 CREATE TABLE Administrators(
@@ -19,13 +35,6 @@ CREATE TABLE Administrators(
 	Email varchar(100) UNIQUE NOT NULL,
 	PasswordHash varchar(60) NOT NULL
 );
-
-CREATE TABLE Rooms (
-	Id int PRIMARY KEY IDENTITY(1, 1) NOT NULL,
-	[Floor] int NOT NULL,
-	Number int UNIQUE NOT NULL,
-	Capacity int NOT NULL
-)
 
 CREATE TABLE ApplicationType (
     Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
@@ -105,11 +114,4 @@ CREATE TABLE Communications (
     StudentId INT NOT NULL,
     [Description] NVARCHAR(255) NOT NULL,
     FOREIGN KEY (StudentId) REFERENCES Students(Id) ON DELETE CASCADE,
-)
-
-CREATE TABLE Reservations (
-    Id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
-    RoomId INT NOT NULL,
-    IsAcceptedByAdmin BIT NOT NULL,
-    FOREIGN KEY (RoomId) REFERENCES Rooms(Id) ON DELETE CASCADE
 )

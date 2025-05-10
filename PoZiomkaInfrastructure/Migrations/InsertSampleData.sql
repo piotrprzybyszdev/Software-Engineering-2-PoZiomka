@@ -3,6 +3,12 @@
 (2, 205, 2),
 (3, 311, 2);
 
+-- Reservations table
+INSERT INTO Reservations (RoomId, IsAcceptedByAdmin)
+VALUES
+(1, 1),
+(2, 0);
+
 INSERT INTO Administrators (Email, PasswordHash)
 VALUES ('admin@example.com', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S');
 
@@ -127,9 +133,3 @@ VALUES
 (3, 'Zostałeś zakwaterowany w pokoju 311'),
 (4, 'Zostałeś zakwaterowany w pokoju 205'),
 (4, 'Twój wniosek został odrzucony');
-
--- Reservations table
-INSERT INTO Reservations (RoomId, IsAcceptedByAdmin)
-VALUES
-(1, 1),
-(2, 0);

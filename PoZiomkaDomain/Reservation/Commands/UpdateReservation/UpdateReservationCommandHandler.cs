@@ -42,7 +42,7 @@ public class UpdateReservationCommandHandler(IReservationRepository reservationR
 
         try
         {
-            await reservationRepository.UpdateStudentReservation(request.Id, request.IsAcceptation, cancellationToken);
+            await reservationRepository.UpdateStudentReservation(request.Id, loggedInUserId, request.IsAcceptation, cancellationToken);
         }
         catch (IdNotFoundException e)
         {
