@@ -34,7 +34,7 @@ public class ReservationController(IMediator mediator) : Controller
     [Authorize(Roles = $"{Roles.Student},{Roles.Administrator}")]
     public async Task<IActionResult> UpdateReservation(ReservationUpdateRequest updateRequest)
     {
-        await mediator.Send(updateRequest.ToUpdateReservationCommand());
+        await mediator.Send(updateRequest.ToUpdateReservationCommand(User));
         return Ok();
     }
 }

@@ -72,7 +72,7 @@ export class CommunicationsComponent implements OnInit {
   onSend(): void {
     this.isSending.set(true);
     this.communicationService.sendCommunication(
-      [...this.isSelected().keys()].filter(index => this.isSelected()[index]), this.description()
+      [...this.isSelected().keys()].filter(index => this.isSelected()[index]).map(index => this._students()[index].id), this.description()
     ).subscribe({
       next: response => {
         if (response.success) {

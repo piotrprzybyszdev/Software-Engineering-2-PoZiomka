@@ -89,14 +89,16 @@ export class MatchesComponent implements OnInit {
                 if (response.success) {
                   const otherStudent = response.payload!;
 
-                  this.matches.update(value => [...value, {
-                    id: match.id,
-                    otherStudent: otherStudent,
-                    thisStatus: isOther1 ? match.status1 : match.status2,
-                    otherStatus: isOther1 ? match.status2 : match.status1,
-                    isAccepted: match.isAccepted,
-                    isRejected: match.isRejected
-                  }]);
+                  this.matches.update(value => {
+                    return [...value.filter(m => m.id !== match.id), {
+                      id: match.id,
+                      otherStudent: otherStudent,
+                      thisStatus: isOther1 ? match.status2 : match.status1,
+                      otherStatus: isOther1 ? match.status1 : match.status2,
+                      isAccepted: match.isAccepted,
+                      isRejected: match.isRejected
+                    }].sort((m1, m2) => m2.id - m1.id)
+                  });
                 } else {
                   this.toastrService.error(response.error!.detail, response.error!.title);
                 }
