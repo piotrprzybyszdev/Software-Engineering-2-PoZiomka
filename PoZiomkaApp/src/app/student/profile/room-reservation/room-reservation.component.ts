@@ -6,6 +6,7 @@ import { RoomService } from '../../../admin/rooms/room.service';
 import { RoomStudentModel, roomStatusToString } from '../../../admin/rooms/room.model';
 import { PopupComponent } from '../../../common/popup/popup.component';
 import { StudentService } from '../../student.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reservation-popup',
@@ -17,7 +18,9 @@ import { StudentService } from '../../student.service';
 export class ReservationPopupComponent implements OnInit {
   private reservationService = inject(ReservationService);
   private roomService = inject(RoomService);
+  private toastrService = inject(ToastrService);
 
+  @Input() isAccepted?: boolean;
   @Input() reservationId?: number;
   @Input() roomId?: number;
 
@@ -43,6 +46,32 @@ export class ReservationPopupComponent implements OnInit {
         }
       });
     }
+  }
+
+  onAccept(): void {
+    this.reservationService.updateReservation(this.reservationId!, true).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Pomyślnie zaakceptowano rezerwację');
+          this.onHide();
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+      }
+    });
+  }
+
+  onReject(): void {
+    this.reservationService.updateReservation(this.reservationId!, false).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastrService.success('Pomyślnie zaakceptowano rezerwację');
+          this.onHide();
+        } else {
+          this.toastrService.error(response.error!.detail, response.error!.title);
+        }
+      }
+    });
   }
 
   onHide(): void {

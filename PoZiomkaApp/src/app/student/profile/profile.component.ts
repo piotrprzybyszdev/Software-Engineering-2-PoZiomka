@@ -118,6 +118,7 @@ export class ProfileComponent implements OnInit {
   
   hideReservationPopup(): void {
     this.isReservationPopupVisible.set(false);
+    this.fetchProfile();
   }
 
   showCommunicationPopup(): void {

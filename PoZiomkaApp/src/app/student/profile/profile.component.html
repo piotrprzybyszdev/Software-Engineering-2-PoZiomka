@@ -149,7 +149,7 @@
   
     <!-- Popup z rezerwacją -->
     @if(isReservationPopupVisible()) {
-      <app-reservation-popup [reservationId]="student?.reservationId!" [roomId]="student?.roomId!" (hide)="hideReservationPopup()"/>
+      <app-reservation-popup [isAccepted]="student?.hasAcceptedReservation" [reservationId]="student?.reservationId!" [roomId]="student?.roomId!" (hide)="hideReservationPopup()"/>
     }
     @if(isCommunicationPopupVisible()) {
         <app-student-communication-popup (hide)="hideCommunicationPopup()" />
