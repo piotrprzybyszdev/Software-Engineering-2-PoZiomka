@@ -1,0 +1,15 @@
+<div class="container row justify-content-center mx-auto">
+    @for (tile of tiles(); track $index) {
+        <div class="col-xl-4 col-lg-6 d-flex">
+            <div class="card mx-xxl-3 btn btn-primary p-0 w-100 mb-5" (click)="onClick(tile.link)">
+                <div class="card-header text-center">
+                    <i [class]="`bi bi-${tile.icon}`" style="font-size: 7rem;"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ tile.title }}</h5>
+                    <p class="card-text">{{ tile.description }}</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
