@@ -2,10 +2,14 @@
     <h1 class="text-center mt-1">Twój Profil</h1>
     <hr>
   
-    <div class="row">
+    <!--<div class="row h-100" >-->
       <!-- Lewa kolumna: Dane profilu -->
-      <div class="col-md-7">
-        <div class="p-4 border rounded shadow-sm">
+      <!--<div class="col-md-7 h-100">-->
+       <!-- <div class="p-4 border rounded shadow-sm"-->
+    <div class="row">
+          <!-- Lewa kolumna -->
+      <div class="col-md-7 d-flex flex-column">
+        <div class="p-4 border rounded shadow-sm flex-grow-1 d-flex flex-column">
           <div *ngIf="student">
             <div class="alert" [ngClass]="student.canFillForms ? 'alert-success' : 'alert-danger'">
               {{ student.canFillForms ? 'Możesz wypełniać formularze' : 'Nie możesz wypełniać formularzy' }}
@@ -103,9 +107,10 @@
       </div>
   
       <!-- Prawa kolumna -->
-      <div class="col-md-5 mt-4 mt-md-0 d-flex flex-column h-100">
+     <!-- <div class="col-md-5 h-100 mt-4 mt-md-0 d-flex flex-column">-->
+      <div class="col-md-5 d-flex flex-column">
         <!-- Pierwsza obramówka - Komunikaty -->
-        <div class="border rounded shadow-sm mb-3">
+        <div class="border rounded shadow-sm mb-3" >
           <div class="p-4">
             <h5 class="mb-3">Komunikaty</h5>
             <button class="btn btn-warning w-100" (click)="showCommunicationPopup()">
@@ -115,8 +120,8 @@
         </div>
         
         <!-- Druga obramówka - Pokój / Rezerwacja -->
-        <div class="border rounded shadow-sm flex-grow-1 d-flex flex-column">
-          <div class="p-4 flex-grow-1 d-flex flex-column">
+        <div class="border rounded shadow-sm flex-grow-1 d-flex flex-column ">
+          <div class="p-4 h-100 d-flex flex-column flex-grow-1">
             <h5>Pokój / Rezerwacja</h5>
             <div>
               <p *ngIf="student?.reservationId">
@@ -140,12 +145,11 @@
           </div>
         </div>
       </div>
-      
+    </div>
     
   
   
   
-      
   
     <!-- Popup z rezerwacją -->
     @if(isReservationPopupVisible()) {
