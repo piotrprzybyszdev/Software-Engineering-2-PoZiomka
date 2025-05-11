@@ -37,8 +37,8 @@ public class GenerateReservationsTests
         mockRoomRepo.Setup(r => r.GetEmptyRooms())
             .ReturnsAsync(emptyRooms);
 
-        mockReservationRepo.Setup(r => r.CreateRoomReservation(It.IsAny<int>()))
-            .ReturnsAsync((int roomId) => new ReservationModel(roomId+100, roomId, false));
+        mockReservationRepo.Setup(r => r.CreateRoomReservation(It.IsAny<int>(), It.IsAny<CancellationToken?>()))
+            .ReturnsAsync((int roomId, CancellationToken? _) => new ReservationModel(roomId+100, roomId, false));
 
         var matches = new List<MatchModel>
         {
@@ -47,7 +47,7 @@ public class GenerateReservationsTests
         };
 
         // Act
-        var result = await service.GenerateReservations(matches);
+        var result = await service.GenerateReservations(matches, null);
 
         // Assert
         Assert.Equal(2, result.Count());
