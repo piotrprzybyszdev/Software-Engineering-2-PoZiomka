@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Communication.Dtos;
 
 namespace PoZiomkaDomain.Communication.Queries.GetStudentCommunications;

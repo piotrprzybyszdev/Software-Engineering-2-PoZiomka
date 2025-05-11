@@ -1,5 +1,4 @@
-﻿using Azure.Storage.Blobs.Models;
-using PoZiomkaDomain.Match;
+﻿using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Match.Dtos;
 using PoZiomkaDomain.Reservation;
 using PoZiomkaDomain.Reservation.Dtos;
@@ -8,7 +7,6 @@ using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.StudentAnswers.Dtos;
-using System.Runtime.InteropServices;
 
 namespace PoZiomkaInfrastructure.Services;
 
@@ -40,7 +38,7 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
     {
         List<ReservationModel> reservations = new List<ReservationModel>();
 
-        
+
 
         List<RoomHelper> akademik = new List<RoomHelper>();
         List<RoomModel> emptyRooms = (await roomRepository.GetEmptyRooms()).ToList();

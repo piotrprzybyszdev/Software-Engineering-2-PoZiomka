@@ -11,7 +11,6 @@ using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student.Exceptions;
 using PoZiomkaDomain.StudentAnswers.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
-using System;
 using System.Text.Json;
 
 namespace PoZiomkaApi;

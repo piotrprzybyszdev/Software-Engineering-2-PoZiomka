@@ -20,7 +20,7 @@ public class DeleteCommandHandlerTest
              new ClaimsIdentity(new Claim[] {
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "2") }));
-        
+
 
         Mock<IStudentAnswerRepository> studentAnswerRepository = new();
         Mock<IStudentRepository> studentRepository = new();

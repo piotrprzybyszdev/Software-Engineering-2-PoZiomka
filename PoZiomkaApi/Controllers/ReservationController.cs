@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PoZiomkaApi.Requests.Reservation;
 using PoZiomkaDomain.Common;
-using PoZiomkaDomain.Reservation.Commands.UpdateReservation;
 using PoZiomkaDomain.Reservation.Dtos;
 using PoZiomkaDomain.Reservation.Queries.GetReservation;
 using PoZiomkaDomain.Reservation.Queries.GetReservations;
-using PoZiomkaDomain.Room.Dtos;
-using PoZiomkaDomain.Student.Dtos;
 
 namespace PoZiomkaApi.Controllers;
 

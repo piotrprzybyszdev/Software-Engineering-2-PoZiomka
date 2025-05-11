@@ -1,7 +1,5 @@
 ﻿using Dapper;
-using FluentValidation;
 using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Reservation;
 using PoZiomkaDomain.Reservation.Dtos;

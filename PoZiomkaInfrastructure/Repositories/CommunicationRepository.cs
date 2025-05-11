@@ -5,8 +5,6 @@ using PoZiomkaDomain.Communication;
 using PoZiomkaDomain.Communication.Dtos;
 using PoZiomkaInfrastructure.Exceptions;
 using System.Data;
-using System.Data.Common;
-using System.Transactions;
 
 namespace PoZiomkaInfrastructure.Repositories;
 

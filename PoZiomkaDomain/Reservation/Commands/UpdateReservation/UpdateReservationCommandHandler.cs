@@ -2,8 +2,8 @@
 using PoZiomkaDomain.Common;
 using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Reservation.Exceptions;
-using PoZiomkaDomain.Student.Exceptions;
 using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Reservation.Commands.UpdateReservation;
 

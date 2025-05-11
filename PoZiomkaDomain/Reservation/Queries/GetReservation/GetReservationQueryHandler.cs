@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Common.Exceptions;
 using PoZiomkaDomain.Reservation.Dtos;
-using PoZiomkaDomain.Student.Exceptions;
-using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Reservation.Exceptions;
+using PoZiomkaDomain.Student;
+using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Reservation.Queries.GetReservation;
 

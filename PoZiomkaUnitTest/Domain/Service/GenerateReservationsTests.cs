@@ -1,17 +1,12 @@
 ﻿using Moq;
+using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Match.Dtos;
 using PoZiomkaDomain.Reservation;
-using PoZiomkaDomain.Room.Dtos;
-using PoZiomkaDomain.Room;
-using PoZiomkaDomain.Student;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PoZiomkaInfrastructure.Services;
-using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Reservation.Dtos;
+using PoZiomkaDomain.Room;
+using PoZiomkaDomain.Room.Dtos;
+using PoZiomkaDomain.Student;
+using PoZiomkaInfrastructure.Services;
 
 namespace PoZiomkaUnitTest.Domain.Service;
 
@@ -38,7 +33,7 @@ public class GenerateReservationsTests
             .ReturnsAsync(emptyRooms);
 
         mockReservationRepo.Setup(r => r.CreateRoomReservation(It.IsAny<int>(), It.IsAny<CancellationToken?>()))
-            .ReturnsAsync((int roomId, CancellationToken? _) => new ReservationModel(roomId+100, roomId, false));
+            .ReturnsAsync((int roomId, CancellationToken? _) => new ReservationModel(roomId + 100, roomId, false));
 
         var matches = new List<MatchModel>
         {
