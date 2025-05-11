@@ -11,6 +11,19 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class StudentRepository(IDbConnection connection) : IStudentRepository
 {
+    public async Task UpdateReservation(int studentId, int reservationId, bool? HasAccepted, CancellationToken? cancellationToken)
+    {
+        var sql = @"Update Students SET HasAcceptedReservation = @HasAccepted, ReservationId = @reservationId WHERE Id= @studentId";
+        int rowsAffected;
+        try
+        {
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sql, new { studentId, reservationId, HasAccepted }, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
     public async Task RegisterStudent(StudentRegister studentRegister, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"

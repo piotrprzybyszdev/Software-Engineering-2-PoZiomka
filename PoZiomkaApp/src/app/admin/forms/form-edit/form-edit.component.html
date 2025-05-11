@@ -49,7 +49,6 @@
         </div>
     }
 </div>
-
 @if (selectedPreferenceIndex() !== undefined) {
     <app-preference-edit [originalPreference]="form()!.obligatoryPreferences[selectedPreferenceIndex()!]" (close)="onClose()" (save)="onSave($event)" />
 }

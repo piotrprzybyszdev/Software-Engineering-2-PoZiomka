@@ -14,6 +14,7 @@ public interface IStudentRepository
     public Task<IEnumerable<StudentModel>> GetAllStudents(CancellationToken? cancellationToken);
     public Task CreateStudent(StudentCreate studentCreate, CancellationToken? cancellationToken);
     public Task UpdateStudent(StudentUpdate studentEdit, CancellationToken? cancellationToken);
+    public Task UpdateReservation(int studentId, int reservationId, bool? HasAccepted, CancellationToken? cancellationToken);
     public Task ConfirmStudent(StudentConfirm studentConfirm, CancellationToken? cancellationToken);
     public Task DeleteStudent(int id, CancellationToken? cancellationToken);
     public Task UpdatePassword(PasswordUpdate passwordUpdate, CancellationToken? cancellationToken);

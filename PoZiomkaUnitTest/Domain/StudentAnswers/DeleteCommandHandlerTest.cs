@@ -17,9 +17,10 @@ public class DeleteCommandHandlerTest
     public async Task CanNotFillFormThrowExceptionTest()
     {
         var user = new ClaimsPrincipal(
-             new ClaimsIdentity([
+             new ClaimsIdentity(new Claim[] {
                 new(ClaimTypes.Role, Roles.Student),
-                new(ClaimTypes.NameIdentifier, "2") ]));
+                new(ClaimTypes.NameIdentifier, "2") }));
+
 
         Mock<IStudentAnswerRepository> studentAnswerRepository = new();
         Mock<IStudentRepository> studentRepository = new();
@@ -37,10 +38,10 @@ public class DeleteCommandHandlerTest
     public async Task UserNotAnsweredThrowExcetpitonTest()
     {
         var user = new ClaimsPrincipal(
-             new ClaimsIdentity([
+             new ClaimsIdentity(new Claim[] {
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "2")
-            ])
+             })
         );
 
         IEnumerable<StudentAnswerModel> studentAnswerModels =
@@ -68,9 +69,9 @@ public class DeleteCommandHandlerTest
     public async Task IfStudentDoesNotHaveThisAnswerIdOrThisAnswerIdIsSomeoneelsesThrowExceptionTest()
     {
         var user = new ClaimsPrincipal(
-            new ClaimsIdentity([
+            new ClaimsIdentity(new Claim[]{
                 new(ClaimTypes.Role, Roles.Student),
-                new(ClaimTypes.NameIdentifier, "2") ]));
+                new(ClaimTypes.NameIdentifier, "2") }));
 
         IEnumerable<StudentAnswerModel> studentAnswerModels =
         [

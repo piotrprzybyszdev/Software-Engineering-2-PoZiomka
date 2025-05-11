@@ -17,10 +17,10 @@ public class UpdateCommandHandlerTest
     public async Task CanNotFillFormThrowExceptionTest()
     {
         var user = new ClaimsPrincipal(
-            new ClaimsIdentity([
+            new ClaimsIdentity(new Claim[]{
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "2")
-            ])
+            })
         );
 
         Mock<IStudentAnswerRepository> studentAnswerRepository = new Mock<IStudentAnswerRepository>();

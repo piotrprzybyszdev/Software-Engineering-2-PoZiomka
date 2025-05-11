@@ -14,11 +14,11 @@ namespace PoZiomkaApi.Controllers;
 [ApiController]
 public class StudentAnswerController(IMediator mediator) : ControllerBase
 {
-    [HttpGet("get-student")]
+    [HttpGet("get/{studentId}")]
     [Authorize(Roles = Roles.Student)]
-    public async Task<IEnumerable<StudentAnswerStatus>> GetStudent()
+    public async Task<IEnumerable<StudentAnswerStatus>> GetStudent(int studentId)
     {
-        GetStudentAnswersQuery query = new(User);
+        GetStudentAnswersQuery query = new(User, studentId);
         return await mediator.Send(query);
     }
 
