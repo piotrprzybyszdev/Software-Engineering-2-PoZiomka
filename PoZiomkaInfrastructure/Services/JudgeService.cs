@@ -1,4 +1,5 @@
-﻿using PoZiomkaDomain.Match;
+﻿using Azure.Storage.Blobs.Models;
+using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Match.Dtos;
 using PoZiomkaDomain.Reservation;
 using PoZiomkaDomain.Reservation.Dtos;
@@ -7,6 +8,7 @@ using PoZiomkaDomain.Room.Dtos;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.StudentAnswers.Dtos;
+using System.Runtime.InteropServices;
 
 namespace PoZiomkaInfrastructure.Services;
 
@@ -22,6 +24,13 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
         return matches;
     }
 
+    private class RoomHelper
+    {
+        public int RoomId { get; set; }
+        public int PlacesLeft { get; set; }
+        public int ReservationId { get; set; }
+    }
+
     /*
      * adds only to empty rooms
      * 1) find empty rooms
@@ -31,11 +40,13 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
     {
         List<ReservationModel> reservations = new List<ReservationModel>();
 
-        List<(int roomId, int placesLeft, int reservationId)> akademik = new List<(int roomId, int placesLeft, int reservationId)>();
+        
+
+        List<RoomHelper> akademik = new List<RoomHelper>();
         List<RoomModel> emptyRooms = (await roomRepository.GetEmptyRooms()).ToList();
         foreach (var room in emptyRooms)
         {
-            akademik.Add((room.Id, room.Capacity, -1));
+            akademik.Add(new RoomHelper { RoomId = room.Id, PlacesLeft = room.Capacity, ReservationId = -1 });
         }
 
         // get uniq student ids from matches
@@ -47,23 +58,25 @@ public class JudgeService(IMatchRepository matchRepository, IReservationReposito
             if (akademik.Count == 0)
                 break;
             int akademikRoomIndex = 0;
-            (int roomId, int placesLeft, int reservationId) room = akademik[akademikRoomIndex];
+            RoomHelper room = akademik[akademikRoomIndex];
 
-            if (room.reservationId == -1)
+            if (room.ReservationId == -1)
             {
                 // create reservation
-                ReservationModel reservationModel = await reservationRepository.CreateRoomReservation(room.roomId, cancellationToken);
+
+                ReservationModel reservationModel = await reservationRepository.CreateRoomReservation(room.RoomId, cancellationToken);
+
                 reservations.Add(reservationModel);
-                room.reservationId = reservationModel.Id;
+                room.ReservationId = reservationModel.Id;
             }
 
             // update student's reservation
-            await studentRepository.UpdateReservation(studentIds[i], room.reservationId, null, null);
+            await studentRepository.UpdateReservation(studentIds[i], room.ReservationId, null, null);
 
-            room.placesLeft--;
+            room.PlacesLeft--;
 
             // remove room if no places left
-            if (room.placesLeft == 0)
+            if (room.PlacesLeft == 0)
             {
                 akademik.RemoveAt(akademikRoomIndex);
             }
