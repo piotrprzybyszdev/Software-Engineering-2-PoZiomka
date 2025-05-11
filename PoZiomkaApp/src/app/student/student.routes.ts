@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { ProfileComponent } from "./profile/profile.component";
 import { ApplicationsComponent } from "./applications/applications.component";
 import { AnswersComponent } from "./answers/answers.component";
+import { MatchesComponent } from "./matches/matches.component";
 
 export const routes: Routes = [
   {
@@ -24,5 +25,10 @@ export const routes: Routes = [
     path: 'answers',
     title: 'PoZiomka - Ankiety',
     component: AnswersComponent
+  },
+  {
+    path: 'matches',
+    title: 'PoZiomk - Dopasowania',
+    component: MatchesComponent
   }
 ]

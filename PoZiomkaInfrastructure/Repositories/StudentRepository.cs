@@ -11,6 +11,19 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class StudentRepository(IDbConnection connection) : IStudentRepository
 {
+    public async Task UpdateReservation(int studentId, int reservationId, bool? HasAccepted, CancellationToken? cancellationToken)
+    {
+        var sql = @"Update Students SET HasAcceptedReservation = @HasAccepted, ReservationId = @reservationId WHERE Id= @studentId";
+        int rowsAffected;
+        try
+        {
+            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sql, new { studentId, reservationId, HasAccepted }, cancellationToken: cancellationToken ?? default));
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
     public async Task RegisterStudent(StudentRegister studentRegister, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"
@@ -175,7 +188,10 @@ WHERE id = @id
 
     public async Task DeleteStudent(int id, CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"DELETE FROM Students WHERE id = @id";
+        var sqlQuery = @"
+DELETE FROM Matches WHERE StudentId1 = @id OR StudentId2 = @id;
+DELETE FROM Students WHERE id = @id
+";
 
         int rowsAffected;
         try

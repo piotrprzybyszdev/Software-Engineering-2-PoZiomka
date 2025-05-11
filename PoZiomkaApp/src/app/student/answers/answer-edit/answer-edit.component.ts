@@ -30,6 +30,7 @@ export class AnswerEditComponent {
   answer = signal<AnswerModel | undefined>(undefined);
 
   isSubmitting = signal<boolean>(false);
+  isDeleting = signal<boolean>(false);
 
   ngOnInit(): void {
     this.loadAnswer();
@@ -217,5 +218,20 @@ export class AnswerEditComponent {
         }
       });
     }
+  }
+
+  onDelete(): void {
+    this.isDeleting.set(true);
+    this.answerService.deleteAnswer(this.answer()!.id!).subscribe({
+      next: response => {
+        if (response.success) {
+          this.toastr.success('Pomyślnie usunięto odpowiedzi');
+          this.hide.emit();
+        } else {
+          this.toastr.error(response.error!.detail, response.error!.title);
+          this.isDeleting.set(false);
+        }
+      }
+    });
   }
 }

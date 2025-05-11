@@ -4,23 +4,29 @@
             <div class="d-flex flex-column h-100">
                 <div class="bg-white border border-secondary rounded-bottom-4 px-4 py-2">
                     <app-menu logoLink="/admin/dashboard" logoStyle="poziomka-logo-blue">
-                        <li class="nav-item mx-lg-2 my-1 my-lg-0">
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0 ms-xl-5">
+                            <a class="nav-link active btn d-inline" (click)="onCommunicationsClick()">Komunikaty</a>
+                        </li>
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0">
+                            <a class="nav-link active btn d-inline" (click)="onReservationsClick()">Rezerwacje</a>
+                        </li>
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0">
                             <a class="nav-link active btn d-inline" (click)="onFormListClick()">Ankiety</a>
                         </li>
-                        <li class="nav-item mx-lg-2 my-1 my-lg-0">
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0">
                             <a class="nav-link active btn d-inline" (click)="onApplicationListClick()">Wnioski</a>
                         </li>
-                        <li class="nav-item mx-lg-2 my-1 my-lg-0">
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0">
                             <a class="nav-link active btn d-inline" (click)="onRoomListClick()">Pokoje</a>
                         </li>
-                        <li class="nav-item mx-lg-2 my-1 my-lg-0">
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0">
                             <a class="nav-link active btn d-inline" (click)="onStudentListClick()">Studenci</a>
                         </li>
-                        <li class="nav-item mx-lg-2 my-1 my-lg-0">
-                            <a class="nav-link active btn d-inline" (click)="onProfileClick()">Profil</a>
+                        <li class="nav-item mx-xl-2 my-1 my-xl-0">
+                            <a class="nav-link active btn d-inline" (click)="onDashboardClick()">Panel główny</a>
                         </li>
                         
-                        <li class="nav-item ms-lg-4 my-1 my-lg-0">
+                        <li class="nav-item my-1 my-xl-0 ms-xl-auto">
                             <a class="nav-link active btn d-inline" (click)="logout()">Wyloguj się</a>
                         </li>
                     </app-menu>
