@@ -1,5 +1,6 @@
 ﻿using Moq;
 using PoZiomkaDomain.Common;
+using PoZiomkaDomain.Match;
 using PoZiomkaDomain.Student;
 using PoZiomkaDomain.Student.Dtos;
 using PoZiomkaDomain.StudentAnswers;
@@ -19,6 +20,8 @@ public class GetStudentAnswersQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "2") }));
 
+        var mockService = new Mock<IJudgeService>();
+
         Mock<IStudentAnswerRepository> studentAnswerRepository = new();
         Mock<IStudentRepository> studentRepository = new();
         studentRepository.Setup(x => x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -26,8 +29,8 @@ public class GetStudentAnswersQueryHandlerTest
         studentRepository.Setup(x => x.GetStudentByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
 
-        var command = new GetStudentAnswersQuery(user);
-        var handler = new GetStudentAnswersQueryHandler(studentRepository.Object, studentAnswerRepository.Object);
+        var command = new GetStudentAnswersQuery(user, 2);
+        var handler = new GetStudentAnswersQueryHandler(studentRepository.Object, mockService.Object, studentAnswerRepository.Object);
         await Assert.ThrowsAsync<UserCanNotFillFormException>(async () => await handler.Handle(command, new CancellationToken()));
     }
 }

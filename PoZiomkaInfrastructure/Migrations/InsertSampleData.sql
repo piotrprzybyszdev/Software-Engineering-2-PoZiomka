@@ -1,18 +1,26 @@
-﻿INSERT INTO Rooms ([Floor], Number, Capacity) VALUES
+﻿INSERT INTO Rooms ([Floor], Number, Capacity)
+VALUES
 (1, 101, 2),
 (2, 205, 2),
 (3, 311, 2);
 
+INSERT INTO Reservations (RoomId, IsAcceptedByAdmin)
+VALUES
+(1, 0),
+(2, 0);
+
 INSERT INTO Administrators (Email, PasswordHash)
-VALUES ('admin@example.com', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S');
+VALUES ('admin@example.com', CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S');
 
-INSERT INTO Students (Email, FirstName, LastName, PasswordHash, IsConfirmed, PhoneNumber, IndexNumber, ReservationId, HasAcceptedReservation, RoomId, IsPhoneNumberHidden, IsIndexNumberHidden) VALUES
-('student@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 1, 0, 1),
-('wojtek@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 1, 0, 1),
-('emil@example.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 2, 0, 1),
-('test@gmail.com', 'John', 'Doe', CHAR(36)+'2a'+CHAR(36)+'11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, NULL, 0, 1);
+INSERT INTO Students (Email, FirstName, LastName, PasswordHash, IsConfirmed, PhoneNumber, IndexNumber, ReservationId, HasAcceptedReservation, RoomId, IsPhoneNumberHidden, IsIndexNumberHidden)
+VALUES
+('student@example.com', 'John', 'Doe', CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', 1, 1, NULL, 0, 1),
+('wojtek@example.com', 'John', 'Doe', CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', 1, NULL, NULL, 0, 1),
+('emil@example.com', 'John', 'Doe', CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, NULL, 0, 1),
+('test@gmail.com', 'John', 'Doe', CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S', 1, '123456789', '123456', NULL, NULL, 2, 0, 1);
 
-INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status) VALUES
+INSERT INTO Application (StudentId, ApplicationTypeId, FileGuid, Status)
+VALUES
 (1, 1, 'b6f4cfe3-fc21-45fc-95b5-3dd29ea4de4f', 0),
 (1, 2, 'c1186e5b-e8e1-4b5b-8ae3-1e0bc4464b97', 1),
 (1, 3, 'fb72b7be-0d92-402c-85de-43a8b66becc5', 2),
@@ -103,3 +111,20 @@ VALUES
 (2, 1, 2, 0),
 (2, 2, 4, 0),
 (2, 3, 12, 0);
+
+INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
+VALUES
+(3, 2, 'Accepted', 'Pending'),
+(1, 3, 'Rejected', 'Rejected'),
+(1, 4, 'Accepted', 'Accepted'),
+(2, 1, 'Pending', 'Pending');
+
+INSERT INTO Communications (StudentId, [Description])
+VALUES
+(1, 'Zostałeś zakwaterowany w pokoju 101'),
+(1, 'Twój wniosek został odrzucony'),
+(1, 'Zostałeś wydalony z akademika'),
+(2, 'Wygrałeś iPhone 16 Pro Max'),
+(3, 'Zostałeś zakwaterowany w pokoju 311'),
+(4, 'Zostałeś zakwaterowany w pokoju 205'),
+(4, 'Twój wniosek został odrzucony');

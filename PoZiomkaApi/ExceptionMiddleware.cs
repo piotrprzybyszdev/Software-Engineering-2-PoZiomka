@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using PoZiomkaDomain.Admin.Exceptions;
 using PoZiomkaDomain.Application.Exceptions;
 using PoZiomkaDomain.Common.Exceptions;
+using PoZiomkaDomain.Communication.Exceptions;
 using PoZiomkaDomain.Exceptions;
 using PoZiomkaDomain.Form.Exceptions;
+using PoZiomkaDomain.Reservation.Exceptions;
 using PoZiomkaDomain.Room.Exceptions;
 using PoZiomkaDomain.Student.Exceptions;
 using PoZiomkaDomain.StudentAnswers.Exceptions;
 using PoZiomkaInfrastructure.Exceptions;
+using System;
 using System.Text.Json;
 
 namespace PoZiomkaApi;
@@ -230,6 +233,36 @@ public class ExceptionMiddleware(RequestDelegate next)
                 Status = StatusCodes.Status401Unauthorized,
                 Detail = exception.Message,
                 Title = "User can't fill forms"
+            };
+        }
+        catch (CommunicationNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Communication not found"
+            };
+        }
+        catch (UnauthorizedDeleteException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = exception.Message,
+                Title = "User not authorized to delete this notification"
+            };
+        }
+        catch (ReservationNotFoundException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Detail = exception.Message,
+                Title = "Reservation not found"
             };
         }
         catch (DomainException exception)

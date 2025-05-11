@@ -10,8 +10,8 @@ import { AnswerCreate, AnswerModel, AnswerStatus, AnswerUpdate } from "./answer.
 export class AnswerService {
   private httpClient = inject(HttpClient);
 
-  getStudentAnswers(): Observable<ApiResponse<AnswerStatus[]>> {
-    return pipeApiResponse(this.httpClient.get<AnswerStatus[]>('/api/answer/get-student'));
+  getStudentAnswers(studentId: number): Observable<ApiResponse<AnswerStatus[]>> {
+    return pipeApiResponse(this.httpClient.get<AnswerStatus[]>(`/api/answer/get/${studentId}`));
   }
 
   getAnswers(formId: number, studentId: number): Observable<ApiResponse<AnswerModel>> {
