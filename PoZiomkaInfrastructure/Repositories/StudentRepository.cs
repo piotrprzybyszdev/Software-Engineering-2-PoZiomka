@@ -188,7 +188,10 @@ WHERE id = @id
 
     public async Task DeleteStudent(int id, CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"DELETE FROM Students WHERE id = @id";
+        var sqlQuery = @"
+DELETE FROM Matches WHERE StudentId1 = @id OR StudentId2 = @id;
+DELETE FROM Students WHERE id = @id
+";
 
         int rowsAffected;
         try
