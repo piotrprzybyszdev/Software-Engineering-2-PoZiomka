@@ -200,19 +200,4 @@ LEFT JOIN StudentAnswers answer ON answer.FormId = form.Id AND answer.StudentId 
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
-
-    public async Task<IEnumerable<StudentAnswerModel>> GetStudentAnswerModels(int studentId, CancellationToken? cancellationToken)
-    {
-        var sql = "SELECT * FROM StudentAnswers WHERE StudentId = @studentId";
-        try
-        {
-            var studentAnswerModels = await connection.QueryAsync<StudentAnswerModel>(
-                               new CommandDefinition(sql, new { studentId }, cancellationToken: cancellationToken ?? default));
-            return studentAnswerModels ?? throw new IdNotFoundException();
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-    }
 }

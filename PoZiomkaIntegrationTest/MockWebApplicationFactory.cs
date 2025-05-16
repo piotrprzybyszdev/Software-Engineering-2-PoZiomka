@@ -46,9 +46,9 @@ public class MockWebApplicationFactory<TProgram> : WebApplicationFactory<TProgra
         var connectionString = config["DB:ConnectionString"] ?? "Server=localhost,1433;Database=PoZiomkaTestDB;User ID=sa;Password=Pass@word;TrustServerCertificate=true;";
 
         builder.UseConfiguration(new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()
-            {
-                ["DB:ConnectionString"] = connectionString.Replace("PoziomkaTestDB", dbName + count)
-            }).Build()
+        {
+            ["DB:ConnectionString"] = connectionString.Replace("PoziomkaTestDB", dbName + count)
+        }).Build()
         );
     }
 }

@@ -1,5 +1,4 @@
-﻿using PoZiomkaApi.Requests.Reservation;
-using PoZiomkaDomain.Reservation.Dtos;
+﻿using PoZiomkaDomain.Reservation.Dtos;
 using System.Net.Http.Json;
 
 namespace PoZiomkaIntegrationTest;

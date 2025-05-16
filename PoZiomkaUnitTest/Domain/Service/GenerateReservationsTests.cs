@@ -25,8 +25,8 @@ public class GenerateReservationsTests
 
         var emptyRooms = new List<RoomModel>
         {
-            new RoomModel(1,1,1,2),
-            new RoomModel (2, 2, 2, 3)
+            new RoomModel(1,1,1,2, 0),
+            new RoomModel (2, 2, 2, 3, 0)
         };
 
         mockRoomRepo.Setup(r => r.GetEmptyRooms())
