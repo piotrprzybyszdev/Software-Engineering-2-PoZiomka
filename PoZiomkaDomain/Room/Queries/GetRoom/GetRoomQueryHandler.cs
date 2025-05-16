@@ -29,7 +29,7 @@ public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentReposit
         if (!isUserAuthorized)
             throw new UnauthorizedException("User must be logged in as an administrator or a student that is assigned to the room");
 
-        RoomModel room;
+        RoomDisplay room;
         try
         {
             room = await roomRepository.GetRoomById(request.Id, cancellationToken);
@@ -43,7 +43,7 @@ public class GetRoomQueryHandler(IRoomRepository roomRepository, IStudentReposit
 
         var hidePersonalInfo = !(request.User.IsInRole(Roles.Administrator));
 
-        var roomStudentDisplay = new RoomStudentDisplay(room.Id, room.Floor, room.Number, room.Capacity, null, students.Select(x => x.ToStudentDisplay(hidePersonalInfo)));
+        var roomStudentDisplay = new RoomStudentDisplay(room.Id, room.Floor, room.Number, room.Capacity, room.StudentCount, room.ReservationId, students.Select(x => x.ToStudentDisplay(hidePersonalInfo)));
 
         return roomStudentDisplay;
     }

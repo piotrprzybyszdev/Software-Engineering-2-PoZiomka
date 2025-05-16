@@ -7,7 +7,7 @@ using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Room.Commands.RemoveStudent;
 
-public class RemoveStudentCommandHandler(IStudentRepository studentRepository) : IRequestHandler<RemoveStudentCommand>
+public class RemoveStudentCommandHandler(IStudentRepository studentRepository, IRoomRepository roomRepository) : IRequestHandler<RemoveStudentCommand>
 {
     public async Task Handle(RemoveStudentCommand request, CancellationToken cancellationToken)
     {
@@ -26,6 +26,6 @@ public class RemoveStudentCommandHandler(IStudentRepository studentRepository) :
             throw new StudentNotAssignedToRoomException("Student not assigned to this room");
         }
 
-        await studentRepository.UpdateRoom(request.StudentId, null);
+        await roomRepository.RemoveStudent(request.Id, request.StudentId, cancellationToken);
     }
 }

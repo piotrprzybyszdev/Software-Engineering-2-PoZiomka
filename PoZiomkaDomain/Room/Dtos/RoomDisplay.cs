@@ -5,8 +5,10 @@ public enum RoomStatus
     Available, Reserved, Occupied, Full
 }
 
-public record RoomDisplay(int Id, int Floor, int Number, int Capacity, int? ReservationId, IEnumerable<int> StudentIds)
+public record RoomDisplay(int Id, int Floor, int Number, int Capacity, int StudentCount, int? ReservationId)
 {
-    public RoomStatus Status => ReservationId is not null ? RoomStatus.Reserved :
-        !StudentIds.Any() ? RoomStatus.Available : StudentIds.Count() == Capacity ? RoomStatus.Full : RoomStatus.Occupied;
+    public RoomStatus Status
+    {
+        get => ReservationId is not null ? RoomStatus.Reserved : StudentCount == 0 ? RoomStatus.Available : StudentCount == Capacity ? RoomStatus.Full  : RoomStatus.Occupied;
+    }
 };

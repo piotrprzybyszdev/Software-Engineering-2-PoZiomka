@@ -107,6 +107,8 @@ AND HasAcceptedReservation = 0;
 ";
 
         var sqlQueryAcceptReservation = @"
+UPDATE Rooms SET StudentCount = (SELECT COUNT(*) FROM Students WHERE ReservationId = @id)
+WHERE Id = (SELECT RoomId FROM Reservations WHERE Id = @id);
 UPDATE Students SET RoomId = (SELECT RoomId FROM Reservations WHERE Id = @id), ReservationId = NULL, HasAcceptedReservation = 0
 WHERE Students.ReservationId = @id;
 DELETE FROM Matches WHERE

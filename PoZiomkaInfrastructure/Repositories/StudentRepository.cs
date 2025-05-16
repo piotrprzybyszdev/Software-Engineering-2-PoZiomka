@@ -223,23 +223,4 @@ WHERE Email = @Email
         }
         if (rowsAffected == 0) throw new EmailNotFoundException();
     }
-
-    public async Task UpdateRoom(int id, int? roomId)
-    {
-        var sqlQuery = @"
-UPDATE Students
-SET RoomId = @roomId
-WHERE id = @id
-";
-        int rowsAffected;
-        try
-        {
-            rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id, roomId }, cancellationToken: default));
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-        if (rowsAffected == 0) throw new IdNotFoundException();
-    }
 }
