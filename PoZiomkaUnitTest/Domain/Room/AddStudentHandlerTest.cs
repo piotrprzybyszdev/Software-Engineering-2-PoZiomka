@@ -114,11 +114,13 @@ public class AddStudentHandlerTest
            IsIndexNumberHidden: false
        );
 
-        var roomModel = new RoomModel(
+        var roomModel = new RoomDisplay(
             Id: 101,
             Floor: 2,
             Number: 205,
-            Capacity: 3
+            Capacity: 3,
+            StudentCount: 0,
+            ReservationId: 10
         );
 
         var studentRepository = new Mock<IStudentRepository>();

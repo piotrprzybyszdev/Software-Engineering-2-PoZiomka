@@ -28,24 +28,22 @@ public class GetAllRoomsQueryHandlerTest
            IsIndexNumberHidden: false
        );
 
-        var roomModel = new RoomModel(
+        var roomModel = new RoomDisplay(
             Id: 101,
             Floor: 2,
             Number: 205,
-            Capacity: 3
+            Capacity: 3,
+            StudentCount: 0,
+            ReservationId: 10
         );
 
         var studentRepository = new Mock<IStudentRepository>();
-        studentRepository.Setup(x => x.GetStudentIdsByRoomId(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<int> { });
-
 
         var roomRepository = new Mock<IRoomRepository>();
-        roomRepository.Setup(x => x.GetAllRooms(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<RoomModel> { roomModel });
+        roomRepository.Setup(x => x.GetAllRooms(It.IsAny<CancellationToken>())).ReturnsAsync([roomModel]);
 
         GetAllRoomsQuery query = new();
-        GetAllRoomsQueryHandler handler = new(roomRepository.Object, studentRepository.Object);
+        GetAllRoomsQueryHandler handler = new(roomRepository.Object);
         await handler.Handle(query, new CancellationToken());
         Assert.True(true);
     }
