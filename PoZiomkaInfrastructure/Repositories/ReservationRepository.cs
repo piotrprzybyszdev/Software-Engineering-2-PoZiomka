@@ -12,25 +12,6 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class ReservationRepository(IDbConnection connection) : IReservationRepository
 {
-    public async Task<ReservationModel> CreateRoomReservation(int id, CancellationToken? cancellationToken)
-    {
-        var sqlQuery = @"
-INSERT INTO Reservations (RoomId, IsAcceptedByAdmin)
-OUTPUT Inserted.*
-VALUES (@id, 0);
-";
-
-        try
-        {
-            var roomModel = await connection.QuerySingleAsync<ReservationModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
-            return roomModel;
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-    }
-
     public async Task<IEnumerable<ReservationModel>> GetAllReservations(CancellationToken? cancellationToken)
     {
         var sqlQuery = @"

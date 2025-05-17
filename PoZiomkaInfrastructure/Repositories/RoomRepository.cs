@@ -11,19 +11,6 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class RoomRepository(IDbConnection connection) : IRoomRepository
 {
-    public async Task<IEnumerable<RoomModel>> GetEmptyRooms()
-    {
-        var sql = @"SELECT * FROM Rooms WHERE Id NOT IN (SELECT RoomId FROM Reservations)";
-
-        try
-        {
-            return await connection.QueryAsync<RoomModel>(sql);
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-    }
     public async Task CreateRoom(RoomCreate roomCreate, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"

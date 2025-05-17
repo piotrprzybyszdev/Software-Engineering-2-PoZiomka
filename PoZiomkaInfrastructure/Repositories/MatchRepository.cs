@@ -39,21 +39,6 @@ public class MatchRepository(IDbConnection connection) : IMatchRepository
         }
     }
 
-    public async Task<MatchModel> CreateMatch(int studentId1, int studentId2)
-    {
-        var sql = @"INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2) VALUES (@studentId1, @studentId2, Pending, Pending)";
-
-        try
-        {
-            var matchId = await connection.ExecuteScalarAsync<int>(sql, new { studentId1, studentId2 });
-            return new MatchModel(matchId, studentId1, studentId2, MatchStatus.Pending, MatchStatus.Pending);
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-    }
-
     public async Task<bool> IsMatch(int studentId1, int studentId2)
     {
         var sql = @"SELECT COUNT(*) FROM Matches WHERE StudentId1 = 1 AND StudentId2 = 2";
