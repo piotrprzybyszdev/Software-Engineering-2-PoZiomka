@@ -53,4 +53,19 @@ public class MatchRepository(IDbConnection connection) : IMatchRepository
             throw new QueryExecutionException(exception.Message, exception.Number);
         }
     }
+
+    public async Task<bool> IsMatch(int studentId1, int studentId2)
+    {
+        var sql = @"SELECT COUNT(*) FROM Matches WHERE StudentId1 = 1 AND StudentId2 = 2";
+
+        try
+        {
+            var matchCount = await connection.ExecuteScalarAsync<int>(sql, new { studentId1, studentId2 });
+            return matchCount > 0;
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
 }

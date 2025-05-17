@@ -102,18 +102,18 @@ WHERE Id = @id
 ";
 
         var sqlQueryIsAcceptedByStudents = @"
-SELECT COUNT(*) FROM Students WHERE ReservationId = @id
-AND HasAcceptedReservation = 0;
+SELECT COUNT(*) FROM Students WHERE ReservationId = @id AND
+(HasAcceptedReservation = 0 OR HasAcceptedReservation IS NULL);
 ";
 
         var sqlQueryAcceptReservation = @"
 UPDATE Rooms SET StudentCount = (SELECT COUNT(*) FROM Students WHERE ReservationId = @id)
 WHERE Id = (SELECT RoomId FROM Reservations WHERE Id = @id);
-UPDATE Students SET RoomId = (SELECT RoomId FROM Reservations WHERE Id = @id), ReservationId = NULL, HasAcceptedReservation = 0
-WHERE Students.ReservationId = @id;
 DELETE FROM Matches WHERE
 StudentId1 IN (SELECT Id FROM Students WHERE ReservationId = @id) OR
 StudentId2 IN (SELECT Id FROM Students WHERE ReservationId = @id);
+UPDATE Students SET RoomId = (SELECT RoomId FROM Reservations WHERE Id = @id), ReservationId = NULL, HasAcceptedReservation = NULL
+WHERE Students.ReservationId = @id;
 DELETE FROM Reservations WHERE Id = @id;
 ";
 
@@ -127,14 +127,17 @@ DELETE FROM Reservations WHERE Id = @id;
 
             if (isAcceptation)
             {
-                var isAcceptedByStudents = await connection.ExecuteScalarAsync<int>(new CommandDefinition(sqlQueryIsAcceptedByStudents, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
-                if (isAcceptedByStudents > 0)
-                {
-                    throw new DomainException("Reservation is not accepted by all students");
-                }
+                var pendingStudentAcceptations = await connection.ExecuteScalarAsync<int>(new CommandDefinition(sqlQueryIsAcceptedByStudents, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
 
-                await connection.ExecuteAsync(new CommandDefinition(sqlQueryAcceptReservation, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+                if (pendingStudentAcceptations == 0)
+                    await connection.ExecuteAsync(new CommandDefinition(sqlQueryAcceptReservation, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
             }
+            else
+            {
+                var deleteQuery = "DELETE FROM Reservations WHERE Id = @id;";
+                await connection.ExecuteAsync(new CommandDefinition(deleteQuery, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+            }
+
             transaction.Commit();
         }
         catch (SqlException exception)
@@ -188,6 +191,33 @@ DELETE FROM Reservations WHERE Id = @id;
                     transaction.Rollback();
                     throw new IdNotFoundException();
                 }
+            }
+            else
+            {
+                var sqlQueryIsAcceptedByAdmin = @"
+SELECT IsAcceptedByAdmin FROM Reservations reservation
+WHERE reservation.Id = @id;";
+
+                var sqlQueryIsAcceptedByStudents = @"
+SELECT COUNT(*) FROM Students student
+WHERE student.ReservationId = 1
+AND (student.HasAcceptedReservation = 0 OR student.HasAcceptedReservation IS NULL)
+";
+                var isAcceptedByAdmin = await connection.ExecuteScalarAsync<bool>(new CommandDefinition(sqlQueryIsAcceptedByAdmin, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+                var pendingStudentAcceptations = await connection.ExecuteScalarAsync<int>(new CommandDefinition(sqlQueryIsAcceptedByStudents, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
+
+                var sqlDeleteReservation = @"
+UPDATE Rooms SET StudentCount = (SELECT COUNT(*) FROM Students WHERE ReservationId = @id)
+WHERE Id = (SELECT RoomId FROM Reservations WHERE Id = @id);
+DELETE FROM Matches WHERE
+StudentId1 IN (SELECT Id FROM Students WHERE ReservationId = @id) OR
+StudentId2 IN (SELECT Id FROM Students WHERE ReservationId = @id);
+UPDATE Students SET RoomId = (SELECT RoomId FROM Reservations WHERE Id = @id), ReservationId = NULL, HasAcceptedReservation = NULL
+WHERE Students.ReservationId = @id;
+DELETE FROM Reservations WHERE Id = @id;";
+
+                if (pendingStudentAcceptations == 0 && isAcceptedByAdmin)
+                    await connection.ExecuteAsync(new CommandDefinition(sqlDeleteReservation, new { id }, transaction: transaction, cancellationToken: cancellationToken ?? default));
             }
             transaction.Commit();
         }
