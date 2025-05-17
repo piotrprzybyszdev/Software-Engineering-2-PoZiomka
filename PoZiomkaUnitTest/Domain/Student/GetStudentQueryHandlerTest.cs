@@ -13,15 +13,15 @@ namespace PoZiomkaUnitTest.Domain.Student;
 public class GetStudentQueryHandlerTest
 {
     private readonly Mock<IStudentRepository> mockStudentRepository;
-    private readonly Mock<IJudgeService> mockJudgeService;
+    private readonly Mock<IMatchRepository> mockMatchRepository;
     private readonly GetStudentQueryHandler handler;
 
     private readonly StudentModel model;
     public GetStudentQueryHandlerTest()
     {
         mockStudentRepository = new Mock<IStudentRepository>();
-        mockJudgeService = new Mock<IJudgeService>();
-        handler = new GetStudentQueryHandler(mockStudentRepository.Object, mockJudgeService.Object);
+        mockMatchRepository = new Mock<IMatchRepository>();
+        handler = new GetStudentQueryHandler(mockStudentRepository.Object, mockMatchRepository.Object);
         model = new StudentModel(
             Id: 1,
             Email: "test@student.com",
@@ -75,8 +75,8 @@ public class GetStudentQueryHandlerTest
     {
         mockStudentRepository.Setup(x =>
             x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(model);
-        mockJudgeService.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
-        mockJudgeService.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
 
         GetStudentQuery query = new(2, new ClaimsPrincipal(
                         new ClaimsIdentity(new Claim[]
@@ -94,8 +94,8 @@ public class GetStudentQueryHandlerTest
     {
         mockStudentRepository.Setup(x =>
             x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(model);
-        mockJudgeService.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(false);
-        mockJudgeService.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(false);
+        mockMatchRepository.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(false);
+        mockMatchRepository.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(false);
 
         GetStudentQuery query = new(2, new ClaimsPrincipal(
                         new ClaimsIdentity(new Claim[]
@@ -143,8 +143,8 @@ public class GetStudentQueryHandlerTest
     {
         mockStudentRepository.Setup(x =>
             x.GetStudentById(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(model);
-        mockJudgeService.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
-        mockJudgeService.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
 
         GetStudentQuery query = new(2, new ClaimsPrincipal(
                         new ClaimsIdentity(new Claim[]

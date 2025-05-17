@@ -1,6 +1,4 @@
-﻿using PoZiomkaDomain.StudentAnswers.Dtos;
-
-namespace PoZiomkaDomain.Match;
+﻿namespace PoZiomkaDomain.Match;
 
 public interface IJudgeService
 {

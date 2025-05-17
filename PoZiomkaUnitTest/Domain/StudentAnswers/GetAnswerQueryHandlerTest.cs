@@ -25,17 +25,17 @@ public class GetAnswerQueryHandlerTest
             ]));
 
         var mockStudentAnswerRepository = new Mock<IStudentAnswerRepository>();
-        var mockJudgeService = new Mock<IJudgeService>();
+        var mockMatchRepository = new Mock<IMatchRepository>();
 
-        mockJudgeService.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(false);
-        mockJudgeService.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(false);
+        mockMatchRepository.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(false);
+        mockMatchRepository.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(false);
 
         mockStudentAnswerRepository
             .Setup(repo => repo.GetStudentAnswer(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new StudentAnswerDisplay(queryStudentId, 1, 1, FormStatus.InProgress, [], []));
 
         var query = new GetAnswerQuery(user, formId: 1, queryStudentId);
-        var handler = new GetAnswerQueryHandler(mockStudentAnswerRepository.Object, mockJudgeService.Object);
+        var handler = new GetAnswerQueryHandler(mockStudentAnswerRepository.Object, mockMatchRepository.Object);
 
         await Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await handler.Handle(query, new CancellationToken()));
     }
@@ -61,10 +61,10 @@ public class GetAnswerQueryHandlerTest
         StudentAnswerObligatoryDisplay obligatoryAnswer = new(1, obligatoryAnswera, 1, true);
 
         var mockStudentAnswerRepository = new Mock<IStudentAnswerRepository>();
-        var mockJudgeService = new Mock<IJudgeService>();
+        var mockMatchRepository = new Mock<IMatchRepository>();
 
-        mockJudgeService.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
-        mockJudgeService.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
 
         mockStudentAnswerRepository
             .Setup(repo => repo.GetStudentAnswer(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -72,7 +72,7 @@ public class GetAnswerQueryHandlerTest
             [choosableAnswer], [obligatoryAnswer]));
 
         var query = new GetAnswerQuery(user, formId: 1, queryStudentId);
-        var handler = new GetAnswerQueryHandler(mockStudentAnswerRepository.Object, mockJudgeService.Object);
+        var handler = new GetAnswerQueryHandler(mockStudentAnswerRepository.Object, mockMatchRepository.Object);
 
         var result = await handler.Handle(query, new CancellationToken());
 
@@ -100,10 +100,10 @@ public class GetAnswerQueryHandlerTest
         StudentAnswerObligatoryDisplay obligatoryAnswer = new(1, obligatoryAnswera, 1, true);
 
         var mockStudentAnswerRepository = new Mock<IStudentAnswerRepository>();
-        var mockJudgeService = new Mock<IJudgeService>();
+        var mockMatchRepository = new Mock<IMatchRepository>();
 
-        mockJudgeService.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
-        mockJudgeService.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(2, 1)).ReturnsAsync(true);
+        mockMatchRepository.Setup(x => x.IsMatch(1, 2)).ReturnsAsync(true);
 
         mockStudentAnswerRepository
             .Setup(repo => repo.GetStudentAnswer(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
@@ -111,7 +111,7 @@ public class GetAnswerQueryHandlerTest
             [choosableAnswer], [obligatoryAnswer]));
 
         var query = new GetAnswerQuery(user, formId: 1, queryStudentId);
-        var handler = new GetAnswerQueryHandler(mockStudentAnswerRepository.Object, mockJudgeService.Object);
+        var handler = new GetAnswerQueryHandler(mockStudentAnswerRepository.Object, mockMatchRepository.Object);
 
         var result = await handler.Handle(query, new CancellationToken());
 
