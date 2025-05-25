@@ -1,4 +1,5 @@
 ﻿using PoZiomkaDomain.Form.Dtos;
+using System.Text.Json.Serialization;
 
 namespace PoZiomkaDomain.StudentAnswers.Dtos;
 
@@ -15,10 +16,24 @@ public record StudentAnswerDisplay(int? Id, int FormId, int StudentId, FormStatu
     }
 }
 
-public record StudentAnswerStatus(int? Id, FormModel Form, FormStatus Status)
+public class StudentAnswerStatus
 {
-    public StudentAnswerStatus(int? id, int formId, string title, FormStatus status)
-        : this(id, new FormModel(formId, title), status)
+    public int? Id { get; set; }
+    public FormModel Form { get; set; }
+    public FormStatus Status { get; set; }
+
+    [JsonConstructor]
+    public StudentAnswerStatus(int? id, FormModel form, FormStatus status)
     {
+        Id = id;
+        Form = form;
+        Status = status;
+    }
+
+    public StudentAnswerStatus(int? id, int formId, string title, FormStatus status)
+    {
+        Id = id;
+        Form = new FormModel(formId, title);
+        Status = status;
     }
 }
