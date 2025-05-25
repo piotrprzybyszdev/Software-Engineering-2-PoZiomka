@@ -1,5 +1,4 @@
-﻿using PoZiomkaDomain.Form.Dtos;
-using PoZiomkaDomain.Room.Dtos;
+﻿using PoZiomkaDomain.Room.Dtos;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -10,8 +9,6 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
 {
     private readonly HttpClient _client = _factory.CreateClient();
 
-    private readonly string _userEmail = "student@example.com";
-    private readonly string _userPassword = "asdf";
     private readonly string _adminEmail = "admin@example.com";
     private readonly string _adminPassword = "asdf";
 
@@ -25,7 +22,7 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
         var response = await _client.SendAsyncWithCookie(getRequest, cookie);
         response.EnsureSuccessStatusCode();
         var roomsBefore = await response.Content.ReadFromJsonAsync<IEnumerable<RoomDisplay>>();
-        int countBefore = roomsBefore.Count();
+        int countBefore = roomsBefore!.Count();
 
         // Create new room
         var room = new
@@ -47,7 +44,7 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
         var responseAfter = await _client.SendAsyncWithCookie(getRequestAfter, cookie);
         responseAfter.EnsureSuccessStatusCode();
         var roomsAfter = await responseAfter.Content.ReadFromJsonAsync<IEnumerable<RoomDisplay>>();
-        Assert.Equal(countBefore + 1, roomsAfter.Count());
+        Assert.Equal(countBefore + 1, roomsAfter!.Count());
     }
 
     [Fact]
@@ -59,7 +56,7 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
         var response = await _client.SendAsyncWithCookie(getRequest, cookie);
         response.EnsureSuccessStatusCode();
         var rooms = await response.Content.ReadFromJsonAsync<IEnumerable<RoomDisplay>>();
-        int roomId = rooms.First().Id;
+        int roomId = rooms!.First().Id;
 
         // Login as student
         string studentCookie = await _client.LoginAsAdmin(_adminEmail, _adminPassword);
@@ -81,9 +78,9 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
         var response = await _client.SendAsyncWithCookie(getRequest, cookie);
         response.EnsureSuccessStatusCode();
         var rooms = await response.Content.ReadFromJsonAsync<IEnumerable<RoomDisplay>>();
-        int roomId = rooms.First().Id;
+        int roomId = rooms!.First().Id;
 
-        int numberOfStudentsBefore = rooms.First().StudentCount;
+        int numberOfStudentsBefore = rooms!.First().StudentCount;
 
         var addRequest = new
         {
@@ -152,9 +149,9 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
         var response = await _client.SendAsyncWithCookie(getRequest, cookie);
         response.EnsureSuccessStatusCode();
         var rooms = await response.Content.ReadFromJsonAsync<IEnumerable<RoomDisplay>>();
-        int roomId = rooms.Last().Id;
+        int roomId = rooms!.Last().Id;
 
-        int countBefore = rooms.Count();
+        int countBefore = rooms!.Count();
 
         var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/room/delete/{roomId}");
         var deleteResponse = await _client.SendAsyncWithCookie(deleteRequest, cookie);
@@ -165,6 +162,6 @@ public class RoomControllerTest(MockWebApplicationFactory<Program> _factory) : I
         responseAfterDelete.EnsureSuccessStatusCode();
         var roomsAfterDelete = await responseAfterDelete.Content.ReadFromJsonAsync<IEnumerable<RoomDisplay>>();
         Assert.NotNull(roomsAfterDelete);
-        Assert.Equal(countBefore - 1, roomsAfterDelete.Count());    
+        Assert.Equal(countBefore - 1, roomsAfterDelete.Count());
     }
 }

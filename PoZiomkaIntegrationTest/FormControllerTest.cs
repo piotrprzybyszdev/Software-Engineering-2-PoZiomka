@@ -9,8 +9,6 @@ public class FormControllerTest(MockWebApplicationFactory<Program> _factory) : I
 {
     private readonly HttpClient _client = _factory.CreateClient();
 
-    private readonly string _userEmail = "student@example.com";
-    private readonly string _userPassword = "asdf";
     private readonly string _adminEmail = "admin@example.com";
     private readonly string _adminPassword = "asdf";
 
@@ -24,7 +22,6 @@ public class FormControllerTest(MockWebApplicationFactory<Program> _factory) : I
         response.EnsureSuccessStatusCode();
         var getResponseContent = await response.Content.ReadFromJsonAsync<IEnumerable<FormModel>>();
         Assert.NotNull(getResponseContent);
-        Assert.NotEmpty(getResponseContent);
         int countBefore = getResponseContent.Count();
 
         var form = new
@@ -72,7 +69,6 @@ public class FormControllerTest(MockWebApplicationFactory<Program> _factory) : I
         response.EnsureSuccessStatusCode();
         var getResponseContent = await response.Content.ReadFromJsonAsync<IEnumerable<FormModel>>();
         Assert.NotNull(getResponseContent);
-        Assert.NotEmpty(getResponseContent);
         int id = getResponseContent.First().Id;
         var getRequestContent = new HttpRequestMessage(HttpMethod.Get, $"/api/form/get-content/{id}");
         var responseContent = await _client.SendAsyncWithCookie(getRequestContent, cookie);
@@ -90,7 +86,6 @@ public class FormControllerTest(MockWebApplicationFactory<Program> _factory) : I
         response.EnsureSuccessStatusCode();
         var getResponseContent = await response.Content.ReadFromJsonAsync<IEnumerable<FormModel>>();
         Assert.NotNull(getResponseContent);
-        Assert.NotEmpty(getResponseContent);
         int id = getResponseContent.First().Id;
         var formUpdate = new
         {

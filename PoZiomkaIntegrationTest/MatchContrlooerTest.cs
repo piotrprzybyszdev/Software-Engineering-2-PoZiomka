@@ -1,5 +1,4 @@
-﻿using PoZiomkaDomain.Form.Dtos;
-using PoZiomkaDomain.Match.Dtos;
+﻿using PoZiomkaDomain.Match.Dtos;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -68,6 +67,6 @@ public class MatchControllerTest(MockWebApplicationFactory<Program> _factory) : 
         Assert.NotEmpty(updatedMatches);
         var matchAfter = updatedMatches.First(m => m.Id == matchId);
         Assert.Equal(matchBefore.Id, matchAfter.Id);
-        Assert.True(matchAfter.Status1==MatchStatus.Accepted);
+        Assert.True(matchAfter.Status1 == MatchStatus.Accepted);
     }
 }
