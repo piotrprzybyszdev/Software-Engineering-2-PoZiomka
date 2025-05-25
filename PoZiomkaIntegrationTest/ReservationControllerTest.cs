@@ -7,8 +7,6 @@ public class ReservationControllerTest(MockWebApplicationFactory<Program> _facto
 {
     private readonly HttpClient _client = _factory.CreateClient();
 
-    private readonly string _userEmail = "student@example.com";
-    private readonly string _userPassword = "asdf";
     private readonly string _adminEmail = "admin@example.com";
     private readonly string _adminPassword = "asdf";
 

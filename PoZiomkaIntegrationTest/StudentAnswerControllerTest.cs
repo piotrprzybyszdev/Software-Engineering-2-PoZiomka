@@ -1,8 +1,5 @@
-﻿using PoZiomkaDomain.Form.Dtos;
-using PoZiomkaDomain.StudentAnswers.Dtos;
+﻿using PoZiomkaDomain.StudentAnswers.Dtos;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 
 namespace PoZiomkaIntegrationTest;
 
@@ -37,7 +34,7 @@ public class StudentAnswerControllerTest(MockWebApplicationFactory<Program> _fac
         var statusRequest = new HttpRequestMessage(HttpMethod.Get, $"/answer/get/{_studentId}");
         var statusResponse = await _client.SendAsyncWithCookie(statusRequest, cookie);
         var statusList = await statusResponse.Content.ReadFromJsonAsync<IEnumerable<StudentAnswerStatus>>();
-        var formId = statusList.First().Form.Id;
+        var formId = statusList!.First().Form.Id;
 
         var request = new HttpRequestMessage(HttpMethod.Get, $"/answer/get/{formId}/{_studentId}");
         var response = await _client.SendAsyncWithCookie(request, cookie);
@@ -47,7 +44,7 @@ public class StudentAnswerControllerTest(MockWebApplicationFactory<Program> _fac
         Assert.NotNull(answer);
     }
 
-   
+
     [Fact]
     public async Task DeleteStudentAnswer_ShouldReturnSuccess()
     {
@@ -56,7 +53,7 @@ public class StudentAnswerControllerTest(MockWebApplicationFactory<Program> _fac
         var statusRequest = new HttpRequestMessage(HttpMethod.Get, $"/answer/get/{_studentId}");
         var statusResponse = await _client.SendAsyncWithCookie(statusRequest, cookie);
         var statuses = await statusResponse.Content.ReadFromJsonAsync<IEnumerable<StudentAnswerStatus>>();
-        int answerId = statuses.First(a => a.Id.HasValue).Id.Value;
+        int answerId = statuses!.First(a => a.Id.HasValue).Id!.Value;
 
         var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"/answer/delete/{answerId}");
         var deleteResponse = await _client.SendAsyncWithCookie(deleteRequest, cookie);

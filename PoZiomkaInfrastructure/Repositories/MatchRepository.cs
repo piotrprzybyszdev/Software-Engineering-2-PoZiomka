@@ -41,7 +41,7 @@ public class MatchRepository(IDbConnection connection) : IMatchRepository
 
     public async Task<bool> IsMatch(int studentId1, int studentId2)
     {
-        var sql = @"SELECT COUNT(*) FROM Matches WHERE StudentId1 = 1 AND StudentId2 = 2";
+        var sql = @"SELECT COUNT(*) FROM Matches WHERE StudentId1 = @studentId1 AND StudentId2 = @studentId2";
 
         try
         {
