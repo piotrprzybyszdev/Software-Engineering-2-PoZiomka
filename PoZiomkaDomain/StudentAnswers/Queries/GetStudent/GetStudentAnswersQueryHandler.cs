@@ -8,7 +8,7 @@ using PoZiomkaDomain.StudentAnswers.Exceptions;
 
 namespace PoZiomkaDomain.StudentAnswers.Queries.GetStudent;
 
-public class GetStudentAnswersQueryHandler(IStudentRepository studentRepository, IJudgeService judgeService, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<GetStudentAnswersQuery, IEnumerable<StudentAnswerStatus>>
+public class GetStudentAnswersQueryHandler(IStudentRepository studentRepository, IMatchRepository matchRepository, IStudentAnswerRepository studentAnswerRepository) : IRequestHandler<GetStudentAnswersQuery, IEnumerable<StudentAnswerStatus>>
 {
     public async Task<IEnumerable<StudentAnswerStatus>> Handle(GetStudentAnswersQuery request, CancellationToken cancellationToken)
     {
@@ -19,9 +19,9 @@ public class GetStudentAnswersQueryHandler(IStudentRepository studentRepository,
         if (studentId == request.StudentId && !student.ToStudentDisplay(false).CanFillForms)
             throw new UserCanNotFillFormException("Student can not fill form");
 
-        if (studentId != request.StudentId && !await judgeService.IsMatch(studentId, request.StudentId))
+        if (studentId != request.StudentId && !await matchRepository.IsMatch(studentId, request.StudentId))
             throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");
-
-        return await studentAnswerRepository.GetStudentFormAnswerStatus(request.StudentId, cancellationToken);
+        var a = await studentAnswerRepository.GetStudentFormAnswerStatus(request.StudentId, cancellationToken);
+        return a;
     }
 }

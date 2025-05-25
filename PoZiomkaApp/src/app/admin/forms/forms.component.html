@@ -8,7 +8,7 @@
     <hr class="mb-5">
     <div class="p-3 d-flex flex-column">
         @for (form of forms(); track form.id) {
-            <div class="btn btn-light border p-3 m-2 rounded-2" (click)="onFormClick(form.id)">
+            <div class="btn btn-light border py-4 m-2 rounded-2 shadow" (click)="onFormClick(form.id)">
                 <h5 class="m-0">{{ form.title }}</h5>
             </div>
         }

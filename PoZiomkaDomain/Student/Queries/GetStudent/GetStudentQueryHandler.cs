@@ -7,7 +7,7 @@ using PoZiomkaDomain.Student.Exceptions;
 
 namespace PoZiomkaDomain.Student.Queries.GetStudent;
 
-public class GetStudentQueryHandler(IStudentRepository studentRepository, IJudgeService judgeService) : IRequestHandler<GetStudentQuery, StudentDisplay>
+public class GetStudentQueryHandler(IStudentRepository studentRepository, IMatchRepository matchRepository) : IRequestHandler<GetStudentQuery, StudentDisplay>
 {
     public async Task<StudentDisplay> Handle(GetStudentQuery request, CancellationToken cancellationToken)
     {
@@ -16,7 +16,7 @@ public class GetStudentQueryHandler(IStudentRepository studentRepository, IJudge
 
         bool isUserAuthorized = request.User.IsInRole(Roles.Administrator) ||
           request.User.IsInRole(Roles.Student) &&
-          (loggedInUserId == userId || await judgeService.IsMatch(loggedInUserId, userId));
+          (loggedInUserId == userId || await matchRepository.IsMatch(loggedInUserId, userId));
 
         if (!isUserAuthorized)
             throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");

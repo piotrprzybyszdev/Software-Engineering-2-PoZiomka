@@ -1,13 +1,12 @@
-﻿INSERT INTO Rooms ([Floor], Number, Capacity)
+﻿INSERT INTO Rooms ([Floor], Number, Capacity, StudentCount)
 VALUES
-(1, 101, 2),
-(2, 205, 2),
-(3, 311, 2);
+(1, 101, 2, 0),
+(2, 205, 2, 1),
+(3, 311, 2, 0);
 
 INSERT INTO Reservations (RoomId, IsAcceptedByAdmin)
 VALUES
-(1, 0),
-(2, 0);
+(1, 0);
 
 INSERT INTO Administrators (Email, PasswordHash)
 VALUES ('admin@example.com', CHAR(36) + '2a' + CHAR(36) + '11' + CHAR(36) + 'SsGgl/8bovY2WSslaj/9o.EcfoDnIn20gpIYeXOqcUOWyiYGPvD0S');
@@ -114,10 +113,10 @@ VALUES
 
 INSERT INTO Matches (StudentId1, StudentId2, Status1, Status2)
 VALUES
-(3, 2, 'Accepted', 'Pending'),
+(2, 3, 'Pending', 'Accepted'),
 (1, 3, 'Rejected', 'Rejected'),
 (1, 4, 'Accepted', 'Accepted'),
-(2, 1, 'Pending', 'Pending');
+(1, 2, 'Pending', 'Pending');
 
 INSERT INTO Communications (StudentId, [Description])
 VALUES

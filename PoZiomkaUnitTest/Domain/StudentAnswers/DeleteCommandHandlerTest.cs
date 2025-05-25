@@ -56,7 +56,6 @@ public class DeleteCommandHandlerTest
         studentRepository.Setup(x => x.GetStudentByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
 
-        studentAnswerRepository.Setup(x => x.GetStudentAnswerModels(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(studentAnswerModels);
         studentAnswerRepository.Setup(x => x.DeleteAnswer(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new UserDidNotAnswerItException("User did not answer it"));
 
@@ -84,8 +83,6 @@ public class DeleteCommandHandlerTest
            .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
         studentRepository.Setup(x => x.GetStudentByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
-
-        studentAnswerRepository.Setup(x => x.GetStudentAnswerModels(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(studentAnswerModels);
 
         var command = new DeleteCommand(user, 1);
         var handler = new DeleteCommandHandler(studentRepository.Object, studentAnswerRepository.Object);

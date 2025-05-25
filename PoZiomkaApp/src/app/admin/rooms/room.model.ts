@@ -9,8 +9,8 @@ export type RoomModel = {
   floor: number,
   number: number,
   capacity: number,
+  studentCount: number,
   reservationId?: number,
-  studentIds: number[],
   status: RoomStatus
 }
 
@@ -19,6 +19,8 @@ export type RoomStudentModel = {
   floor: number,
   number: number,
   capacity: number,
+  studentCount: number,
+  reservationId?: number,
   students: StudentModel[],
   status: RoomStatus
 }

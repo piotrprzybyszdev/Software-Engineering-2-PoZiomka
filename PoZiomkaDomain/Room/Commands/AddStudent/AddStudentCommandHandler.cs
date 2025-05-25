@@ -28,7 +28,7 @@ public class AddStudentCommandHandler(IRoomRepository roomRepository, IStudentRe
             throw new StudentAlreadyInRoomException("Student is already in a room");
         }
 
-        RoomModel room;
+        RoomDisplay room;
         try
         {
             room = await roomRepository.GetRoomById(request.Id, cancellationToken);
@@ -45,6 +45,6 @@ public class AddStudentCommandHandler(IRoomRepository roomRepository, IStudentRe
             throw new RoomFullException("Trying to add a student to full room");
         }
 
-        await studentRepository.UpdateRoom(request.StudentId, request.Id);
+        await roomRepository.AddStudent(request.Id, request.StudentId, cancellationToken);
     }
 }
