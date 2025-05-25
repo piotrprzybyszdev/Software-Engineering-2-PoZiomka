@@ -21,7 +21,7 @@ public class GetStudentAnswersQueryHandler(IStudentRepository studentRepository,
 
         if (studentId != request.StudentId && !await matchRepository.IsMatch(studentId, request.StudentId))
             throw new UnauthorizedException("User must be logged in as an administrator or a student that has a match with the student");
-
-        return await studentAnswerRepository.GetStudentFormAnswerStatus(request.StudentId, cancellationToken);
+        var a= await studentAnswerRepository.GetStudentFormAnswerStatus(request.StudentId, cancellationToken);
+        return a;
     }
 }
