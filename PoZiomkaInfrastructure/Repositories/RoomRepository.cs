@@ -14,8 +14,8 @@ public class RoomRepository(IDbConnection connection) : IRoomRepository
     public async Task CreateRoom(RoomCreate roomCreate, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"
-INSERT INTO Rooms ([Floor], Number, Capacity)
-VALUES (@floor, @number, @capacity);
+INSERT INTO Rooms ([Floor], Number, Capacity,StudentCount)
+VALUES (@floor, @number, @capacity,0);
 ";
 
         try
