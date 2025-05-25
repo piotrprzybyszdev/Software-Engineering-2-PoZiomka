@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\CreateStoredProcedures.sql" />
     <EmbeddedResource Include="Migrations\CreateTables.sql" />
     <EmbeddedResource Include="Migrations\InsertConstantData.sql" />
     <EmbeddedResource Include="Migrations\InsertSampleData.sql" />

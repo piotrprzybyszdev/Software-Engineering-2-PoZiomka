@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { PopupComponent } from '../../../common/popup/popup.component';
-import { roomStatusToColorString, roomStatusToString, RoomStudentModel } from '../room.model';
+import { RoomStatus, roomStatusToColorString, roomStatusToString, RoomStudentModel } from '../room.model';
 import { CommonModule } from '@angular/common';
 import { LoadingButtonComponent } from '../../../common/loading-button/loading-button.component';
 import { StudentModel } from '../../../student/student.model';
@@ -40,6 +40,7 @@ export class RoomDetailsComponent {
     otherStudent.lastName?.startsWith(this.lastName()))
   );
 
+  RoomStatus = RoomStatus;
   roomStatusToString = roomStatusToString;
   roomStatusToColorString = roomStatusToColorString;
 

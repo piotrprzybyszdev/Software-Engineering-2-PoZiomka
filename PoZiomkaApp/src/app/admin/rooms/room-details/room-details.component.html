@@ -105,7 +105,7 @@
                                         <td>{{ student.phoneNumber ?? "-" }}</td>
                                         <td>{{ student.indexNumber ?? "-" }}</td>
                                         <td>
-                                            <app-loading-button [class]="'btn-sm btn-success mx-2 border-0'" (clicked)="onStudentAdd($index)" [isLoading]="isAdding()[$index]" [isDisabled]="room()?.capacity == room()?.students?.length">
+                                            <app-loading-button [class]="'btn-sm btn-success mx-2 border-0'" (clicked)="onStudentAdd($index)" [isLoading]="isAdding()[$index]" [isDisabled]="room()?.status == RoomStatus.Full || room()?.status == RoomStatus.Reserved">
                                                 <i class="bi bi-plus-lg"></i>
                                             </app-loading-button>
                                         </td>

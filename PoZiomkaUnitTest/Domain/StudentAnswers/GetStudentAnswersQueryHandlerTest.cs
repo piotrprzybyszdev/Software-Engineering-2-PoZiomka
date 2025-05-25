@@ -20,7 +20,7 @@ public class GetStudentAnswersQueryHandlerTest
                 new(ClaimTypes.Role, Roles.Student),
                 new(ClaimTypes.NameIdentifier, "2") }));
 
-        var mockService = new Mock<IJudgeService>();
+        var mockRepository = new Mock<IMatchRepository>();
 
         Mock<IStudentAnswerRepository> studentAnswerRepository = new();
         Mock<IStudentRepository> studentRepository = new();
@@ -30,7 +30,7 @@ public class GetStudentAnswersQueryHandlerTest
             .ReturnsAsync(new StudentModel(1, "test@gmail.com", null, null, "hash", false, null, null, null, null, null, false, false));
 
         var command = new GetStudentAnswersQuery(user, 2);
-        var handler = new GetStudentAnswersQueryHandler(studentRepository.Object, mockService.Object, studentAnswerRepository.Object);
+        var handler = new GetStudentAnswersQueryHandler(studentRepository.Object, mockRepository.Object, studentAnswerRepository.Object);
         await Assert.ThrowsAsync<UserCanNotFillFormException>(async () => await handler.Handle(command, new CancellationToken()));
     }
 }

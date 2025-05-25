@@ -11,24 +11,11 @@ namespace PoZiomkaInfrastructure.Repositories;
 
 public class RoomRepository(IDbConnection connection) : IRoomRepository
 {
-    public async Task<IEnumerable<RoomModel>> GetEmptyRooms()
-    {
-        var sql = @"SELECT * FROM Rooms WHERE Id NOT IN (SELECT RoomId FROM Reservations)";
-
-        try
-        {
-            return await connection.QueryAsync<RoomModel>(sql);
-        }
-        catch (SqlException exception)
-        {
-            throw new QueryExecutionException(exception.Message, exception.Number);
-        }
-    }
     public async Task CreateRoom(RoomCreate roomCreate, CancellationToken? cancellationToken)
     {
         var sqlQuery = @"
-INSERT INTO Rooms ([Floor], Number, Capacity)
-VALUES (@floor, @number, @capacity);
+INSERT INTO Rooms ([Floor], Number, Capacity,StudentCount)
+VALUES (@floor, @number, @capacity,0);
 ";
 
         try
@@ -46,13 +33,17 @@ VALUES (@floor, @number, @capacity);
         }
     }
 
-    public async Task<RoomModel> GetRoomById(int id, CancellationToken? cancellationToken)
+    public async Task<RoomDisplay> GetRoomById(int id, CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"SELECT * FROM Rooms WHERE id = @id";
+        var sqlQuery = @"
+SELECT room.*, reservation.Id AS reservationId FROM Rooms as room
+LEFT JOIN Reservations as reservation ON room.Id = reservation.RoomId
+WHERE room.Id = @id
+";
 
         try
         {
-            var room = await connection.QuerySingleOrDefaultAsync<RoomModel>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
+            var room = await connection.QuerySingleOrDefaultAsync<RoomDisplay>(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
             return room ?? throw new IdNotFoundException();
         }
         catch (SqlException exception)
@@ -61,13 +52,15 @@ VALUES (@floor, @number, @capacity);
         }
     }
 
-    public async Task<IEnumerable<RoomModel>> GetAllRooms(CancellationToken? cancellationToken)
+    public async Task<IEnumerable<RoomDisplay>> GetAllRooms(CancellationToken? cancellationToken)
     {
-        var sqlQuery = @"SELECT * FROM Rooms";
+        var sqlQuery = @"
+SELECT room.*, reservation.Id AS reservationId FROM Rooms as room
+LEFT JOIN Reservations as reservation ON room.Id = reservation.RoomId
+";
         try
         {
-            var rooms = await connection.QueryAsync<RoomModel>(new CommandDefinition(sqlQuery, cancellationToken: cancellationToken ?? default));
-            return rooms;
+            return await connection.QueryAsync<RoomDisplay>(new CommandDefinition(sqlQuery, cancellationToken: cancellationToken ?? default));
         }
         catch (SqlException exception)
         {
@@ -81,6 +74,59 @@ VALUES (@floor, @number, @capacity);
         try
         {
             var rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id }, cancellationToken: cancellationToken ?? default));
+            if (rowsAffected == 0) throw new IdNotFoundException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
+
+    public async Task RemoveStudent(int id, int studentId, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"
+BEGIN TRANSACTION
+
+UPDATE Students
+SET RoomId = NULL
+WHERE Id = @studentId
+
+UPDATE Rooms
+SET StudentCount = StudentCount - 1
+WHERE Id = @id
+
+COMMIT TRANSACTION
+";
+        try
+        {
+            var rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id, studentId }, cancellationToken: cancellationToken ?? default));
+            if (rowsAffected == 0) throw new IdNotFoundException();
+        }
+        catch (SqlException exception)
+        {
+            throw new QueryExecutionException(exception.Message, exception.Number);
+        }
+    }
+
+    public async Task AddStudent(int id, int studentId, CancellationToken? cancellationToken)
+    {
+        var sqlQuery = @"
+BEGIN TRANSACTION
+
+UPDATE Students
+SET RoomId = @id
+WHERE Id = @studentId
+
+UPDATE Rooms
+SET StudentCount = StudentCount + 1
+WHERE Id = @id
+
+COMMIT TRANSACTION
+";
+
+        try
+        {
+            var rowsAffected = await connection.ExecuteAsync(new CommandDefinition(sqlQuery, new { id, studentId }, cancellationToken: cancellationToken ?? default));
             if (rowsAffected == 0) throw new IdNotFoundException();
         }
         catch (SqlException exception)

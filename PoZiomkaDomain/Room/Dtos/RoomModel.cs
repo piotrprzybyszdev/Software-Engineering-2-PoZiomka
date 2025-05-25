@@ -1,3 +1,3 @@
 ﻿namespace PoZiomkaDomain.Room.Dtos;
 
-public record RoomModel(int Id, int Floor, int Number, int Capacity);
+public record RoomModel(int Id, int Floor, int Number, int Capacity, int StudentCount);

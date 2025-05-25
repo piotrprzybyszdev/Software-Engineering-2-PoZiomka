@@ -10,4 +10,3 @@ public interface IFormRepository
     Task UpdateForm(FormUpdate form, CancellationToken? cancellationToken);
     Task DeleteForm(int id, CancellationToken? cancellationToken);
 }
-
